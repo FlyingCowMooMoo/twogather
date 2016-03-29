@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+</br></br></br></br></br></br></br>
+<style>
+    .row {
+        margin-top:10px;
+        padding: 20px;
+        outline: 2px solid #ccc;
+        outline-offset: -10px;
+        -moz-outline-radius: 10px;
+        -webkit-outline-radius: 10px;
+    }
+    .list-con {
+        margin-top:10px;
+        padding: 20px;
+        outline: 2px solid #ccc;
+        outline-offset: -10px;
+        -moz-outline-radius: 10px;
+        -webkit-outline-radius: 10px;
+    }
+    .ui-draggable-dragging {
+        z-index: 10000!important}
+</style>
+<div class="container">
+    <div class="row">
+    <div class="col-sm-4 list-con" id="tasks">
+            <h1>Tasks</h1>
+        {% for item in thetasks %}
+            <div class="col-sm-6 card-div" >
+                <div class="card card-block text-xs-center">
+                    <div class="card-header">
+                        Task
+                    </div>
+                    <h3 class="card-title">{{item.title}}</h3>
+                    <p class="card-text">{{item.description}}</p>
+                    <a href="#" class="btn btn-primary">Ok Boss</a>
+                    <div class="card-footer text-muted">
+                        {{item.assigned_at}}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4 list-con" id="todo">
+            <h1>Todo</h1>
+        </div>
+        <div class="col-sm-4 list-con" id="done">
+            <h1>Done</h1>
+        </div>
+        </div>
+</div>
+<script>
+    $('.card-div').draggable();
+
+    $( "#todo" ).droppable({
+        drop: function( event, ui ) {
+            console.log(event);
+            console.log(ui);
+            $( this )
+                    .removeClass("col-sm-4")
+                    .addClass( "col-sm-4" );
+        }
+    });
+</script>
+{% endblock %}
