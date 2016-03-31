@@ -55,10 +55,16 @@
 
     $( "#todo" ).droppable({
         drop: function( event, ui ) {
-            console.log(event);
-            $(this).append(ui['draggable'][0]);
-            console.log("Dropped!");
+            addTaskToContainer($(this), event, ui);
         }
     });
+
+    function addTaskToContainer(droppable, event, ui)
+    {
+        var task = ui['draggable'][0];
+        $(task).css('left', '0');
+        $(task).css('right', '0');
+        droppable.append(task);
+    }
 </script>
 {% endblock %}
