@@ -26,7 +26,7 @@
     <div class="col-sm-4 list-con" id="tasks">
             <h1>Tasks</h1>
         {% for item in thetasks %}
-            <div class="col-sm-6 card-div" >
+            <div class="col-sm-6 card-div general-task" >
                 <div class="card card-block text-xs-center">
                     <div class="card-header">
                         Task
@@ -56,10 +56,7 @@
     $( "#todo" ).droppable({
         drop: function( event, ui ) {
             console.log(event);
-            console.log(ui);
-            $( this )
-                    .removeClass("col-sm-4")
-                    .addClass( "col-sm-4" );
+            $(this).append(ui['draggable'][0]);
         }
     });
 </script>
