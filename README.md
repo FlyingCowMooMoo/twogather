@@ -20,7 +20,7 @@ Once you have python installed, you will need to install some packages
 
 Open a command prompt/terminal and install the following depenencies
 
-    pip install Flask
+    pip install flask
     pip install Flask-Security
     pip install peewee
     pip install flask-peewee
@@ -34,4 +34,4 @@ and run the following command
 
     python twogather.py
   
-  This will start the server. By default you should be able to connect to it on localhost:5000. For now, it's populating a lot of dummy data so it will take a while for the page to load. This is just something I have done so there is data to work with and will be addressed soon.
+  This will start the server. By default you should be able to connect to it on http://127.0.0.1:5000. For now, it's populating a lot of dummy data so it will take a while for the page to load. This is just something I have done so there is data to work with and will be addressed soon.
