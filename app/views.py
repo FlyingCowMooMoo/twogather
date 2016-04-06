@@ -29,12 +29,20 @@ def prepare():
             entry.save()
 
     reader = csv.reader(open(os.path.join(BASEDIR, 'dummymanagerdata.csv'), mode='r'))
+    manager_role = Role()
+    manager_role.name = "Warehouse Manager"
+    manager_role.description = "Manager of this warehouse"
+    manager_role.save()
     for line in reader:
         manager = User()
         manager.email = line[0].rstrip()
         manager.password = line[1].rstrip()
         manager.confirmed_at = datetime.datetime.now()
         manager.save()
+        their_role = UserRoles()
+        their_role.user = manager
+        their_role.role = manager_role
+        their_role.save()
     reader = csv.reader(open(os.path.join(BASEDIR, 'dummytasks.csv'), mode='r'))
     for line in reader:
         task = Task()
