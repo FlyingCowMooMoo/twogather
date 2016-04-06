@@ -5,8 +5,6 @@ from flask.ext.security import UserMixin, RoleMixin
 from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, ForeignKeyField, DecimalField, \
     IntegerField, DateField
 
-from peewee import Model, SqliteDatabase
-
 from app import db
 
 class Role(db.Model, RoleMixin):
@@ -57,3 +55,14 @@ class MarkedAsTodo(db.Model):
     task = ForeignKeyField(Task)
     employee = ForeignKeyField(EmployeePin)
     marked_at = DateTimeField(null=False, default=datetime.datetime.now())
+
+
+class TaskBoard(db.Model):
+    name = TextField(primary_key=True)
+    creator = ForeignKeyField(User)
+    created_at = DateTimeField(null=False, default=datetime.datetime.now())
+
+
+class BoardTask(db.Model):
+    board = ForeignKeyField(TaskBoard)
+    task = ForeignKeyField(Task)
