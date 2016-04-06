@@ -5,11 +5,10 @@ import os
 
 from app import app, db
 from flask import render_template
-from peewee import fn, IntegrityError
+from peewee import fn
 
 from config import BASEDIR
-from dbmodels import Task
-from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo
+from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask
 
 
 @app.before_first_request
@@ -21,7 +20,10 @@ def prepare():
     Task.drop_table(True)
     TaskCompletion.drop_table(True)
     MarkedAsTodo.drop_table(True)
-    db.database.create_tables([Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo], True)
+    TaskBoard.drop_table(True)
+    BoardTask.drop_table(True)
+    db.database.create_tables([Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard,
+                               BoardTask], True)
     with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
         for pin in g.readlines():
             entry = EmployeePin()
@@ -58,3 +60,13 @@ def index():
     print 'lol'
     tasks = Task.select().order_by(fn.Random())
     return render_template('tasks.html', thetasks=tasks)
+
+@app.route('/board/<string:boardname>', methods=['GET'])
+def show_board(boardname):
+    board = TaskBoard.get(TaskBoard.name == boardname)
+    if board is None:
+        return render_template('error.html'), 404
+    tasks = BoardTask.select(BoardTask.board == board)
+    return render_template('board.html', thetasks=tasks, theboard=board)
+
+
