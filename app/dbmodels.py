@@ -3,12 +3,11 @@ import datetime
 from flask.ext.security import UserMixin, RoleMixin
 
 from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, ForeignKeyField, DecimalField, \
-    IntegerField
+    IntegerField, DateField
 
 from peewee import Model, SqliteDatabase
 
 from app import db
-
 
 class Role(db.Model, RoleMixin):
     name = CharField(unique=True)
@@ -31,6 +30,13 @@ class UserRoles(db.Model):
 
 class EmployeePin(db.Model):
     pin = TextField(unique=True)
+
+
+class EmployeeDay(db.Model):
+    employee = ForeignKeyField(EmployeePin)
+    day = DateField(null=False, default=datetime.datetime.now())
+    color = TextField(null=False)
+    logo = TextField(null=False)
 
 
 class Task(db.Model):
