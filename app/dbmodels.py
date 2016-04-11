@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     password = TextField()
     active = BooleanField(default=True)
     confirmed_at = DateTimeField(null=True)
+    name = TextField()
 
 
 class UserRoles(db.Model):
@@ -30,19 +31,12 @@ class EmployeePin(db.Model):
     pin = TextField(unique=True)
 
 
-class EmployeeDay(db.Model):
-    employee = ForeignKeyField(EmployeePin)
-    day = DateField(null=False, default=datetime.datetime.now())
-    color = TextField(null=False)
-    logo = TextField(null=False)
-
-
 class Task(db.Model):
     id = IntegerField(primary_key=True)
     title = TextField()
     description = TextField()
     completed = BooleanField(default=False)
-    assigned_at = DateTimeField(null=False, default=datetime.datetime.now())
+    assigned_at = DateTimeField(null=False, default=datetime.datetime.now)
     completed_at = DateTimeField(null=True)
 
 
@@ -54,15 +48,32 @@ class TaskCompletion(db.Model):
 class MarkedAsTodo(db.Model):
     task = ForeignKeyField(Task)
     employee = ForeignKeyField(EmployeePin)
-    marked_at = DateTimeField(null=False, default=datetime.datetime.now())
+    marked_at = DateTimeField(null=False, default=datetime.datetime.now)
 
 
 class TaskBoard(db.Model):
-    name = TextField(primary_key=True)
+    id = IntegerField(primary_key=True)
+    name = TextField(unique=True)
     creator = ForeignKeyField(User)
-    created_at = DateTimeField(null=False, default=datetime.datetime.now())
+    created_at = DateTimeField(null=False, default=datetime.datetime.now)
 
 
 class BoardTask(db.Model):
     board = ForeignKeyField(TaskBoard)
     task = ForeignKeyField(Task)
+
+class Logo(db.Model):
+    id = IntegerField(primary_key=True)
+    logo = TextField(unique=True)
+
+
+class Shift(db.Model):
+    id = IntegerField(primary_key=True)
+    day = DateTimeField(null=False, default=datetime.datetime.now, unique=True)
+
+
+class EmployeeShift(db.Model):
+    employee = ForeignKeyField(EmployeePin)
+    shift = ForeignKeyField(Shift)
+    color = TextField(null=False)
+    logo = ForeignKeyField(Logo)
