@@ -35,7 +35,9 @@ class Task(db.Model):
     id = PrimaryKeyField()
     title = TextField()
     description = TextField()
-    completed = BooleanField(default=False)
+    marked_as_task = BooleanField(default=True)
+    marked_as_todo = BooleanField(default=False)
+    marked_as_completed = BooleanField(default=False)
     assigned_at = DateTimeField(null=False, default=datetime.datetime.now)
     completed_at = DateTimeField(null=True)
 
