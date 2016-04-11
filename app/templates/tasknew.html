@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    .ui-draggable-dragging {
+        z-index: 10000!important}
+
+    .task-column {
+        margin-top:10px;
+        border: #cdcdcd medium solid;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 task-column" id="container-task">
+            <h2>
+                Task
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in normaltasks %}
+                <blockquote class="task-block current-task">
+                    <p>
+                        Description <cite>{{item.description}}</cite>
+                    </p> <small>{{item.title}}<cite>Source Title</cite> Date: <cite>{{item.assigned_at}}</cite></small>
+                </blockquote>
+            {% endfor %}
+        </div>
+        <div class="col-md-4 task-column" id="container-doing">
+            <h2>
+                Doing
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in doingtasks %}
+            <blockquote class="task-block doing-task">
+                <p>
+                    Description <cite>{{item.description}}</cite>
+                </p> <small>Title<cite>{{item.title}}</cite> Date: <cite>{{item.assigned_at}}</cite></small>
+            </blockquote>
+            {% endfor %}
+        </div>
+        <div class="col-md-4 task-column" id="container-done">
+            <h2>
+                Done
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in donetasks %}
+            <blockquote class="task-block done-task">
+                <p>
+                    Description <cite>{{item.description}}</cite>
+                </p> <small>{{item.title}}<cite>Source Title</cite> Date: <cite>{{item.assigned_at}}</cite></small>
+            </blockquote>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.task-block').draggable();
+
+    $( "#container-task" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    $( "#container-doing" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    $( "#container-done" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    function addTaskToContainer(droppable, event, ui)
+    {
+        var task = ui['draggable'][0];
+        $(task).css('left', '0');
+        $(task).css('right', '0');
+        droppable.append(task);
+    }
+</script>
+{% endblock %}

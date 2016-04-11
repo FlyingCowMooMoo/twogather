@@ -21,7 +21,7 @@ def prepare():
 def index():
     print 'lol'
     tasks = Task.select().order_by(fn.Random())
-    return render_template('tasks.html', thetasks=tasks)
+    return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
 
 @app.route('/marktask', methods=['POST'])
 def updatetask():
@@ -102,6 +102,7 @@ def populate_dummy_data():
     TaskBoard.drop_table(True)
     BoardTask.drop_table(True)
     Shift.drop_table(True)
+    EmployeePin.drop_table(True)
     db.database.create_tables([Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard,
                                BoardTask, EmployeeShift, Shift], True)
     with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:

@@ -3,7 +3,7 @@ import os
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 DATABASE = {
-    'name': 'twogather.db',
+    'name': 'demba.db',
     'engine': 'peewee.SqliteDatabase',
 }
 

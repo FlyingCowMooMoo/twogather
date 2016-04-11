@@ -3,7 +3,7 @@ import datetime
 from flask.ext.security import UserMixin, RoleMixin
 
 from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, ForeignKeyField, DecimalField, \
-    IntegerField, DateField
+    IntegerField, DateField, PrimaryKeyField
 
 from app import db
 
@@ -32,7 +32,7 @@ class EmployeePin(db.Model):
 
 
 class Task(db.Model):
-    id = IntegerField(primary_key=True)
+    id = PrimaryKeyField()
     title = TextField()
     description = TextField()
     completed = BooleanField(default=False)
@@ -52,27 +52,30 @@ class MarkedAsTodo(db.Model):
 
 
 class TaskBoard(db.Model):
-    id = IntegerField(primary_key=True)
+    id = PrimaryKeyField()
     name = TextField(unique=True)
     creator = ForeignKeyField(User)
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
 
 
 class BoardTask(db.Model):
+    id = PrimaryKeyField()
     board = ForeignKeyField(TaskBoard)
     task = ForeignKeyField(Task)
 
+
 class Logo(db.Model):
-    id = IntegerField(primary_key=True)
+    id = PrimaryKeyField()
     logo = TextField(unique=True)
 
 
 class Shift(db.Model):
-    id = IntegerField(primary_key=True)
+    id = PrimaryKeyField()
     day = DateTimeField(null=False, default=datetime.datetime.now, unique=True)
 
 
 class EmployeeShift(db.Model):
+    id = PrimaryKeyField()
     employee = ForeignKeyField(EmployeePin)
     shift = ForeignKeyField(Shift)
     color = TextField(null=False)
