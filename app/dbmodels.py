@@ -39,7 +39,9 @@ class Task(db.Model):
     marked_as_todo = BooleanField(default=False)
     marked_as_completed = BooleanField(default=False)
     assigned_at = DateTimeField(null=False, default=datetime.datetime.now)
+    updated_at = DateTimeField(null=True)
     completed_at = DateTimeField(null=True)
+    marked_by = ForeignKeyField(EmployeePin, null=True)
 
 
 class TaskCompletion(db.Model):
