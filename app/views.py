@@ -3,17 +3,20 @@ import csv
 import datetime
 import os
 
+import re
+
 from app import app, db
 from flask import render_template, request, jsonify, Response
-from peewee import fn, DoesNotExist
+from peewee import fn, DoesNotExist, IntegrityError
 
-from config import BASEDIR
+from config import BASEDIR, EMPLOYEE_ICONS_CSS
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
-    EmployeeShift, Shift
+    EmployeeShift, Shift, Logo
 
 
 @app.before_first_request
 def prepare():
+    refresh_logos()
     populate_dummy_data()
 
 
@@ -145,3 +148,17 @@ def populate_dummy_data():
 
 
 
+
+def refresh_logos():
+    db.database.create_tables([Logo], True)
+    textfile = open(EMPLOYEE_ICONS_CSS, 'r')
+    filetext = textfile.read()
+    textfile.close()
+    matches = re.findall("\.([\w_-]+)", filetext)
+    for m in matches:
+        logo = Logo()
+        logo.logo_class = m.rstrip()
+        try:
+            logo.save()
+        except IntegrityError as ie:
+            print ie.message

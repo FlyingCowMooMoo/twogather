@@ -68,7 +68,7 @@ class BoardTask(db.Model):
 
 class Logo(db.Model):
     id = PrimaryKeyField()
-    logo = TextField(unique=True)
+    logo_class = TextField(unique=True)
 
 
 class Shift(db.Model):

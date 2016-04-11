@@ -1,3 +1,4 @@
+tinycss
 peewee
 Flask-Security
 flask
