@@ -270,6 +270,7 @@ def get_dummy_employee_pins():
     with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
         for pin in g.readlines():
             data.append(str(pin.rstrip()))
+        g.close()
     return tuple(data)
 
 
@@ -278,6 +279,7 @@ def get_dummy_colors():
     with open(os.path.join(BASEDIR, 'dummycolors.csv')) as g:
         for pin in g.readlines():
             data.append(str(pin.rstrip()))
+        g.close()
     return tuple(data)
 
 

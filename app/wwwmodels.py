@@ -34,7 +34,7 @@ class Employee():
             raise ValueError('Logo cannot be none')
         self.pin = pin
         self.color = color
-        self.logo = color
+        self.logo = logo
 
     def pin(self):
         return self.pin
