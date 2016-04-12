@@ -2,6 +2,7 @@ import csv
 
 import datetime
 import os
+import random
 
 import re
 
@@ -10,15 +11,15 @@ from flask import render_template, request, jsonify, Response
 from peewee import fn, DoesNotExist, IntegrityError
 
 from config import BASEDIR, EMPLOYEE_ICONS_CSS
-from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
-    EmployeeShift, Shift, Logo, Color
+from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask\
+    , Logo, Color
 
 import wwwmodels as wm
 
 @app.before_first_request
 def prepare():
     refresh_logos()
-    populate_dummy_data()
+    #populate_dummy_data()
 
 
 @app.route('/', methods=['GET'])
@@ -28,11 +29,12 @@ def index():
     return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
 
 
+
 @app.route('/updatepin', methods=['POST'])
 def update_pin():
-    pin = ['pin']
-    color = ['color']
-    logo = ['logo']
+    pin = request.form['pin']
+    color = request.form['color']
+    logo = request.form['logo']
     try:
         e = EmployeePin.select(EmployeePin.color.hex_color == color, EmployeePin.logo.logo_class == logo)
         data = jsonify(error='Invalid Color/Logo Combination, already claimed by another employee')
@@ -88,12 +90,6 @@ def updatetask():
         data = jsonify(error='Invalid Employee Pin')
         return Response(response=data, status=200, mimetype="application/json")
 
-    try:
-        shift = Shift.select(Shift.day.day == datetime.date.today())
-    except DoesNotExist:
-        data = jsonify(error='No shift today')
-        return Response(response=data, status=200, mimetype="application/json")
-
     taskaction = request.form['action']
     if taskaction == 'markastodo':
         try:
@@ -136,16 +132,14 @@ def populate_dummy_data():
     Role.drop_table(True)
     User.drop_table(True)
     UserRoles.drop_table(True)
-    EmployeeShift.drop_table(True)
     Task.drop_table(True)
     TaskCompletion.drop_table(True)
     MarkedAsTodo.drop_table(True)
     TaskBoard.drop_table(True)
     BoardTask.drop_table(True)
-    Shift.drop_table(True)
     EmployeePin.drop_table(True)
     db.database.create_tables([Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard,
-                               BoardTask, EmployeeShift, Shift], True)
+                               BoardTask], True)
     with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
         for pin in g.readlines():
             entry = EmployeePin()
@@ -185,6 +179,21 @@ def populate_dummy_data():
             bt.save()
 
 
+def refresh_color():
+    db.database.create_tables([Color], True)
+    with open(os.path.join(BASEDIR, 'dummycolors.csv')) as g:
+        stuff = g.readlines()
+    if stuff is not None:
+        for line in stuff:
+            value = line.rstrip()
+            try:
+                Color.select(Color.hex_code == value)
+            except DoesNotExist:
+                c = Color()
+                c.hex_code = value
+                c.save()
+
+
 def refresh_logos():
     db.database.create_tables([Logo], True)
     css_file = open(EMPLOYEE_ICONS_CSS, 'r')
@@ -198,3 +207,39 @@ def refresh_logos():
             logo.save()
         except IntegrityError as ie:
             print ie.message
+
+
+
+
+def demo_data():
+    boards = list()
+    manager_names = get_dummy_manager_names()
+    employee_pins = get_dummy_employee_pins()
+
+
+def get_dummy_employee_pins():
+    data = list()
+    with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
+        for pin in g.readlines():
+            data.append(str(pin.rstrip()))
+    return tuple(data)
+
+
+def get_dummy_manager_names():
+    data = list()
+    reader = csv.reader(open(os.path.join(BASEDIR, 'dummymanagerdata.csv'), mode='r'))
+    for line in reader:
+        name = line[2].rstrip()
+        data.append(name)
+    return tuple(data)
+
+
+def get_dummy_icons():
+    data = list()
+    css_file = open(EMPLOYEE_ICONS_CSS, 'r')
+    css_text = css_file.read()
+    css_file.close()
+    matches = re.findall("\.([\w_-]+)", css_text)
+    for m in matches:
+        data.append(str(m.rstrip()))
+    return tuple(data)

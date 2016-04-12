@@ -2,8 +2,7 @@ import datetime
 
 from flask.ext.security import UserMixin, RoleMixin
 
-from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, ForeignKeyField, DecimalField, \
-    IntegerField, DateField, PrimaryKeyField
+from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, ForeignKeyField, PrimaryKeyField
 
 from app import db
 
@@ -74,19 +73,7 @@ class Logo(db.Model):
     id = PrimaryKeyField()
     logo_class = TextField(unique=True)
 
-
-class Shift(db.Model):
-    id = PrimaryKeyField()
-    day = DateTimeField(null=False, default=datetime.datetime.now, unique=True)
-
-
-class EmployeeShift(db.Model):
-    id = PrimaryKeyField()
-    employee = ForeignKeyField(EmployeePin)
-    shift = ForeignKeyField(Shift)
-    color = TextField(null=False)
-    logo = ForeignKeyField(Logo)
-
 class Color(db.Model):
     id = PrimaryKeyField()
     hex_code = TextField(unique=True)
+
