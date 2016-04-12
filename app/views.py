@@ -28,9 +28,7 @@ def prepare():
 def index():
     b = demo_data()
     print b
-    #print 'lol'
-    #tasks = Task.select().order_by(fn.Random())
-    #return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
+    return render_template('taskdemo.html', tasks = b[0])
 
 
 @app.route('/updatepin', methods=['POST'])

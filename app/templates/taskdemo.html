@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    .ui-draggable-dragging {
+        z-index: 10000!important}
+
+    .task-column {
+        margin-top:10px;
+        border: #000000 medium solid;
+        border-radius: 50px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+    }
+
+    .task-block {
+        margin-top:10px;
+        border: #595959 medium solid;
+        border-radius: 20px;
+        -moz-border-radius: 20px;
+        -webkit-border-radius: 20px;
+    }
+
+    .caution-border {
+        border: 10px solid transparent;
+        -moz-border-image: -moz-linear-gradient(right, #fcfa1e 0%, rgba(0, 0, 0, 0.91) 100%);
+        -webkit-border-image: -webkit-linear-gradient(right, #fcfa1e 0%, #000000 100%);
+        border-image: linear-gradient(to left, #fcfa1e 0%, #000000 100%);
+        border-image-slice: 1;
+    }
+</style>
+
+</br></br></br></br></br></br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 task-column" id="container-task">
+            <h2>
+                Task
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in tasks %}
+                {% if item.unassigned == True %}
+                    {% if item.urgent == True%}
+                        <blockquote class="task-block current-task caution-border">
+                    {% else %}
+                        <blockquote class="task-block current-task">
+                    {% endif %}
+                            <p>
+                                Description <cite>{{item.desc}}</cite>
+                            </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                        </blockquote>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="col-md-4 task-column" id="container-doing">
+            <h2>
+                Doing
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in tasks %}
+                {% if item.todo == True %}
+                    {% if item.urgent == True%}
+                        <blockquote class="task-block current-task caution-border" style="background-color: {{ item.color }}">
+                    {% else %}
+                        <blockquote class="task-block current-task style="background-color: {{item.color}}">
+                    {% endif %}
+                    <p>
+                        <i class="{{item.logo_class}}"></i>
+                        Description <cite>{{item.desc}}</cite>
+                    </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                </blockquote>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="col-md-4 task-column" id="container-done">
+            <h2>
+                Done
+            </h2>
+
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+            {% for item in tasks %}
+                {% if item.done == True %}
+                    {% if item.urgent == True%}
+                        <blockquote class="task-block current-task caution-border" style="background-color: {{item.color}}">
+                    {% else %}
+                         <blockquote class="task-block current-task style="background-color: {{item.color}}">
+                    {% endif %}
+
+                    <p>
+                        <i class="{{item.logo_class}}"></i>
+                        Description <cite>{{item.desc}}</cite>
+                    </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                </blockquote>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.task-block').draggable();
+
+    $( "#container-task" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    $( "#container-doing" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    $( "#container-done" ).droppable({
+        drop: function( event, ui ) {
+            addTaskToContainer($(this), event, ui);
+        }
+    });
+
+    function addTaskToContainer(droppable, event, ui)
+    {
+        var task = ui['draggable'][0];
+        $(task).css('left', '0');
+        $(task).css('right', '0');
+        droppable.append(task);
+    }
+</script>
+{% endblock %}
