@@ -50,7 +50,7 @@
                     {% endif %}
                             <p>
                                 Description <cite>{{item.desc}}</cite>
-                            </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                            </p> <small><cite>Title</cite>{{item.title}}</small>
                         </blockquote>
                 {% endif %}
             {% endfor %}
@@ -68,12 +68,12 @@
                     {% if item.urgent == True%}
                         <blockquote class="task-block current-task caution-border" style="background-color: {{ item.color }}">
                     {% else %}
-                        <blockquote class="task-block current-task style="background-color: {{item.color}}">
+                        <blockquote class="task-block current-task" style="background-color: {{item.color}}">
                     {% endif %}
                     <p>
-                        <i class="{{item.logo_class}}"></i>
+                        <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
                         Description <cite>{{item.desc}}</cite>
-                    </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                    </p> <small><cite>Title</cite>{{item.title}}</small>
                 </blockquote>
                 {% endif %}
             {% endfor %}
@@ -91,13 +91,12 @@
                     {% if item.urgent == True%}
                         <blockquote class="task-block current-task caution-border" style="background-color: {{item.color}}">
                     {% else %}
-                         <blockquote class="task-block current-task style="background-color: {{item.color}}">
+                         <blockquote class="task-block current-task" style="background-color: {{item.color}}">
                     {% endif %}
-
                     <p>
-                        <i class="{{item.logo_class}}"></i>
+                        <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
                         Description <cite>{{item.desc}}</cite>
-                    </p> <small>{{item.title}}<cite>Source Title</cite></small>
+                    </p> <small><cite>Title</cite>{{item.title}}</small>
                 </blockquote>
                 {% endif %}
             {% endfor %}

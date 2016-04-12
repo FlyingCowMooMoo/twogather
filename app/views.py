@@ -11,7 +11,7 @@ from app import app, db
 from flask import render_template, request, jsonify, Response
 from peewee import fn, DoesNotExist, IntegrityError
 
-from config import BASEDIR, EMPLOYEE_ICONS_CSS
+from config import BASEDIR, EMPLOYEE_ICONS_CSS, IMAGE_FOLDER_LOCATION
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask \
     , Logo, Color
 
@@ -293,6 +293,11 @@ def get_dummy_manager_names():
 
 
 def get_dummy_icons():
+    from os import listdir
+    from os.path import isfile, join
+    onlyfiles = [f for f in listdir(IMAGE_FOLDER_LOCATION) if isfile(join(IMAGE_FOLDER_LOCATION, f))]
+    return tuple(onlyfiles)
+    '''
     data = list()
     css_file = open(EMPLOYEE_ICONS_CSS, 'r')
     css_text = css_file.read()
@@ -301,6 +306,7 @@ def get_dummy_icons():
     for m in matches:
         data.append(str(m.rstrip()))
     return tuple(data)
+    '''
 
 
 def get_dummy_tasks():
