@@ -26,9 +26,10 @@ class UserRoles(db.Model):
     name = property(lambda self: self.role.name)
     description = property(lambda self: self.role.description)
 
-
 class EmployeePin(db.Model):
     pin = TextField(unique=True)
+    logo = ForeignKeyField(Logo, null=True, unique=True)
+    color = ForeignKeyField(Color, null=True, unique=True)
 
 
 class Task(db.Model):
@@ -85,3 +86,7 @@ class EmployeeShift(db.Model):
     shift = ForeignKeyField(Shift)
     color = TextField(null=False)
     logo = ForeignKeyField(Logo)
+
+class Color(db.Model):
+    id = PrimaryKeyField()
+    hex_code = TextField(unique=True)

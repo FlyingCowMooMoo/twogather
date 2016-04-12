@@ -11,7 +11,7 @@ from peewee import fn, DoesNotExist, IntegrityError
 
 from config import BASEDIR, EMPLOYEE_ICONS_CSS
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
-    EmployeeShift, Shift, Logo
+    EmployeeShift, Shift, Logo, Color
 
 import wwwmodels as wm
 
@@ -27,6 +27,32 @@ def index():
     tasks = Task.select().order_by(fn.Random())
     return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
 
+
+@app.route('/updatepin', methods=['POST'])
+def update_pin():
+    pin = ['pin']
+    color = ['color']
+    logo = ['logo']
+    try:
+        e = EmployeePin.select(EmployeePin.color.hex_color == color, EmployeePin.logo.logo_class == logo)
+        data = jsonify(error='Invalid Color/Logo Combination, already claimed by another employee')
+        return Response(response=data, status=200, mimetype="application/json")
+    except DoesNotExist:
+        try:
+            emp = EmployeePin.select(EmployeePin.pin == pin)
+            if emp is None:
+                raise DoesNotExist
+            lg = Logo.select(Logo.logo_class == logo).first()
+            cl = Color.select(Color.hex_code == color).first()
+            if lg is None or cl is None:
+                data = jsonify(error='Invalid Color/Logo Combination')
+                return Response(response=data, status=200, mimetype="application/json")
+            emp.color = color
+            emp.logo = logo
+            emp.save()
+        except DoesNotExist:
+            data = jsonify(error='Invalid employee id')
+            return Response(response=data, status=200, mimetype="application/json")
 
 @app.route('/marktask', methods=['POST'])
 def updatetask():
@@ -85,19 +111,26 @@ def updatetask():
     elif taskaction == 'markasdone':
         print('a')
         # TODO: Handle marked as done
-
+'''
 
 @app.route('/board/<string:boardname>', methods=['GET'])
 def show_board(boardname):
     board = TaskBoard.get(TaskBoard.name == boardname)
     if board is None:
         return render_template('error.html'), 404
-    tasks = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_task == True)
+    tasks = BoardTask.select(BoardTask.board == board)
     tasktodo = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_todo == True)
     done = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_completed == True)
     result = wm.Board(title=board.title, managername=board.creator.name)
-    return render_template('board.html', thetasks=tasks, theboard=board)
+    for t in tasks:
+        tsk = t.task
+        title = tsk.title
+        desc = tsk.description
 
+        if tsk.marked_as_task:# wt = tsk.
+        ftsk = wm.Task(title=title, desc=desc)
+    return render_template('board.html', thetasks=tasks, theboard=board)
+'''
 
 def populate_dummy_data():
     Role.drop_table(True)
@@ -154,10 +187,10 @@ def populate_dummy_data():
 
 def refresh_logos():
     db.database.create_tables([Logo], True)
-    textfile = open(EMPLOYEE_ICONS_CSS, 'r')
-    filetext = textfile.read()
-    textfile.close()
-    matches = re.findall("\.([\w_-]+)", filetext)
+    css_file = open(EMPLOYEE_ICONS_CSS, 'r')
+    css_text = css_file.read()
+    css_file.close()
+    matches = re.findall("\.([\w_-]+)", css_text)
     for m in matches:
         logo = Logo()
         logo.logo_class = m.rstrip()
