@@ -1,3 +1,4 @@
+import collections
 import csv
 
 import datetime
@@ -11,23 +12,25 @@ from flask import render_template, request, jsonify, Response
 from peewee import fn, DoesNotExist, IntegrityError
 
 from config import BASEDIR, EMPLOYEE_ICONS_CSS
-from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask\
+from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask \
     , Logo, Color
 
 import wwwmodels as wm
 
+
 @app.before_first_request
 def prepare():
     refresh_logos()
-    #populate_dummy_data()
+    # populate_dummy_data()
 
 
 @app.route('/', methods=['GET'])
 def index():
-    print 'lol'
-    tasks = Task.select().order_by(fn.Random())
-    return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
-
+    b = demo_data()
+    print b
+    #print 'lol'
+    #tasks = Task.select().order_by(fn.Random())
+    #return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
 
 
 @app.route('/updatepin', methods=['POST'])
@@ -55,6 +58,7 @@ def update_pin():
         except DoesNotExist:
             data = jsonify(error='Invalid employee id')
             return Response(response=data, status=200, mimetype="application/json")
+
 
 @app.route('/marktask', methods=['POST'])
 def updatetask():
@@ -107,6 +111,8 @@ def updatetask():
     elif taskaction == 'markasdone':
         print('a')
         # TODO: Handle marked as done
+
+
 '''
 
 @app.route('/board/<string:boardname>', methods=['GET'])
@@ -127,6 +133,7 @@ def show_board(boardname):
         ftsk = wm.Task(title=title, desc=desc)
     return render_template('board.html', thetasks=tasks, theboard=board)
 '''
+
 
 def populate_dummy_data():
     Role.drop_table(True)
@@ -209,17 +216,68 @@ def refresh_logos():
             print ie.message
 
 
-
-
 def demo_data():
     boards = list()
+    employees = get_dummy_employees()
     manager_names = get_dummy_manager_names()
+    dummy_tasks = get_dummy_tasks()
+    for _ in range(5):
+        boards.append(get_dummy_board(tasks=dummy_tasks, manager=random.choice(manager_names), employees=employees))
+    return tuple(boards)
+
+
+def get_dummy_board(tasks=None, manager=None, employees=None):
+    if not (not (manager is None) and not (tasks is None) and not (employees is None) and isinstance(manager,
+                                                                                                     collections.Iterable) and isinstance( employees, collections.Iterable)):
+        raise ValueError('Invalid parameters')
+    actions = ['unassigned', 'todo', 'done']
+    btasks = list()
+    name = 'Board ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    for t in tasks:
+        emp = random.choice(employees)
+        bt = wm.Task(title=t[0], desc=t[1], logo_class=emp.logo, priority=None, pin=emp.pin, color=emp.color,
+                     urgent=random.choice([True, False]), startdate=None, updatedate=None)
+        action = random.choice(actions)
+        if action == 'unassigned':
+            bt.unassigned = True
+        elif action == 'todo':
+            bt.unassigned = False
+            bt.todo = True
+        else:
+            bt.unassigned = False
+            bt.done = True
+        btasks.append(bt)
+    return tuple(btasks)
+
+
+def get_dummy_employees():
     employee_pins = get_dummy_employee_pins()
+    icons = get_dummy_icons()
+    colors = get_dummy_colors()
+    number_of_employees = min(len(employee_pins), len(icons))
+    icons_to_use = random.sample(icons, number_of_employees)
+    pins_to_use = random.sample(employee_pins, number_of_employees)
+    colors_to_use = random.sample(colors, number_of_employees)
+    employees = list()
+    index = 0
+    for p in pins_to_use:
+        emp = wm.Employee(pin=p, logo=icons_to_use[index], color=colors_to_use[index])
+        index += 1
+        employees.append(emp)
+    return tuple(employees)
 
 
 def get_dummy_employee_pins():
     data = list()
     with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
+        for pin in g.readlines():
+            data.append(str(pin.rstrip()))
+    return tuple(data)
+
+
+def get_dummy_colors():
+    data = list()
+    with open(os.path.join(BASEDIR, 'dummycolors.csv')) as g:
         for pin in g.readlines():
             data.append(str(pin.rstrip()))
     return tuple(data)
@@ -243,3 +301,13 @@ def get_dummy_icons():
     for m in matches:
         data.append(str(m.rstrip()))
     return tuple(data)
+
+
+def get_dummy_tasks():
+    data = list()
+    reader = csv.reader(open(os.path.join(BASEDIR, 'dummytasks.csv'), mode='r'))
+    for line in reader:
+        title = str(line[0].rstrip())
+        desc = str(line[1].rstrip())
+        data.append(tuple([title, desc]))
+    return data

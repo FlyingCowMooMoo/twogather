@@ -11,8 +11,8 @@ class Board():
 
 
 class Task():
-    def __init__(self, title='', desc='', logo_class='', priority='', pin='', color='', urgent=False, startdate=None,
-                 updatedate=None):
+    def __init__(self, title=None, desc=None, logo_class=None, priority=None, pin=None, color=None, urgent=False, startdate=None,
+                 updatedate=None, unassigned=True, todo=False, done=False):
         self.title = title
         self.desc = desc
         self.pin = pin
@@ -22,3 +22,25 @@ class Task():
         self.urgent = urgent
         self.startdate = startdate
         self.updatedate = updatedate
+
+
+class Employee():
+    def __init__(self, pin=None, color=None, logo=None):
+        if pin is None:
+            raise ValueError('Pin cannot be none')
+        if color is None:
+            raise ValueError('Color cannot be none')
+        if logo is None:
+            raise ValueError('Logo cannot be none')
+        self.pin = pin
+        self.color = color
+        self.logo = color
+
+    def pin(self):
+        return self.pin
+
+    def color(self):
+        return self.color
+
+    def logo(self):
+        return self.logo

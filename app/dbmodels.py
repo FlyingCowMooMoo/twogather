@@ -6,6 +6,17 @@ from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, F
 
 from app import db
 
+
+class Logo(db.Model):
+    id = PrimaryKeyField()
+    logo_class = TextField(unique=True)
+
+
+class Color(db.Model):
+    id = PrimaryKeyField()
+    hex_code = TextField(unique=True)
+
+
 class Role(db.Model, RoleMixin):
     name = CharField(unique=True)
     description = TextField(null=True)
@@ -69,11 +80,4 @@ class BoardTask(db.Model):
     task = ForeignKeyField(Task)
 
 
-class Logo(db.Model):
-    id = PrimaryKeyField()
-    logo_class = TextField(unique=True)
-
-class Color(db.Model):
-    id = PrimaryKeyField()
-    hex_code = TextField(unique=True)
 
