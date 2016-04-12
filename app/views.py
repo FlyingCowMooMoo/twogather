@@ -13,6 +13,7 @@ from config import BASEDIR, EMPLOYEE_ICONS_CSS
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
     EmployeeShift, Shift, Logo
 
+import wwwmodels as wm
 
 @app.before_first_request
 def prepare():
@@ -26,9 +27,10 @@ def index():
     tasks = Task.select().order_by(fn.Random())
     return render_template('tasknew.html', normaltasks=tasks, doingtasks=(), donetasks=())
 
+
 @app.route('/marktask', methods=['POST'])
 def updatetask():
-    pin=request.form['pin']
+    pin = request.form['pin']
 
     try:
         brd = int(request.form['board'])
@@ -82,8 +84,7 @@ def updatetask():
 
     elif taskaction == 'markasdone':
         print('a')
-            # TODO: Handle marked as done
-
+        # TODO: Handle marked as done
 
 
 @app.route('/board/<string:boardname>', methods=['GET'])
@@ -91,8 +92,12 @@ def show_board(boardname):
     board = TaskBoard.get(TaskBoard.name == boardname)
     if board is None:
         return render_template('error.html'), 404
-    tasks = BoardTask.select(BoardTask.board == board)
+    tasks = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_task == True)
+    tasktodo = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_todo == True)
+    done = BoardTask.select(BoardTask.board == board, BoardTask.task.marked_as_completed == True)
+    result = wm.Board(title=board.title, managername=board.creator.name)
     return render_template('board.html', thetasks=tasks, theboard=board)
+
 
 def populate_dummy_data():
     Role.drop_table(True)
@@ -145,8 +150,6 @@ def populate_dummy_data():
             bt.board = taskboard
             bt.task = task
             bt.save()
-
-
 
 
 def refresh_logos():
