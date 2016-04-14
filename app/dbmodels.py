@@ -36,6 +36,7 @@ class UserRoles(db.Model):
     name = property(lambda self: self.role.name)
     description = property(lambda self: self.role.description)
 
+
 class EmployeePin(db.Model):
     pin = TextField(unique=True)
     logo = ForeignKeyField(Logo, null=True, unique=True)
@@ -78,6 +79,19 @@ class BoardTask(db.Model):
     id = PrimaryKeyField()
     board = ForeignKeyField(TaskBoard)
     task = ForeignKeyField(Task)
+
+
+class Comment(db.Model):
+    id = PrimaryKeyField()
+    context = TextField()
+    DateTimeField(null=False, default=datetime.datetime.now)
+    created_by_employee = ForeignKeyField(EmployeePin, null=True, default=None)
+    created_by_manager = ForeignKeyField(User, null=True, default=None)
+
+
+class TaskComment(db.Model):
+    task = ForeignKeyField(Task, null=False)
+    comment = ForeignKeyField(Comment, null=False)
 
 
 
