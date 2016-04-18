@@ -44,9 +44,9 @@
             {% for item in tasks %}
                 {% if item.unassigned == True %}
                     {% if item.urgent == True%}
-                        <blockquote class="task-block current-task caution-border">
+                        <blockquote class="task-block current-task caution-border" data-id={{item.id}}>
                     {% else %}
-                        <blockquote class="task-block current-task">
+                        <blockquote class="task-block current-task" data-id={{item.id}}>
                     {% endif %}
                             <p>
                                 Description <cite>{{item.desc}}</cite>
@@ -66,9 +66,9 @@
             {% for item in tasks %}
                 {% if item.todo == True %}
                     {% if item.urgent == True%}
-                        <blockquote class="task-block current-task caution-border" style="background-color: {{ item.color }}">
+                        <blockquote class="task-block current-task caution-border" data-id={{item.id}} style="background-color: {{ item.color }}">
                     {% else %}
-                        <blockquote class="task-block current-task" style="background-color: {{item.color}}">
+                        <blockquote class="task-block current-task" data-id={{item.id}} style="background-color: {{item.color}}">
                     {% endif %}
                     <p>
                         <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
@@ -89,9 +89,9 @@
             {% for item in tasks %}
                 {% if item.done == True %}
                     {% if item.urgent == True%}
-                        <blockquote class="task-block current-task caution-border" style="background-color: {{item.color}}">
+                        <blockquote class="task-block current-task caution-border" data-id={{item.id}} style="background-color: {{item.color}}">
                     {% else %}
-                         <blockquote class="task-block current-task" style="background-color: {{item.color}}">
+                         <blockquote class="task-block current-task" data-id={{item.id}} style="background-color: {{item.color}}">
                     {% endif %}
                     <p>
                         <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
@@ -132,5 +132,11 @@
         $(task).css('right', '0');
         droppable.append(task);
     }
+
+    $(document).ready(function() {
+        $('.task-block').each(function(i, obj) {
+            console.log($(this).data("id"))
+        });
+    });
 </script>
 {% endblock %}

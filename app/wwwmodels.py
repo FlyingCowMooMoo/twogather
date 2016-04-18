@@ -11,8 +11,9 @@ class Board():
 
 
 class Task():
-    def __init__(self, title=None, desc=None, logo_class=None, priority=None, pin=None, color=None, urgent=False, startdate=None,
+    def __init__(self, id=None, title=None, desc=None, logo_class=None, priority=None, pin=None, color=None, urgent=False, startdate=None,
                  updatedate=None, unassigned=True, todo=False, done=False):
+        self.id = id
         self.title = title
         self.desc = desc
         self.pin = pin

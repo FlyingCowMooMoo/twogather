@@ -13,7 +13,7 @@ from peewee import fn, DoesNotExist, IntegrityError
 
 from config import BASEDIR, EMPLOYEE_ICONS_CSS, IMAGE_FOLDER_LOCATION
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask \
-    , Logo, Color
+    , Logo, Color, Comment, TaskComment
 
 import wwwmodels as wm
 
@@ -28,7 +28,26 @@ def prepare():
 def index():
     b = demo_data()
     print b
-    return render_template('taskdemo.html', tasks = b[0])
+    return render_template('taskdemo.html', tasks=b[0])
+
+
+@app.route('/getcomments/<int:taskid>', methods=['POST'])
+def get_comments(taskid=None):
+    try:
+        try:
+            taskid = int(taskid)
+        except ValueError:
+            raise DoesNotExist('Task Id Needs to be numeric')
+        if taskid is None:
+            raise DoesNotExist('Task Id Needs to be specified')
+        comments = (Comment.select().join(TaskComment).where(TaskComment.task.id == taskid))
+        data = jsonify(comments=comments)
+    except DoesNotExist as e:
+        data = jsonify(error='Invalid Task Id ' + e.message)
+
+    return Response(response=data, status=200, mimetype="application/json")
+
+
 
 
 @app.route('/updatepin', methods=['POST'])
@@ -231,9 +250,10 @@ def get_dummy_board(tasks=None, manager=None, employees=None):
     actions = ['unassigned', 'todo', 'done']
     btasks = list()
     name = 'Board ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    counter = 0
     for t in tasks:
         emp = random.choice(employees)
-        bt = wm.Task(title=t[0], desc=t[1], logo_class=emp.logo, priority=None, pin=emp.pin, color=emp.color,
+        bt = wm.Task(id=counter, title=t[0], desc=t[1], logo_class=emp.logo, priority=None, pin=emp.pin, color=emp.color,
                      urgent=random.choice([True, False]), startdate=None, updatedate=None)
         action = random.choice(actions)
         if action == 'unassigned':
@@ -245,6 +265,7 @@ def get_dummy_board(tasks=None, manager=None, employees=None):
             bt.unassigned = False
             bt.done = True
         btasks.append(bt)
+        counter += 1
     return tuple(btasks)
 
 
@@ -312,8 +333,10 @@ def get_dummy_icons():
 def get_dummy_tasks():
     data = list()
     reader = csv.reader(open(os.path.join(BASEDIR, 'dummytasks.csv'), mode='r'))
+    counter = 0
     for line in reader:
         title = str(line[0].rstrip())
         desc = str(line[1].rstrip())
         data.append(tuple([title, desc]))
+        counter += 1
     return data
