@@ -7,6 +7,11 @@ from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, F
 from app import db
 
 
+class LogoImage(db.Model):
+    id = PrimaryKeyField()
+    image_name = TextField(unique=True)
+
+
 class Logo(db.Model):
     id = PrimaryKeyField()
     logo_class = TextField(unique=True)
@@ -24,10 +29,10 @@ class Role(db.Model, RoleMixin):
 
 class User(db.Model, UserMixin):
     email = TextField(unique=True)
-    password = TextField()
+    password = TextField(null=True)
     active = BooleanField(default=True)
     confirmed_at = DateTimeField(null=True)
-    name = TextField()
+    name = TextField(null=True)
 
 
 class UserRoles(db.Model):
@@ -39,8 +44,8 @@ class UserRoles(db.Model):
 
 class EmployeePin(db.Model):
     pin = TextField(unique=True)
-    logo = ForeignKeyField(Logo, null=True, unique=True)
-    color = ForeignKeyField(Color, null=True, unique=True)
+    logo = ForeignKeyField(LogoImage, null=True)
+    color = ForeignKeyField(Color, null=True)
 
 
 class Task(db.Model):

@@ -135,8 +135,23 @@
 
     $(document).ready(function() {
         $('.task-block').each(function(i, obj) {
-            console.log($(this).data("id"))
+            console.log($(this).data("id"));
+            populateComments($(this).data("id"));
         });
     });
+
+    function populateComments(taskId)
+    {
+        var value = {"task_id": taskId};
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('get_comments') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                console.log(result);
+            }
+        });
+    }
 </script>
 {% endblock %}
