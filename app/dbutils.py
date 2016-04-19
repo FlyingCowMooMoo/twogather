@@ -75,14 +75,17 @@ def generate_dummy_task():
     task = Task()
     task.title = title
     task.description = title
+    emp = (EmployeePin.select().order_by(fn.Random())).get()
     if action == 'unassigned':
         task.marked_as_task = True
     elif action == 'todo':
         task.marked_as_task = False
         task.marked_as_todo = True
+        task.marked_by = emp
     else:
         task.marked_as_task = False
         task.marked_as_completed = True
+        task.marked_by = emp
     task.marked_as_high_priority = random.choice([True, False])
     task.save()
     return task
@@ -95,8 +98,8 @@ def populate_dummy_employees():
         for pin in g.readlines():
             emp = EmployeePin.create_or_get(pin=pin.rstrip())
             emp = EmployeePin.get(EmployeePin.pin == pin.rstrip())
-            emp.color = Color.select(Color.id == index)
-            emp.logo = LogoImage.select(LogoImage.id == index)
+            emp.color = (Color.select().order_by(fn.Random())).get()
+            emp.logo = (LogoImage.select().order_by(fn.Random())).get()
             emp.save()
             index += 1
 

@@ -39,5 +39,5 @@ class UserRoles(db.Model):
 
 class EmployeePin(db.Model):
     pin = TextField(unique=True)
-    logo = ForeignKeyField(LogoImage, null=True, unique=True)
-    color = ForeignKeyField(Color, null=True, unique=True)
+    logo = ForeignKeyField(LogoImage, null=True)
+    color = ForeignKeyField(Color, null=True)

@@ -27,6 +27,9 @@ class Task():
         self.urgent = urgent
         self.startdate = startdate
         self.updatedate = updatedate
+        self.unassigned = unassigned
+        self.todo = todo
+        self.done = done
 
     @staticmethod
     def create_from_dbmodel(dbmodel=None):
@@ -47,11 +50,13 @@ class Task():
             done = False
         color = None
         logo = None
+        pin = None
         if dbmodel.marked_by is not None:
-            color = dbmodel.marked_by.color
-            logo = dbmodel.marked_by.logo
+            color = dbmodel.marked_by.color.hex_code
+            logo = dbmodel.marked_by.logo.image_name
+            pin = dbmodel.marked_by.pin
         return Task(dbmodel.id, dbmodel.title, dbmodel.description, logo, dbmodel.marked_as_high_priority,
-                    dbmodel.marked_by.pin, color, dbmodel.marked_as_high_priority, dbmodel.assigned_at,
+                    pin, color, dbmodel.marked_as_high_priority, dbmodel.assigned_at,
                     dbmodel.completed_at, unassigned, todo, done)
 
 
