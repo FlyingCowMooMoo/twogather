@@ -46,12 +46,15 @@ class EmployeePin(db.Model):
     pin = TextField(unique=True)
     logo = ForeignKeyField(LogoImage, null=True)
     color = ForeignKeyField(Color, null=True)
+    email = TextField(null=True)
+    first_name = TextField(null=True)
+    last_name = TextField(null=True)
 
 
 class Task(db.Model):
     id = PrimaryKeyField()
-    title = TextField()
-    description = TextField()
+    title = TextField(null=False)
+    description = TextField(null=True)
     marked_as_task = BooleanField(default=True)
     marked_as_todo = BooleanField(default=False)
     marked_as_completed = BooleanField(default=False)
