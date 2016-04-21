@@ -28,8 +28,7 @@ def verify_tables(drop_tables=False, generate_data=False):
              Color], True)
     for i in load_icons():
         _ = LogoImage.create_or_get(image_name=str(i))
-    for i in load_colors():
-        _ = Color.create_or_get(hex_code=str(i))
+    populate_colors()
     _ = Role.create_or_get(name='Manager')
     if generate_data:
         populate_dummy_managers()
@@ -92,16 +91,15 @@ def generate_dummy_task():
 
 
 def populate_dummy_employees():
+    data = list()
     import os
-    with open(os.path.join(BASEDIR, 'dummypins.csv')) as g:
-        index = 1
-        for pin in g.readlines():
-            emp = EmployeePin.create_or_get(pin=pin.rstrip())
-            emp = EmployeePin.get(EmployeePin.pin == pin.rstrip())
-            emp.color = (Color.select().order_by(fn.Random())).get()
-            emp.logo = (LogoImage.select().order_by(fn.Random())).get()
-            emp.save()
-            index += 1
+    reader = csv.reader(open(os.path.join(BASEDIR, 'dummypins.csv'), mode='r'))
+    for line in reader:
+        d = {'pin': line[0].rstrip(), 'first_name': line[1].rstrip(), 'last_name': line[2].rstrip(),
+             'email': line[3].rstrip()}
+        data.append(d)
+    with db.database.atomic():
+        EmployeePin.insert_many(data).execute()
 
 
 def populate_dummy_managers():
@@ -120,14 +118,16 @@ def populate_dummy_managers():
         role.save()
 
 
-def load_colors():
+def populate_colors():
     data = list()
     import os
     with open(os.path.join(BASEDIR, 'dummycolors.csv')) as g:
-        for pin in g.readlines():
-            data.append(str(pin.rstrip()))
+        for line in g.readlines():
+            d = {'hex_code': str(line.rstrip())}
+            data.append(d)
         g.close()
-    return tuple(data)
+    with db.database.atomic():
+        Color.insert_many(data).execute()
 
 
 def load_icons():

@@ -1,4 +1,4 @@
-# The Models that hold data to pass to the rendering engine
+# The Models that hold data to pass to the rendering engine a.k.a View Models
 
 import dbmodels as dbm
 
