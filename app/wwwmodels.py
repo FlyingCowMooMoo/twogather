@@ -80,3 +80,18 @@ class Employee():
 
     def logo(self):
         return self.logo
+
+
+class Comment:
+    def __init__(self, comment=None):
+        if comment is None or not isinstance(Comment, dbm.Comment):
+            raise ValueError('Invalid Parameter')
+        self.id = comment.id
+        self.text = comment.text
+        self.color = '#f2f2f2'
+        if comment.created_by_employee is not None:
+            self.author = comment.created_by_employee.pin
+            self.color = comment.created_by_employee.color.hex_code
+        else:
+            self.author = comment.created_by_manager.email
+

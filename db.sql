@@ -14,18 +14,33 @@ CREATE TABLE color
     hex_code TEXT NOT NULL
 );
 CREATE UNIQUE INDEX color_hex_code ON color (hex_code);
+CREATE TABLE comment
+(
+    id INTEGER PRIMARY KEY NOT NULL,
+    text TEXT NOT NULL,
+    date TEXT NOT NULL,
+    created_by_employee_id INTEGER,
+    created_by_manager_id INTEGER,
+    FOREIGN KEY (created_by_manager_id) REFERENCES user (id) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY (created_by_employee_id) REFERENCES employeepin (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE UNIQUE INDEX comment_created_by_employee_id ON comment (created_by_employee_id);
+CREATE UNIQUE INDEX comment_created_by_manager_id ON comment (created_by_manager_id);
 CREATE TABLE employeepin
 (
     id INTEGER PRIMARY KEY NOT NULL,
     pin TEXT NOT NULL,
     logo_id INTEGER,
     color_id INTEGER,
+    email TEXT,
+    first_name TEXT,
+    last_name TEXT,
     FOREIGN KEY (color_id) REFERENCES color (id) DEFERRABLE INITIALLY DEFERRED,
     FOREIGN KEY (logo_id) REFERENCES logoimage (id) DEFERRABLE INITIALLY DEFERRED
 );
-CREATE UNIQUE INDEX employeepin_pin ON employeepin (pin);
 CREATE UNIQUE INDEX employeepin_logo_id ON employeepin (logo_id);
 CREATE UNIQUE INDEX employeepin_color_id ON employeepin (color_id);
+CREATE UNIQUE INDEX employeepin_pin ON employeepin (pin);
 CREATE TABLE logo
 (
     id INTEGER PRIMARY KEY NOT NULL,
@@ -60,7 +75,7 @@ CREATE TABLE task
 (
     id INTEGER PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT,
     marked_as_task INTEGER NOT NULL,
     marked_as_todo INTEGER NOT NULL,
     marked_as_completed INTEGER NOT NULL,
@@ -82,6 +97,16 @@ CREATE TABLE taskboard
 );
 CREATE UNIQUE INDEX taskboard_name ON taskboard (name);
 CREATE UNIQUE INDEX taskboard_creator_id ON taskboard (creator_id);
+CREATE TABLE taskcomment
+(
+    id INTEGER PRIMARY KEY NOT NULL,
+    task_id INTEGER NOT NULL,
+    comment_id INTEGER NOT NULL,
+    FOREIGN KEY (comment_id) REFERENCES comment (id) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY (task_id) REFERENCES task (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE UNIQUE INDEX taskcomment_task_id ON taskcomment (task_id);
+CREATE UNIQUE INDEX taskcomment_comment_id ON taskcomment (comment_id);
 CREATE TABLE taskcompletion
 (
     id INTEGER PRIMARY KEY NOT NULL,
@@ -96,10 +121,10 @@ CREATE TABLE user
 (
     id INTEGER PRIMARY KEY NOT NULL,
     email TEXT NOT NULL,
-    password TEXT NOT NULL,
+    password TEXT,
     active INTEGER NOT NULL,
     confirmed_at TEXT,
-    name TEXT NOT NULL
+    name TEXT
 );
 CREATE UNIQUE INDEX user_email ON user (email);
 CREATE TABLE userroles

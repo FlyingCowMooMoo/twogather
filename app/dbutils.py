@@ -7,7 +7,7 @@ from peewee import fn
 from app import db
 from config import IMAGE_FOLDER_LOCATION, BASEDIR
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
-    LogoImage, Color
+    LogoImage, Color, Comment, TaskComment, Organization
 
 
 def verify_tables(drop_tables=False, generate_data=False):
@@ -23,41 +23,46 @@ def verify_tables(drop_tables=False, generate_data=False):
         BoardTask.drop_table(True)
         LogoImage.drop_table(True)
         Color.drop_table(True)
+        Comment.drop_table(True)
+        TaskComment.drop_table(True)
+        Organization.drop_table(True)
     db.database.create_tables(
             [Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, LogoImage,
-             Color], True)
-    for i in load_icons():
-        _ = LogoImage.create_or_get(image_name=str(i))
+             Color, Comment, TaskComment, Organization], True)
+    populate_logos()
     populate_colors()
     _ = Role.create_or_get(name='Manager')
     if generate_data:
+        populate_dummy_companies()
         populate_dummy_managers()
         populate_dummy_employees()
-        generate_random_boards()
+        generate_random_boards(1, 10)
+        #populate_dummy_comments()
 
 
 def generate_random_boards(number=5, tasks_per_board=20):
     # managers = (User.select().join(UserRoles).join(Role).where(UserRoles.role.name == 'Manager')).order_by(
     #    fn.Random()).limit(number)
     # lol = tuple(UserRoles.select(UserRoles.role == Role.get(Role.name == 'Manager')).limit(number))
-    lol = tuple(User.select().order_by(fn.Random()).limit(number))
-    print lol
-    for _ in range(number):
-        manager = random.choice(lol)
-        board = TaskBoard()
-        board.name = ' '.join((manager.name, '\'s board', str(random.sample(xrange(10), 4))))
-        board.creator = manager
-        board.save()
-        for _ in range(tasks_per_board):
-            task = generate_dummy_task()
-            bt = BoardTask()
-            bt.board = board
-            random_query = Task.select().order_by(fn.Random())
-            bt.task = random_query.get()
-            bt.save()
+    for org in Organization.select():
+        random_manager = tuple(User.select().order_by(fn.Random()).limit(number))
+        for _ in range(number):
+            manager = random.choice(random_manager)
+            board = TaskBoard()
+            board.name = ' '.join((manager.name, '\'s board', str(random.sample(xrange(10), 4))))
+            board.creator = manager
+            board.organization = org
+            board.save()
+            for _ in range(tasks_per_board):
+                task = generate_dummy_task(org)
+                bt = BoardTask()
+                bt.board = board
+                random_query = Task.select().order_by(fn.Random())
+                bt.task = random_query.get()
+                bt.save()
 
 
-def generate_dummy_task():
+def generate_dummy_task(org=None):
     verb = random.choice(('back up', 'bypass', "hack", "override", "compress",
                           "copy", "navigate", "index", "connect", "generate", "quantify", "calculate", "synthesize",
                           "input",
@@ -74,7 +79,7 @@ def generate_dummy_task():
     task = Task()
     task.title = title
     task.description = title
-    emp = (EmployeePin.select().order_by(fn.Random())).get()
+    emp = (EmployeePin.select(EmployeePin.organization == org).order_by(fn.Random())).get()
     if action == 'unassigned':
         task.marked_as_task = True
     elif action == 'todo':
@@ -95,8 +100,14 @@ def populate_dummy_employees():
     import os
     reader = csv.reader(open(os.path.join(BASEDIR, 'dummypins.csv'), mode='r'))
     for line in reader:
+        random_query = Color.select().order_by(fn.Random())
+        color = random_query.get()
+        random_query = LogoImage.select().order_by(fn.Random())
+        logo = random_query.get()
+        random_query = Organization.select().order_by(fn.Random())
+        org = random_query.get()
         d = {'pin': line[0].rstrip(), 'first_name': line[1].rstrip(), 'last_name': line[2].rstrip(),
-             'email': line[3].rstrip()}
+             'email': line[3].rstrip(), 'color': color, 'logo': logo, 'organization': org}
         data.append(d)
     with db.database.atomic():
         EmployeePin.insert_many(data).execute()
@@ -118,6 +129,33 @@ def populate_dummy_managers():
         role.save()
 
 
+def populate_dummy_comments():
+    data = list()
+    import os
+    assign_to_employee = random.choice([True, False])
+    with open(os.path.join(BASEDIR, 'dummycomments.csv')) as g:
+        for line in g.readlines():
+            data.append(line.rstrip())
+        g.close()
+    for task in Task.select():
+        for comment in data:
+            c = Comment()
+            c.text = comment
+            if assign_to_employee:
+                random_query = EmployeePin.select().order_by(fn.Random())
+                user = random_query.get()
+                c.created_by_employee = user
+            else:
+                random_query = User.select().order_by(fn.Random())
+                user = random_query.get()
+                c.created_by_manager = user
+            c.save()
+            tc = TaskComment()
+            tc.task = task
+            tc.comment = c
+            tc.save()
+
+
 def populate_colors():
     data = list()
     import os
@@ -128,6 +166,28 @@ def populate_colors():
         g.close()
     with db.database.atomic():
         Color.insert_many(data).execute()
+
+
+def populate_logos():
+    data = list()
+    import os
+    reader = csv.reader(open(os.path.join(BASEDIR, 'dummyimages.csv'), mode='r'))
+    for line in reader:
+        man = {'id': line[0].rstrip(), 'image_name': line[1].rstrip()}
+        data.append(man)
+    with db.database.atomic():
+        LogoImage.insert_many(data).execute()
+
+
+def populate_dummy_companies():
+    data = list()
+    import os
+    reader = csv.reader(open(os.path.join(BASEDIR, 'dummycompanies.csv'), mode='r'))
+    for line in reader:
+        man = {'id': line[0].rstrip(), 'name': line[1].rstrip()}
+        data.append(man)
+    with db.database.atomic():
+        Organization.insert_many(data).execute()
 
 
 def load_icons():

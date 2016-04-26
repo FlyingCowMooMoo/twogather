@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-<form class="form-horizontal">
+    <br/><br/><br/>
+<form class="form-horizontal" id="create-task-form">
     <fieldset>
 
         <!-- Form Name -->
@@ -41,8 +42,10 @@
             <label class="col-md-4 control-label" for="employee">Assign To Employee</label>
             <div class="col-md-6">
                 <select id="employee" name="employee" class="form-control">
-                    <option value="1">Option one</option>
-                    <option value="2">Option two</option>
+                    <option value="none">None</option>
+                    {% for item in employees %}
+                        <option style="background-color:{{ item['color'] }};" value="{{ item['pin'] }}">{{ item['pin'] }}({{ item['name']}})</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -51,12 +54,70 @@
             <label class="col-md-4 control-label" for="employee">Manager</label>
             <div class="col-md-6">
                 <select id="manager" name="manager" class="form-control">
-                    <option value="1">Option one</option>
-                    <option value="2">Option two</option>
+                    {% for item in managers %}
+                        <option value="{{ item['id'] }}">{{ item['name']}}</option>
+                    {% endfor %}
                 </select>
+            </div>
+        </div>
+
+        <!-- Multiple Radios (inline) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="urgent">Mark As Urgent</label>
+            <div class="col-md-4">
+                <label class="radio-inline" for="urgent-0">
+                    <input type="radio" name="urgent" id="urgent-0" value="yes">
+                    Yes
+                </label>
+                <label class="radio-inline" for="urgent-1">
+                    <input type="radio" name="urgent" id="urgent-1" value="no" checked="checked">
+                    No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="taskname"></label>
+            <div class="col-md-6">
+                <button type="submit" value="Send" class="btn btn-success" id="submit" />
             </div>
         </div>
 
     </fieldset>
 </form>
+
+    <script>
+        $( "#create-task-form" ).submit(function( event ) {
+            var formData;
+            event.preventDefault();
+            var board = $("#selectboard").val();
+            var taskName = $("#taskname").val();
+            var taskDesc = $("#taskdesc").val();
+            var employee = $("#employee").val();
+            var manager = $("#manager").val();
+            var urgent = false
+            if($('#urgent-0').is(':checked')) {
+                urgent = true
+            }
+            formData = {
+                board_id: board,
+                task_title: taskName,
+                task_desc: taskDesc,
+                employee_id: employee,
+                manager_id: manager,
+                urgent: urgent
+            };
+            $.ajax({
+                url: '{{ url_for('submit_create_task') }}',
+                data: formData,
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
 {% endblock %}

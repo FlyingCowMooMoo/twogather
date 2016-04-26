@@ -7,14 +7,14 @@ from flask_peewee.db import CharField, TextField, BooleanField, DateTimeField, F
 from app import db
 
 
+class Organization(db.Model):
+    id = PrimaryKeyField()
+    name = TextField(unique=True)
+
+
 class LogoImage(db.Model):
     id = PrimaryKeyField()
-    image_name = TextField(unique=True)
-
-
-class Logo(db.Model):
-    id = PrimaryKeyField()
-    logo_class = TextField(unique=True)
+    image_name = TextField()
 
 
 class Color(db.Model):
@@ -28,6 +28,7 @@ class Role(db.Model, RoleMixin):
 
 
 class User(db.Model, UserMixin):
+    id = PrimaryKeyField()
     email = TextField(unique=True)
     password = TextField(null=True)
     active = BooleanField(default=True)
@@ -49,6 +50,9 @@ class EmployeePin(db.Model):
     email = TextField(null=True)
     first_name = TextField(null=True)
     last_name = TextField(null=True)
+    organization = ForeignKeyField(Organization)
+    hex_color = property(lambda self: self.color.hex_code)
+    logo_url = property(lambda self: self.logo.image_name)
 
 
 class Task(db.Model):
@@ -81,6 +85,7 @@ class TaskBoard(db.Model):
     name = TextField(unique=True)
     creator = ForeignKeyField(User)
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
+    organization = ForeignKeyField(Organization)
 
 
 class BoardTask(db.Model):
@@ -91,8 +96,8 @@ class BoardTask(db.Model):
 
 class Comment(db.Model):
     id = PrimaryKeyField()
-    context = TextField()
-    DateTimeField(null=False, default=datetime.datetime.now)
+    text = TextField()
+    date = DateTimeField(null=False, default=datetime.datetime.now)
     created_by_employee = ForeignKeyField(EmployeePin, null=True, default=None)
     created_by_manager = ForeignKeyField(User, null=True, default=None)
 

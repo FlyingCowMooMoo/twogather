@@ -71,7 +71,7 @@
                         <blockquote class="task-block current-task" data-id={{item.id}} style="background-color: {{item.color}}">
                     {% endif %}
                     <p>
-                        <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
+                        <img width="16" height="16" alt="star" src="{{ item.logo_class }}" />
                         Description <cite>{{item.desc}}</cite>
                     </p> <small><cite>Title</cite>{{item.title}}</small>
                 </blockquote>
@@ -94,7 +94,7 @@
                          <blockquote class="task-block current-task" data-id={{item.id}} style="background-color: {{item.color}}">
                     {% endif %}
                     <p>
-                        <img width="16" height="16" alt="star" src="{{ url_for('static', filename='img/' + item.logo_class ) }}" />
+                        <img width="16" height="16" alt="star" src="{{ item.logo_class }}" />
                         Description <cite>{{item.desc}}</cite>
                     </p> <small><cite>Title</cite>{{item.title}}</small>
                 </blockquote>
