@@ -124,9 +124,11 @@ def submit_create_task():
     except DoesNotExist:
         return jsonify(error="Invalid Parameters")
 
+
 @app.route('/getcomments', methods=['POST'])
 def get_comments():
-    taskid = int(request.form['task_id'])
+    datac = list()
+    taskid = int(request.json['task_id'])
     print taskid
     try:
         try:
@@ -135,11 +137,18 @@ def get_comments():
             raise DoesNotExist('Task Id Needs to be numeric')
         if taskid is None:
             raise DoesNotExist('Task Id Needs to be specified')
-        comments = (Comment.select().join(TaskComment).where(TaskComment.task == taskid))
+        # for tc in TaskComment.select():
+        #    if tc.taskid == taskid:
+        #        datac.append(tc.comment)
 
-        data = jsonify(comments=comments)
+        for c in Comment.select().join(TaskComment).where(TaskComment.task == taskid):
+            author = c.get_author()
+            datac.append({'author': c.get_author(), 'text': c.text})
+        # comments = (Comment.select().join(TaskComment).where(TaskComment.task == taskid))
+
+        return jsonify(comments=datac)
     except DoesNotExist as e:
-        data = jsonify(error='Invalid Task Id ' + e.message)
+        return jsonify(error='Invalid Task Id ' + e.message)
 
     return Response(response=data, status=200, mimetype="application/json")
 

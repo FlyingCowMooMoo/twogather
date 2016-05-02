@@ -36,8 +36,8 @@ def verify_tables(drop_tables=False, generate_data=False):
         populate_dummy_companies()
         populate_dummy_managers()
         populate_dummy_employees()
-        generate_random_boards(1, 10)
-        #populate_dummy_comments()
+        generate_random_boards()
+        populate_dummy_comments()
 
 
 def generate_random_boards(number=5, tasks_per_board=20):
@@ -79,7 +79,7 @@ def generate_dummy_task(org=None):
     task = Task()
     task.title = title
     task.description = title
-    emp = (EmployeePin.select(EmployeePin.organization == org).order_by(fn.Random())).get()
+    emp = (EmployeePin.select().where(EmployeePin.organization == org).order_by(fn.Random())).get()
     if action == 'unassigned':
         task.marked_as_task = True
     elif action == 'todo':
@@ -132,13 +132,13 @@ def populate_dummy_managers():
 def populate_dummy_comments():
     data = list()
     import os
-    assign_to_employee = random.choice([True, False])
     with open(os.path.join(BASEDIR, 'dummycomments.csv')) as g:
         for line in g.readlines():
             data.append(line.rstrip())
         g.close()
     for task in Task.select():
         for comment in data:
+            assign_to_employee = random.choice([True, False])
             c = Comment()
             c.text = comment
             if assign_to_employee:

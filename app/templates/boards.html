@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for item in items %}
-        <a class="btn btn-primary" href="{{ url_for('show_board', board_id=item['id']) }}" role="button">{{ item['Name'] }}</a></br>
+        <a class="btn btn-primary" href="{{ url_for('show_board', board_id=item['id']) }}" role="button">
+            {{ item['name'] }}</a></br>
     {% endfor %}
 {% endblock %}

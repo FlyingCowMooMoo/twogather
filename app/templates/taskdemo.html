@@ -51,6 +51,9 @@
                             <p>
                                 Description <cite>{{item.desc}}</cite>
                             </p> <small><cite>Title</cite>{{item.title}}</small>
+                <a href="#" class="btn btn-info" data-toggle="collapse"
+                   data-target="#comments-{{ item.id }}">Comments</a>
+                <div id="comments-{{ item.id }}" class="collapse"></div>
                         </blockquote>
                 {% endif %}
             {% endfor %}
@@ -74,6 +77,8 @@
                         <img width="16" height="16" alt="star" src="{{ item.logo_class }}" />
                         Description <cite>{{item.desc}}</cite>
                     </p> <small><cite>Title</cite>{{item.title}}</small>
+                    <a href="#" class="btn btn-info" data-toggle="collapse" data-target="#comments-{{ item.id }}">Comments</a>
+                    <div id="comments-{{ item.id }}" class="collapse"></div>
                 </blockquote>
                  {% endif %}
             {% endfor %}
@@ -97,6 +102,8 @@
                         <img width="16" height="16" alt="star" src="{{ item.logo_class }}" />
                         Description <cite>{{item.desc}}</cite>
                     </p> <small><cite>Title</cite>{{item.title}}</small>
+                    <a href="#" class="btn btn-info" data-toggle="collapse" data-target="#comments-{{ item.id }}">Comments</a>
+                    <div id="comments-{{ item.id }}" class="collapse"></div>
                 </blockquote>
                 {% endif %}
             {% endfor %}
@@ -149,6 +156,11 @@
             data: JSON.stringify(value),
             contentType: 'application/json;charset=UTF-8',
             success: function(result) {
+                var i;
+                for (i = 0; i < result.comments.length; ++i) {
+                    var element = " <blockquote class=\"\" data-id=" + i + "\"><p><cite>" + result.comments[i].text + "</cite> </p> <small>" + result.comments[i].author + "</small>";
+                    $("#comments-" + taskId).append(element);
+                }
                 console.log(result);
             }
         });

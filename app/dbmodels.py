@@ -101,10 +101,22 @@ class Comment(db.Model):
     created_by_employee = ForeignKeyField(EmployeePin, null=True, default=None)
     created_by_manager = ForeignKeyField(User, null=True, default=None)
 
+    def get_author(self):
+        if self.created_by_employee is not None:
+            if self.created_by_employee.first_name is not None and self.created_by_employee.last_name is not None:
+                return ' '.join((self.created_by_employee.first_name, self.created_by_employee.last_name))
+            else:
+                return str(self.created_by_employee.pin)
+        elif self.created_by_manager is not None:
+            if self.created_by_manager.name is not None:
+                return self.created_by_manager.name
+            else:
+                return self.created_by_manager.email
+        else:
+            return 'Unnamed Author'
+
 
 class TaskComment(db.Model):
     task = ForeignKeyField(Task, null=False)
     comment = ForeignKeyField(Comment, null=False)
-
-
-
+    taskid = property(lambda self: self.task.id)
