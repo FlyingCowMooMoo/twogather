@@ -86,6 +86,7 @@ class TaskBoard(db.Model):
     creator = ForeignKeyField(User)
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
     organization = ForeignKeyField(Organization)
+    org_id = property(lambda self: self.organization.id)
 
 
 class BoardTask(db.Model):

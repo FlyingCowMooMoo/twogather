@@ -88,29 +88,25 @@
 
     <script>
         $( "#create-task-form" ).submit(function( event ) {
-            var formData;
             event.preventDefault();
-            var board = $("#selectboard").val();
-            var taskName = $("#taskname").val();
-            var taskDesc = $("#taskdesc").val();
-            var employee = $("#employee").val();
-            var manager = $("#manager").val();
-            var urgent = false
+            var data = {}
+            data['board_id'] = $("#selectboard").val();
+            data['task_title'] = $("#taskname").val();
+            data['task_desc'] = $("#taskdesc").val();
+            data['employee_id'] = $("#employee").val();
+            data['manager_id'] = $("#manager").val();
+            data['urgent'] = false;
             if($('#urgent-0').is(':checked')) {
-                urgent = true
+                data['urgent'] = true
             }
-            formData = {
-                board_id: board,
-                task_title: taskName,
-                task_desc: taskDesc,
-                employee_id: employee,
-                manager_id: manager,
-                urgent: urgent
-            };
+            data = JSON.stringify(data);
+            console.log(data);
             $.ajax({
                 url: '{{ url_for('submit_create_task') }}',
-                data: formData,
                 type: 'POST',
+                data: data,
+                contentType: 'application/json;charset=UTF-8',
+                cache: false,
                 success: function(response) {
                     console.log(response);
                 },

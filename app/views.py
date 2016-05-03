@@ -1,3 +1,5 @@
+import json
+
 import dbutils
 
 from app import app, db
@@ -35,9 +37,24 @@ def show_board(board_id=None):
         tasks = list()
         for item in query:
             tasks.append(viewmodels.Task.create_from_dbmodel(item))
-        return render_template('taskdemo.html', tasks=tuple(tasks))
+        return render_template('taskdemo.html', tasks=tuple(tasks), id=board_id, orgid=board.org_id)
     except DoesNotExist as e:
         return show_error('404', e.message)
+
+
+@app.route('/getemployees', methods=['POST'])
+def get_employees():
+    ordid = int(request.json['org_id'])
+    employees = list()
+    try:
+        org = Organization.get(Organization.id == ordid)
+        for emp in EmployeePin.select().where(EmployeePin.organization == org):
+            employees.append({"id": emp.id, "color": emp.hex_color, "logo": emp.logo_url, "pin": emp.pin,
+                              "fname": emp.first_name, "lname": emp.last_name})
+        # return Response(response=jsonify(employees=employees), status=200, mimetype="application/json")
+        return jsonify(employees=employees)
+    except DoesNotExist as e:
+        return jsonify(error="Invalid Parameters" + e.message)
 
 
 @app.route('/companies')
@@ -61,20 +78,20 @@ def company(cid=None):
         return render_template('boards.html', items=tuple(data))
 
 
-
-@app.route('/createtask', methods=['GET'])
-def create_task():
+@app.route('/createtask/<int:boardid>', methods=['GET'])
+def create_task(boardid):
     employees = list()
     boards = list()
     managers = list()
-    for value in TaskBoard.select():
-        boards.append({'id': value.id, 'name': value.name})
-    for value in EmployeePin.select():
+    task_board = TaskBoard.get(TaskBoard.id == boardid)
+    boards.append({'id': task_board.id, 'name': task_board.name})
+    for value in EmployeePin.select().where(EmployeePin.organization == task_board.organization):
         if value.first_name and value.last_name:
             name = ' '.join((value.first_name, value.last_name))
         else:
             name = 'No name specified'
-        employees.append({'pin': value.pin, 'color': value.color.hex_code, 'image': value.logo.image_name, 'name': name})
+        employees.append(
+                {'pin': value.pin, 'color': value.color.hex_code, 'image': value.logo.image_name, 'name': name})
     for value in User.select():
         managers.append({'id': value.id, 'name': value.name})
     return render_template('createtask.html', employees=tuple(employees), boards=tuple(boards),
@@ -91,14 +108,15 @@ def task_details():
 
 @app.route('/submitcreatetask', methods=['POST'])
 def submit_create_task():
+    a = request.json
     try:
-        board_id = int(request.form['board_id'])
-        task_title = request.form['task_title']
-        task_desc = request.form['task_desc']
-        if request.form['employee_id'] != 'NONE':
-            employee_id = int(request.form['employee_id'])
-        manager_id = int(request.form['manager_id'])
-        urgent = utils.to_bool(request.form['urgent'])
+        board_id = int(request.json['board_id'])
+        task_title = request.json['task_title']
+        task_desc = request.json['task_desc']
+        if request.json['employee_id'] != 'NONE':
+            employee_id = request.json['employee_id']
+        manager_id = int(request.json['manager_id'])
+        urgent = utils.to_bool(request.json['urgent'])
     except ValueError as ve:
         return jsonify(error="Invalid Parameters", details=ve.message)
     if board_id is None or task_title is None or task_desc is None or manager_id is None:

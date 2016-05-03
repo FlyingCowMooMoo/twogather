@@ -1,6 +1,7 @@
 def to_bool(value):
     """
         Convert a string to a boolean
+    :rtype: bool
     :param value: the string
     :return: a boolean value
     """
