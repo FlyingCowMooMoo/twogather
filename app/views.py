@@ -3,7 +3,7 @@ import json
 import dbutils
 
 from app import app, db
-from flask import render_template, request, jsonify, Response
+from flask import render_template, request, jsonify, Response, url_for
 from peewee import fn, DoesNotExist
 
 from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
@@ -139,6 +139,7 @@ def submit_create_task():
         bt.task = task
         bt.board = board
         bt.save()
+        return jsonify(msg="All Good", url=url_for('show_board', board_id=board_id))
     except DoesNotExist:
         return jsonify(error="Invalid Parameters")
 
