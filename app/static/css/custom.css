@@ -1,0 +1,520 @@
+/**
+ * Customising css classes form bootstrap
+ */
+
+/* general classes */
+
+html {
+	background-color: #f2f2f2;
+}
+
+body {
+	overflow: hidden;
+}
+
+.navbar {
+ 	border-radius: 0px;
+ 	margin-bottom: 10px;
+ 	/*background-color: lightGreen;*/
+ }
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover{
+	/*background-color: green;*/
+ }
+
+main {
+	padding-right: 20px;
+	padding-left: 20px;
+	width: 100%;
+}
+
+.col-sm-3 {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.input {
+	border: 0px;
+}
+
+hr {
+	margin-bottom: 10px;
+	border-top: 1px solid gray;
+}
+
+textarea {
+   resize: none;
+}
+
+.glyphicon {
+	top: 3px;
+}
+
+/* new classes */
+/* Boards page: boards */
+
+div#boards-block {
+	/*background-color: lightBlue;*/
+	/*height: 100%;*/
+	float: left;
+	width: 85%;
+	padding-left: 0px;
+	padding-right: 0px;
+	/*padding-right: 10px;*/
+	display: inline-block;
+}
+
+div.row.boards {
+	/*margin-top: 10px;*/
+	/*background-color: lightGreen;*/
+
+	margin: 10px 1px;
+	/*height: 80%;*/
+}
+
+div.board {
+	background-color: lightGray;
+	padding: 1px 15px;
+	margin-bottom: 20px;
+	border-radius: 3px;
+}
+
+div.board-new {
+	background-color: lightBlue;
+	padding-bottom: 11px;
+}
+
+div.board > div > h2 {
+	margin-top: 10px;
+}
+
+div[id^='empsInvolved'] {
+	min-height: 50px;
+	width: 100%;
+	background-color: white;
+	border-radius: 3px;
+	padding: 1px 5px;
+}
+
+div[id^='empsInvolved'] div.emp {
+	background-color: lightGray;
+	border-radius: 3px;
+	height: 33px;
+	width: 33px;
+	padding: 5px;
+	position: relative;
+	left: 5px;
+	top: 5px;
+	display: inline-block;
+	text-align: center;
+}
+
+/* Boards page: Employees */
+
+div#employees-block {
+	/*background-color: lightBlue;*/
+	/*height: 80%;*/
+	float: right;
+	width: 13.5%;
+	/*margin-left: 10px;*/
+	display: inline-block;
+}
+
+div.employees {
+	height: 80%;
+	border-radius: 3px;
+	border-left: 3px solid #2c3e50;
+	margin-top: 10px;
+	padding: 0 10px;
+}
+
+div.employee {
+	text-align: center;
+	background-color: lightGray;
+	padding: 1px 5px;
+	margin: 8px 0;
+	min-height: 23px;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+div.employee p {
+	margin-bottom: 0;
+}
+
+div.employee-new {
+	font-size: 13px;
+	padding: 2px 8px;
+	padding-bottom: 7px;
+	text-align: left;
+	cursor: default;
+}
+
+div.employee-new .heading button.delete {
+	width: 11px;
+	position: relative;
+	top: 8px;
+	left: 10px;
+	font-size: 16px;	
+}
+
+div.employee-new fieldset {
+	margin-bottom: 0px;
+}
+
+div.employee-new .form-control.input {
+	height: 23px;
+	font-size: 12px;
+	padding: 5px 10px;
+	margin: 6px 0px;
+	border-radius: 2px;
+}
+
+div.employee-new p,
+div.employee-new span {
+	display: inline-block;
+}	
+
+div.employee-new button.btn.brd/*,
+div.employee-new button.delete */{
+	font-size: smaller;
+	height: 22px;
+	padding-top: 2px;
+	margin-top: 8px;
+	width: 53px;
+	margin: 8px 2px 0 2px;
+}
+
+div.employee-new button.btn.brd:hover {
+	background-color: lightBlue;
+}
+
+/* -------------  Tasks page: taks  ------------- */
+
+div#states-block {
+	float: left;
+	width: 85%;
+	padding: 30px 0;
+}
+
+div.state {
+	margin-left: auto;
+	margin-right: auto;
+	width:300px;
+}
+
+div.state > div.heading {
+	height: 60px;
+	width: 50%;
+	float: left;
+	background-color: lightGray;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	padding: 12px 11px;
+	text-align: center;	
+}
+
+div.state h1,
+div.state h2,
+div.state h3{
+	margin: 0;
+	font-weight: 500;
+}	
+
+div.state > div.empty {
+	height: 60px;
+	width: 50%;
+	float: right;
+	padding: 10px;
+	text-align: center;	
+}
+
+div.empty > * {
+	display: inline-block;
+}
+
+div.empty > h3 {
+	float: right;
+	cursor: pointer;
+}
+
+div.empty span#addTask:hover {
+	color: lightBlue;
+}
+
+div.state > div.content {
+	height: 500px;
+	max-height: 500px;
+	width: 100%;
+	border-radius: 0 3px 3px 3px;
+	margin-bottom: 20px;
+	overflow: auto;
+	background-color: darkGray;
+	border: 10px solid lightGray;
+	border-top: 15px solid lightGray;
+	padding: 8px;
+}
+
+/*div.content > div {
+	background-color: darkGray;
+	height: 490px;
+	width: 100%;
+	border-radius: 2px;
+	padding: 8px;
+	overflow: auto;
+}*/
+
+div.content > div.task {
+	height: 60px;
+	width: 100%;
+	/*background-color: whitesmoke;*/
+	border-radius: 3px;
+	margin-bottom: 8px;
+}
+
+div.task > div {
+	height: 60px;
+	/*position: relative;*/
+	/*top: -42px;*/
+	float: left;
+	display: inline-block;
+}
+
+div.task div.taskEmp {
+	background-color: lightsalmon;
+	width: 60px;
+	border-radius: 3px 0 0 3px;
+	padding: 15px 5px;
+	text-align: center;
+	color: white;
+	cursor: default;
+}
+
+div.task div.taskContent {
+	width: 194px;
+	padding: 5px;
+	background-color: whitesmoke
+}
+
+div.taskContent h6 {
+	height: 30px;
+	width: 180px;
+	margin: 0;
+}
+
+div.taskContent > div {
+	width: 100%;
+	height: 22px;
+	/*background-color: blue;*/
+	margin: 0;
+	
+}
+div.taskContent > div > p {
+	display: inline-block;
+	font-size: 15px;
+}
+
+div.taskContent > div > span.btn.transparent {
+	font-size: 20px;
+	margin-top: -4px;
+	right: -20px;
+	position: relative;
+	float: right;
+}
+
+div.task div.taskImportant {
+	float: right;
+	background-color: whitesmoke;
+	width: 10px;
+	border-radius: 0 2px 2px 0;
+}
+
+div.task div[id^="commentsBlock"] {
+	display: none;
+	background-color: whitesmoke;
+	width: 100%;
+	height: auto;
+	padding: 8px 8px 0 8px;
+	font-size: 11px;
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	border-top: 1px dashed lightGray;
+	margin-bottom: 10px;
+}
+
+/* new tasks */
+
+div.content div.task-new {
+	height: auto;
+	background-color: lightGray;
+	padding: 7px;
+	padding-top: 0;
+}
+
+div.task-new span.glyphicon-remove {
+	float: right;
+	margin-right: 3px;
+	cursor: pointer;
+}
+
+
+
+div.task-new div.heading {
+	top: -34px;
+	padding: 4px 0;
+	height: 35px;
+	width: 100%;
+}
+
+div.task-new div.heading > h5{
+	margin: 0;
+	display: inline-block;
+}
+
+div.task-new div.heading > button.delete {
+	display: inline-block;
+	top: 17px;
+	font-size: 20px;
+	right: -15px;
+}
+/*
+div.task-new form {
+	position: relative;
+    top: -26px;
+    padding: 0 2px;
+}*/
+
+/*div.task-new div > fieldset:first-child {
+	position: absolute;
+	width: 250px;
+}*/
+
+div.task-new form p {
+	font-size: 13px;
+	margin-bottom: 4px;
+	margin-left: 4px;
+}
+
+div.task-new form > fieldset {
+	margin: 0;
+}
+
+div.task-new fieldset > input.input,
+div.task-new form > div.input{
+	height: 35px;
+	font-size: small;
+	border-radius: 2px;
+	padding: 5px 8px;
+	background-color: white;
+	margin-bottom: 10px;
+/*	width: 96%;
+margin: auto;*/
+}
+
+div.task-new form > div[id^='empAssigned']  {
+	height: 48px;
+}
+
+div.task-new button.btn {
+	margin: 0;
+	height: 22px;
+	width: 83px;
+	font-size: 10px;
+	padding: 3px 7px;
+	float: right;
+	margin-right: 3px;
+}
+
+div.task-new button.btn:hover {
+	background-color: lightBlue;
+}
+
+div.task-new div > h5 {
+	display: inline-block;
+}
+
+div.task-new div > input {
+	display: inline-block;
+	float: right;
+	margin-right: 90px;
+	margin-top: 10px;
+	width: 20px;
+	height: 20px;
+}
+
+div.task-new div > button.btn {
+	font-size: 14px;
+	height: 25px;
+	padding: 0;
+}
+
+/* edit task */
+div.task-new div.text-center {
+	padding: 0 28px;
+	height: 27px;
+}
+
+div.task-new div > button.btn.remove {
+	float: left;
+}
+
+/* buttons */
+
+.btn.transparent {
+	font-size: 50px;
+	min-height: 30px;
+	width: auto;
+	background-color: transparent;
+	margin: 0px;
+	line-height: 0;
+    margin-top: -17px;
+}
+
+.btn.add {
+	min-height: 45px;
+}
+
+.transparent:hover{
+	color: gray;
+}
+
+.btn.menu {
+	font-size: 28px;
+	position: absolute;
+	top: 30px;
+	right: 13px;
+}
+
+.btn.delete {
+	font-size: 23px;
+	position: absolute;
+	top: 26px;
+ 	right: 4px;
+}
+
+.btn.brd {
+	color: white;
+	background-color: #2c3e50;
+	border-radius: 2px;
+	border: 0px;
+	margin-top: 15px;
+	padding: 3px 15px;
+	min-width: 50px;
+}
+
+.btn.brd:hover {
+	background-color: lightGray;
+}
+
+
+/*   test     */
+div.content div.task > div.test {
+	height: 60px;
+	background-color: lightBlue;
+	width: 60px;
+	display: inline-block;
+
+}
+
+
