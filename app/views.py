@@ -1,5 +1,7 @@
 import json
 
+from flask.ext.login import login_required, current_user
+
 import dbutils
 
 from app import app, db
@@ -27,6 +29,7 @@ def index():
     return render_template('index.html', items=tuple(items))
 
 
+@login_required
 @app.route('/showboard/<int:board_id>', methods=['GET'])
 def show_board(board_id=None):
     if board_id is None:
@@ -37,7 +40,8 @@ def show_board(board_id=None):
         tasks = list()
         for item in query:
             tasks.append(viewmodels.Task.create_from_dbmodel(item))
-        return render_template('taskdemo.html', tasks=tuple(tasks), id=board_id, orgid=board.org_id)
+        return render_template('pages/board.html', tasks=tuple(tasks), id=board_id, orgid=board.org_id,
+                               orgname=board.org_name, accountname=current_user.get_name())
     except DoesNotExist as e:
         return show_error('404', e.message)
 

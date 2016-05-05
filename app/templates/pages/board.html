@@ -5,15 +5,15 @@
 	<title>Board</title>
 
 	<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="../../static/css/custom.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="../../static/js/bootstrap.min.js"></script>
-	<script src="../../static/js/jqury.js"></script>
-  <script src="../../static/js/tasks.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/tasks.js') }}"/>
 </head>
 <body>
+    <input type="hidden" id="orgid" value="{{ orgid }}">
 
   <!-- Navigation -->
 	<nav class="navbar navbar-default">
@@ -22,11 +22,11 @@
         <a class="navbar-brand" href="boards.html">Gatha</a>
       </div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="boards.html">Bunnings</a></li>
+        <li class="active"><a href="boards.html">{{ orgname }}</a></li>
         <li ><a href="#">Shoes</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Hi, John</a></li>
+        <li><a href="#">Hi, {{ accountname }}</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
       </ul>
     </div>

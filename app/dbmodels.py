@@ -35,6 +35,13 @@ class User(db.Model, UserMixin):
     confirmed_at = DateTimeField(null=True)
     name = TextField(null=True)
 
+    def get_name(self):
+        if self.name is None:
+            return self.email
+        else:
+            return self.name
+
+
 
 class UserRoles(db.Model):
     user = ForeignKeyField(User, related_name='roles')
@@ -87,6 +94,7 @@ class TaskBoard(db.Model):
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
     organization = ForeignKeyField(Organization)
     org_id = property(lambda self: self.organization.id)
+    org_name = property(lambda self: self.organization.name)
 
 
 class BoardTask(db.Model):
