@@ -11,7 +11,7 @@
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="../../static/js/bootstrap.min.js"></script>
 	<script src="../../static/js/jqury.js"></script>
-  <script src="../../static/js/boards.js"></script>
+  <script src="../../static/js/boards.js"> </script>
 </head>
 <body>
 
@@ -19,14 +19,33 @@
 	<nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Gatha</a>
+        <a class="navbar-brand" href="#">
+          <div class="img"></div>
+          <!-- <img src="../static/img/logo_white.png" alt="Gatha Logo"> -->
+        </a>
       </div>
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Bunnings</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Hi, John</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+    <!--   <ul class="nav navbar-nav navbar-right">
+        <li>
+         <a href="#">Hi, John</a> --> 
+          <div class="btn-group nav navbar-nav navbar-right">
+            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+              John Smith 
+              <span class="glyphicon glyphicon-menu-down"></span>
+              <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
+            </a>
+            <ul class="dropdown-menu">
+              <!-- dropdown menu links -->
+              <li class="active"><a href="#">John Smith</a></li>
+              <li class="a"><a href="#">Employees</a></li>
+              <hr>
+              <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+            </ul>
+          </div>
+        <!-- </li> -->
+        
       </ul>
     </div>
   </nav>
@@ -37,7 +56,8 @@
     <div class="grid" id="boards-block">
       <div class="row">
         <div class="col-sm-12"> 
-          <h4 style="display: inline-block;" > Boards (<span id="boardsNumber">0</span>)</h4>
+          <h4 class="heading" ><span id="boardsNumber">0 </span>
+          <span class="glyphicon glyphicon-list-alt"></span></h4>
           <button id="addBoard" class="btn transparent add glyphicons glyphicon-plus"></button>
         </div>
       </div>
@@ -46,7 +66,8 @@
     <!-- Employees -->
     <div id="employees-block">
       <div>
-          <h4 style="display: inline-block;" > Emps (<span id="empsNumber">0</span>)</h4>
+          <h4 class="heading"  ><span id="empsNumber">0 </span>
+          <span class="glyphicon glyphicon-user"></span></h4>
           <button id="addEmployee" class="btn transparent add glyphicons glyphicon-plus"></button> 
       </div>
       <div id="employees" class="employees emps"></div>

@@ -13,21 +13,39 @@
 	<script src="../../static/js/jqury.js"></script>
   <script src="../../static/js/tasks.js"></script>
 </head>
-<body>
+<body class="no-scroll">
 
   <!-- Navigation -->
-	<nav class="navbar navbar-default">
+  <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="boards.html">Gatha</a>
+        <a class="navbar-brand" href="boards.page">
+          <div class="img"></div>
+        </a>
       </div>
       <ul class="nav navbar-nav">
         <li class="active"><a href="boards.html">Bunnings</a></li>
-        <li ><a href="#">Shoes</a></li>
+        <li ><a href="board.html">Shoes</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Hi, John</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+    <!--   <ul class="nav navbar-nav navbar-right">
+        <li>
+         <a href="#">Hi, John</a> --> 
+          <div class="btn-group nav navbar-nav navbar-right">
+            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+              John Smith 
+              <span class="glyphicon glyphicon-menu-down"></span>
+              <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
+            </a>
+            <ul class="dropdown-menu">
+              <!-- dropdown menu links -->
+              <li class="active"><a href="#">John Smith</a></li>
+              <li class="a"><a href="#">Employees</a></li>
+              <hr>
+              <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+            </ul>
+          </div>
+        <!-- </li> -->
+        
       </ul>
     </div>
   </nav>
@@ -43,30 +61,10 @@
               <h1>To-Do</h1>
             </div>
             <div class="empty">
-              <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
+               <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
               <h3><span class="glyphicon glyphicon-plus" id="addTask"></span></h3>
             </div>
             <div class="content" id="newTasks">
-              <!-- <div> -->
-                <!-- <div id="task0" class="task">
-                  <div id="employee" class="taskEmp">
-                    <h3>WW</h3>
-                  </div>
-                  <div class="taskContent">
-                    <h6>Clean up shoes stores, and don't forget!</h6>
-                    <div>
-                      <p><span id="comment00">1 </span><span class="glyphicon glyphicon-comment"></span></p>
-                      <span class="btn transparent glyphicon glyphicon-chevron-down showComment"></span>
-                    </div>
-                  </div>
-                  <div class="taskImportant"></div>
-                  <div id="commentsBlock0">
-                   <p>* Clean up you shoes<p>
-                   <p>* Move your rubbish<p>
-                   <p>* Move your rubbish<p>
-                  </div>
-                </div> -->
-               
             </div>
           </div>
         </div>
@@ -78,7 +76,7 @@
               <h1>Doing</h1>
             </div>
             <div class="empty">
-              <h2>10 <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
             <div class="content"></div>
           </div>
@@ -89,7 +87,7 @@
               <h1>Done</h1>
             </div>
             <div class="empty">
-              <h2>23 <span class="glyphicon glyphicon-tasks"></span></h2>
+               <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
             <div class="content"></div>
           </div>

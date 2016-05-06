@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">  
+	<title>Login</title>
+
+	<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/custom.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="../../static/js/bootstrap.min.js"></script>
+	<script src="../../static/js/jqury.js"></script>
+</head>
+<body>
+
+  <!-- Body -->
+  <main id="login" class="sign">
+    <div class="state">
+    
+      <!-- Logo -->
+      <div class="heading">
+        <img src="../../static/img/logo_green.png" alt="Gatha Logo">
+      </div>
+
+      <!-- Loging block -->
+      <div class="content">
+        <form>
+          <fieldset class="form-group">
+            <input type="text" class="form-control input" id="username" placeholder="Username">
+          </fieldset>
+          <fieldset class="form-group">
+            <input type="password" class="form-control input" id="password" placeholder="Password">
+          </fieldset>
+           <a href="#">Forgot username or password?</a>
+          <div class="text-center">
+            <button type="button" class="btn brd log" onclick="location.href='boards.html';">Login</button>
+            <p>or</p>
+            <button type="button" class="btn brd log" onclick="location.href='signup.html';">Sign up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

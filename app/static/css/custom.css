@@ -2,16 +2,22 @@
  * Customising css classes form bootstrap
  */
 
-/* general classes */
+/* general selectors */
+
+/* set font family for all html elements */
+*, h1, h2, h3, h4, h5, h6 {
+	font-family: Futura,Trebuchet MS,Arial,sans-serif; 
+	/*font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; */
+}
 
 html {
 	background-color: #f2f2f2;
 }
 
-body {
-	overflow: hidden;
+hr {
+	width: 80%;
+	margin: 10px; 0; 
 }
-
 .navbar {
  	border-radius: 0px;
  	margin-bottom: 10px;
@@ -35,6 +41,7 @@ main {
 }
 
 .input {
+
 	border: 0px;
 }
 
@@ -52,6 +59,154 @@ textarea {
 }
 
 /* new classes */
+
+/* login and sign up page */
+
+main.sign {
+	background-image: url("../img/wallpaper.jpg");
+	/*background-color: lightBlue;*/
+	background-repeat: no-repeat;
+	background-position: center; 
+	background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: fixed;
+    height: 100vh;
+}
+
+main.sign > div.state {
+	width: 500px;
+	padding: 50px 0; 
+	/*background-color: lightGreen;*/
+	/*max-height: */
+}
+
+main.sign > div.state > div.heading {
+	float: none;
+	width: 100%;
+	height: 110px;
+	background-color: transparent;
+}
+
+main.sign div.heading > img {
+	height: 100%;
+}
+
+main.sign > div.state > div.content {
+	border: 0;
+	border-radius: 3px;
+	margin-top: 30px;
+	height: 450px;
+	overflow: hidden;
+	/*opacity: 0.4;*/
+	background-color: rgba(152,162,157,0.3);
+	padding: 40px 30px;
+}
+
+main#signup > div.state > div.content {
+	padding: 10px 30px;
+}
+
+main.sign div.content fieldset {
+	margin-top: 20px;
+}
+
+main.sign div.content input.input {
+	font-size: large;
+	opacity: 0.7;
+	color: #3e4c45;
+}
+
+main.sign div.content a,
+main.sign div.content > p {
+	color: #666;
+	font-size: 13px;
+}
+
+main.sign div.content a:hover {
+	color: #aaa;
+}
+
+main.sign div.content div.text-center {
+	padding-top: 10px;
+}
+
+main.sign div.content button.log {
+
+	margin-bottom: 15px;
+	margin-top: 15px;
+	background-color: #3e4c45;
+	color: whitesmoke;
+
+}
+
+main.sign div.content button.log:hover {
+	background-color: #aeccbd;
+}
+
+main.sign div.text-center > p {
+    margin-top: 35px;
+    margin-bottom: 0;
+    color: whitesmoke;
+    font-size: 21px;
+	font-weight: 200;
+	letter-spacing: 2px;
+}
+
+/* Navigation */
+
+div.navbar-header > a.navbar-brand {
+	padding: 10px;
+}
+
+/*div.navbar-header > a.navbar-brand:hover {
+	background-color: lightGray;
+}
+*/
+a.navbar-brand > div.img {
+	background-image: urL("../img/logo_white.png");
+	background-size: cover;
+	/*idth: 140px;
+	height: 100%;*/
+	width: 109px;
+height: 31px;
+margin-top: 5px;
+}
+
+a.navbar-brand > div.img:hover {
+	background-image: urL("../img/logo_light_blue.png");
+}
+
+li.active > a {
+	background-color: #364d63 !important;
+}
+
+div.btn-group.navbar-right {
+    height: 60px;
+    padding: 10px;
+    text-align: center;
+}
+
+div.btn-group.navbar-right > a {
+	font-size: 20px;
+	color: #f2f2f2;
+	font-weight: 300;
+	letter-spacing: 1px;
+}
+
+div.btn-group.navbar-right > a > span.glyphicon {
+	font-size: 30px;
+	top: 6px;
+}
+
+div.btn-group.navbar-right > a:hover,
+div.btn-group.navbar-right > a:focus {
+	text-decoration: none;
+	color: #bdccdb;
+}
+
 /* Boards page: boards */
 
 div#boards-block {
@@ -62,6 +217,11 @@ div#boards-block {
 	padding-left: 0px;
 	padding-right: 0px;
 	/*padding-right: 10px;*/
+	display: inline-block;
+}
+
+main div > h4.heading {
+	font-size: 30px;
 	display: inline-block;
 }
 
@@ -191,6 +351,10 @@ div.employee-new button.btn.brd:hover {
 }
 
 /* -------------  Tasks page: taks  ------------- */
+
+body.no-scroll {
+	overflow: hidden;
+}
 
 div#states-block {
 	float: left;
@@ -514,7 +678,14 @@ div.content div.task > div.test {
 	background-color: lightBlue;
 	width: 60px;
 	display: inline-block;
+}
 
+.log {
+	height: 35px;
+	width: 160px;
+	font-weight: 200;
+	letter-spacing: 1px;
+	font-size: large;
 }
 
 
