@@ -166,6 +166,33 @@ var taskCount = 0;
     $(rootTask).append(editTask).addClass('task-new').addClass('parent');	
 });
 
+function addTask(taskId, taskName, empName)
+{
+	
+	populateComments(taskId);
+}
+
+function populateComments(taskId)
+{
+	var value = {"task_id": taskId};
+	$.ajax({
+		type : "POST",
+		url : "{{ url_for('get_comments') }}",
+		data: JSON.stringify(value),
+		contentType: 'application/json;charset=UTF-8',
+		success: function(result) {
+			var i;
+			for (i = 0; i < result.comments.length; ++i) {
+				var element = '<p id="comment' + i + '">' + result.comments[i].text +
+					'<span class="glyphicon glyphicon-remove remove"></span></p>'
+				//var element = " <blockquote class=\"\" data-id=" + i + "\"><p><cite>" + result.comments[i].text + "</cite> </p> <small>" + result.comments[i].author + "</small>";
+				$("#comments-" + taskId).append(element);
+			}
+			console.log(result);
+		}
+	});
+}
+
 /**
  * Function to make employees draggable to boards
  */
