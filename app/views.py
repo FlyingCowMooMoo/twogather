@@ -65,6 +65,36 @@ def get_employee():
     except DoesNotExist:
         return jsonify(error='Invalid Pin')
 
+
+@app.route('/marktask', methods=['POST'])
+def mark_task():
+    action = request.json['action']
+    emp = request.json['pin']
+    task = request.json['task']
+
+    try:
+        task = Task.get(Task.id == task)
+    except DoesNotExist:
+        return jsonify(error='Invalid Task Id')
+    try:
+        emp = EmployeePin.get(EmployeePin.pin == emp)
+    except DoesNotExist:
+        return jsonify(error='Invalid PIN')
+    task.marked_by = emp
+    if action == 'todo':
+        task.marked_as_task = False
+        task.marked_as_completed = False
+        task.marked_as_todo = True
+    if action == 'done':
+        task.marked_as_task = False
+        task.marked_as_completed = True
+        task.marked_as_todo = False
+    task.save()
+    msg = ' '.join(('Task was marked as', action, 'by employee with PIN', emp.pin))
+    return jsonify(msg=msg)
+
+
+
 @app.route('/getemployees', methods=['POST'])
 def get_employees():
     ordid = int(request.json['org_id'])
