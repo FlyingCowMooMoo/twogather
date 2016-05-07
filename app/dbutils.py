@@ -2,7 +2,7 @@
 import csv
 import random
 
-from peewee import fn
+from peewee import fn, DoesNotExist
 
 from app import db
 from config import IMAGE_FOLDER_LOCATION, BASEDIR
@@ -205,3 +205,22 @@ def load_dummy_managers():
         man = {'email': line[0].rstrip(), 'password': line[1].rstrip(), 'name': line[2].rstrip()}
         data.append(man)
     return tuple(data)
+
+
+def get_comments(task_id):
+    if task_id is None:
+        raise ValueError('Invalid Task Id')
+    data = list()
+    try:
+        try:
+            taskid = int(task_id)
+        except ValueError:
+            raise DoesNotExist('Task Id Needs to be numeric')
+        if taskid is None:
+            raise DoesNotExist('Task Id Needs to be specified')
+
+        for c in Comment.select().join(TaskComment).where(TaskComment.task == taskid):
+            data.append({'author': c.get_author(), 'text': c.text})
+        return tuple(data)
+    except DoesNotExist as e:
+        return tuple()

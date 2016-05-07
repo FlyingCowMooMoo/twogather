@@ -16,7 +16,7 @@ class Board():
 class Task():
     def __init__(self, id=None, title=None, desc=None, logo_class=None, priority=None, pin=None, color=None,
                  urgent=False, startdate=None,
-                 updatedate=None, unassigned=True, todo=False, done=False):
+                 updatedate=None, unassigned=True, todo=False, done=False, comments=list()):
         self.id = id
         self.title = title
         self.desc = desc
@@ -30,9 +30,10 @@ class Task():
         self.unassigned = unassigned
         self.todo = todo
         self.done = done
+        self.comments = comments
 
     @staticmethod
-    def create_from_dbmodel(dbmodel=None):
+    def create_from_dbmodel(dbmodel=None, comments=list()):
         if dbmodel is None or not isinstance(dbmodel, dbm.Task):
             raise ValueError('Invalid parameter')
         if dbmodel.marked_as_task:
@@ -57,7 +58,13 @@ class Task():
             pin = dbmodel.marked_by.pin
         return Task(dbmodel.id, dbmodel.title, dbmodel.description, logo, dbmodel.marked_as_high_priority,
                     pin, color, dbmodel.marked_as_high_priority, dbmodel.assigned_at,
-                    dbmodel.completed_at, unassigned, todo, done)
+                    dbmodel.completed_at, unassigned, todo, done, comments)
+
+    def to_dict(self):
+        return {'id': self.id, 'title': self.title, 'desc': self.desc, 'pin': self.pin, 'color': self.color,
+                'logo_class': self.logo_class, 'priority': self.priority, 'urgent': self.urgent,
+                'startdate': self.startdate, 'updatedate': self.updatedate, 'unassigned': self.unassigned,
+                'todo': self.todo, 'done': self.done, 'comments': self.comments}
 
 
 class Employee():
@@ -94,4 +101,3 @@ class Comment:
             self.color = comment.created_by_employee.color.hex_code
         else:
             self.author = comment.created_by_manager.email
-

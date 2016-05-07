@@ -9,56 +9,24 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/tasks.js') }}"/>
 </head>
-<<<<<<< HEAD
-<body class="no-scroll">
-=======
 <body>
     <input type="hidden" id="orgid" value="{{ orgid }}">
->>>>>>> refs/remotes/origin/master
+    <input type="hidden" id="board_id" value="{{ id }}">
 
   <!-- Navigation -->
-  <nav class="navbar navbar-default">
+	<nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="boards.page">
-          <div class="img"></div>
-        </a>
+        <a class="navbar-brand" href="boards.html">Gatha</a>
       </div>
       <ul class="nav navbar-nav">
-<<<<<<< HEAD
-        <li class="active"><a href="boards.html">Bunnings</a></li>
-        <li ><a href="board.html">Shoes</a></li>
-      </ul>
-    <!--   <ul class="nav navbar-nav navbar-right">
-        <li>
-         <a href="#">Hi, John</a> --> 
-          <div class="btn-group nav navbar-nav navbar-right">
-            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
-              John Smith 
-              <span class="glyphicon glyphicon-menu-down"></span>
-              <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
-            </a>
-            <ul class="dropdown-menu">
-              <!-- dropdown menu links -->
-              <li class="active"><a href="#">John Smith</a></li>
-              <li class="a"><a href="#">Employees</a></li>
-              <hr>
-              <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
-            </ul>
-          </div>
-        <!-- </li> -->
-        
-=======
         <li class="active"><a href="boards.html">{{ orgname }}</a></li>
         <li ><a href="#">Shoes</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Hi, {{ accountname }}</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
->>>>>>> refs/remotes/origin/master
       </ul>
     </div>
   </nav>
@@ -74,10 +42,30 @@
               <h1>To-Do</h1>
             </div>
             <div class="empty">
-               <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
               <h3><span class="glyphicon glyphicon-plus" id="addTask"></span></h3>
             </div>
-            <div class="content" id="newTasks">
+            <div class="content task-container" id="newTasks">
+              <!-- <div> -->
+                <!-- <div id="task0" class="task">
+                  <div id="employee" class="taskEmp">
+                    <h3>WW</h3>
+                  </div>
+                  <div class="taskContent">
+                    <h6>Clean up shoes stores, and don't forget!</h6>
+                    <div>
+                      <p><span id="comment00">1 </span><span class="glyphicon glyphicon-comment"></span></p>
+                      <span class="btn transparent glyphicon glyphicon-chevron-down showComment"></span>
+                    </div>
+                  </div>
+                  <div class="taskImportant"></div>
+                  <div id="commentsBlock0">
+                   <p>* Clean up you shoes<p>
+                   <p>* Move your rubbish<p>
+                   <p>* Move your rubbish<p>
+                  </div>
+                </div> -->
+               
             </div>
           </div>
         </div>
@@ -89,9 +77,9 @@
               <h1>Doing</h1>
             </div>
             <div class="empty">
-              <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2>10 <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
-            <div class="content"></div>
+            <div class="content task-container" id="todo"></div>
           </div>
         </div>
          <div class="col-sm-4">
@@ -100,9 +88,9 @@
               <h1>Done</h1>
             </div>
             <div class="empty">
-               <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2>23 <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
-            <div class="content"></div>
+            <div class="content task-container" id="done"></div>
           </div>
         </div>
       </div>
@@ -113,18 +101,121 @@
           <h4 style="display: inline-block;" > Employees (<span id="empsNumber">3</span>)</h4>
       </div>
       <div id="employees" class="employees emps">
-        <div id="employee_0" class="employee" draggable="true">
-            <p>Robert Williams</p>
-          </div>
-           <div id="employee_1" class="employee">
-            <p>Sam Smith</p>
-          </div>
-           <div id="employee_2" class="employee" ondrag="dragg()">
-            <p>George Ezra</p>
-          </div>
       </div>
     </div>
   </main>
 
+<script>
+
+    $("#newTasks, #todo, #done").sortable({ connectWith: "#newTasks, #todo, #done" });
+
+    $(document).ready(function() {
+        var boardId = $("#board_id").val();
+        var orgId = $("#orgid").val();
+        populateTasks(boardId);
+        populateEmployees(orgId);
+    });
+
+    function populateTasks(boardId)
+    {
+        var value = {"board_id": boardId};
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('get_tasks') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                var i;
+                for (i = 0; i < result.tasks.length; ++i)
+                {
+                    var task = result.tasks[i];
+                    var element = '<div id=\"task'+ task.id +'\" class=\"task\"> ';
+                    if(task.unassigned == true)
+                    {
+                        element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
+                                ''+ task.color +'\" > <h3>U</h3> </div>';
+                    }
+                    else
+                    {
+                        element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
+                                ''+ task.color +'\" > <h3>'+ 'AA' +'</h3> </div>';
+                    }
+
+                    element += '<div class=\"taskContent\"><h6>'+ task.title +'</h6>' +
+                            '<div><p><span id=\"comment00\">'+ task.comments.length +' ' +
+                            '</span><span class=\"glyphicon glyphicon-comment\"></span>' +
+                            '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\"></span> ' +
+                            '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                    if(task.comments.length > 0)
+                    {
+                        for (var j = 0; j < task.comments.length; j++)
+                        {
+                            var comment = task.comments[i];
+                            if(comment != undefined)
+                            {
+                                element += '<p>* '+ comment.text +'<p> ';
+                            }
+                        }
+                    }
+                    element += '</div></div>';
+                    if(task.unassigned == true)
+                    {
+                        $("#newTasks").append(element);
+                    }
+                    else if(task.todo == true)
+                    {
+                        $("#todo").append(element);
+                    }
+                    else
+                    {
+                        $("#done").append(element);
+                    }
+                    $("#newTasks, #todo, #done").sortable({ connectWith: ".task-container" });
+
+                }
+            }
+        });
+    }
+
+    function populateComments(taskId)
+    {
+        var value = {"task_id": taskId};
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('get_comments') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                var i;
+                for (i = 0; i < result.comments.length; ++i) {
+                    var element = '<p id="comment' + i + '">' + result.comments[i]['text'] +
+                            '<span class="glyphicon glyphicon-remove remove"></span></p>';
+                    $("#comments-" + taskId).append(element);
+                    $("#empsNumber").html(parseInt(this.val()) + 1);
+                }
+            }
+        });
+    }
+
+
+    function populateEmployees(org) {
+        var value = {"org_id": org};
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('get_employees') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function (result) {
+                for (var i = 0; i < result.employees.length; ++i) {
+                    var emp = result.employees[i];
+                    var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+                    $("#employees").append(element);
+                    $("#empsNumber").html(parseInt($("#empsNumber").val()) + 1);
+                }
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

@@ -168,7 +168,7 @@ var taskCount = 0;
 
 function addTask(taskId, taskName, empName)
 {
-	
+
 	populateComments(taskId);
 }
 
@@ -184,11 +184,31 @@ function populateComments(taskId)
 			var i;
 			for (i = 0; i < result.comments.length; ++i) {
 				var element = '<p id="comment' + i + '">' + result.comments[i].text +
-					'<span class="glyphicon glyphicon-remove remove"></span></p>'
+					'<span class="glyphicon glyphicon-remove remove"></span></p>';
 				//var element = " <blockquote class=\"\" data-id=" + i + "\"><p><cite>" + result.comments[i].text + "</cite> </p> <small>" + result.comments[i].author + "</small>";
 				$("#comments-" + taskId).append(element);
 			}
 			console.log(result);
+		}
+	});
+}
+
+
+function populateEmployees(org) {
+	var value = {"org_id": org};
+	$.ajax({
+		type: "POST",
+		url: "{{ url_for('get_employees') }}",
+		data: JSON.stringify(value),
+		contentType: 'application/json;charset=UTF-8',
+		success: function (result) {
+			for (var i = 0; i < result.employees.length; ++i) {
+				var emp = result.employees[i];
+				var ele = '<div id="employee_2" style=\"background-color:" + emp.color + " \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+				var emp = result.employees[i];
+				var element = " <blockquote  style=\"background-color:" + emp.color + " \" class=\"\" data-id=" + emp.id + "\"><p><cite>" + emp.fname + " " + emp.lname + "</cite> </p> <small>" + emp.pin + "</small>";
+				$("#employees").append(element);
+			}
 		}
 	});
 }

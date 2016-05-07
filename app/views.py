@@ -29,21 +29,27 @@ def index():
     return render_template('index.html', items=tuple(items))
 
 
-@login_required
 @app.route('/showboard/<int:board_id>', methods=['GET'])
 def show_board(board_id=None):
     if board_id is None:
         return show_error('400', 'No board id specified')
     try:
         board = TaskBoard.get(TaskBoard.id == board_id)
-        query = tuple(Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id))
-        tasks = list()
-        for item in query:
-            tasks.append(viewmodels.Task.create_from_dbmodel(item))
-        return render_template('pages/board.html', tasks=tuple(tasks), id=board_id, orgid=board.org_id,
-                               orgname=board.org_name, accountname=current_user.get_name())
+        return render_template('pages/board.html', id=board_id, orgid=board.org_id,
+                               orgname=board.org_name, accountname='')
     except DoesNotExist as e:
         return show_error('404', e.message)
+
+
+@app.route('/gettasks', methods=['POST'])
+def get_tasks():
+    board_id = int(request.json['board_id'])
+    board = TaskBoard.get(TaskBoard.id == board_id)
+    query = tuple(Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id))
+    tasks = list()
+    for item in query:
+        tasks.append(viewmodels.Task.create_from_dbmodel(item, dbutils.get_comments(item.id)).to_dict())
+    return jsonify(tasks=tasks)
 
 
 @app.route('/getemployees', methods=['POST'])
