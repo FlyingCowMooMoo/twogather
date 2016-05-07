@@ -97,6 +97,8 @@
   </main>
 
     <div id="confirmTask" class="modal fade" role="dialog">
+        <input type="hidden" id="task-action" value="none">
+        <input type="hidden" id="task-id" value="none">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -147,6 +149,18 @@
     $("#emp-pin-confirm").click(function(){
 
         var pin = $("#emp-pin-emp-display-pin").text();
+        var action = $("#task-action").val();
+        var task = $("#task-id").val();
+        var value = {"pin": pin, "action": action, "task": task};
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('mark_task') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                $("#task" + task).detach().appendTo('#' + action);
+            }
+        });
     });
 
     $("#verify-pin").click(function()
@@ -193,7 +207,7 @@
                 for (i = 0; i < result.tasks.length; ++i)
                 {
                     var task = result.tasks[i];
-                    var element = '<div id=\"task'+ task.id +'\" class=\"task\"> ';
+                    var element = '<div id=\"task'+ task.id +'\" class=\"task\" data-id=\"'+ task.id +'\"> ';
                     if(task.unassigned == true)
                     {
                         element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
@@ -249,13 +263,17 @@
                         },
                         receive: function(event, ui)
                         {
+                            ui.sender.sortable("cancel");
                             var source = ui.sender.attr('id');
                             var destination = $(this).attr('id');
+                            var taskId = ui.item.attr("data-id");
                             if(source == "newTasks" && (destination == "todo" || destination == "done" ))
                             {
-                                console.log('Moving from new tasks');
+                                $("#task-action").val(destination);
+                                $("#task-id").val(taskId);
                                 $("#confirmTask").modal('show');
                             }
+                            console.log(taskId);
                         }
                     }).disableSelection();
 
