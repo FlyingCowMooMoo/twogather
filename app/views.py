@@ -52,6 +52,19 @@ def get_tasks():
     return jsonify(tasks=tasks)
 
 
+@app.route('/getemployee', methods=['POST'])
+def get_employee():
+    if request.json['pin'] is None:
+        return jsonify(error='Invalid Pin')
+    pin = request.json['pin']
+    try:
+        emp = EmployeePin.get(EmployeePin.pin == pin)
+        emp = {"id": emp.id, "color": emp.hex_color, "logo": emp.logo_url, "pin": emp.pin,
+               "fname": emp.first_name, "lname": emp.last_name}
+        return jsonify(employee=emp)
+    except DoesNotExist:
+        return jsonify(error='Invalid Pin')
+
 @app.route('/getemployees', methods=['POST'])
 def get_employees():
     ordid = int(request.json['org_id'])

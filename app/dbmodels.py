@@ -61,6 +61,14 @@ class EmployeePin(db.Model):
     hex_color = property(lambda self: self.color.hex_code)
     logo_url = property(lambda self: self.logo.image_name)
 
+    def get_abv(self):
+        if self.first_name is not None and self.last_name is not None:
+            fn = str(self.first_name)
+            ln = str(self.last_name)
+            return ''.join((fn[0:1], ln[0:1]))
+        else:
+            return 'N/A'
+
 
 class Task(db.Model):
     id = PrimaryKeyField()

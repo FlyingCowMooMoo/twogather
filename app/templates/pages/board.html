@@ -4,11 +4,21 @@
   <meta charset="UTF-8">  
 	<title>Board</title>
 
-	<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <style>
+        .ui-sortable-placeholder {
+            border: 3px dashed #aaa;
+            height: 45px;
+            width: 344px;
+            background: #ccc;
+        }
+    </style>
 </head>
 <body>
     <input type="hidden" id="orgid" value="{{ orgid }}">
@@ -42,29 +52,10 @@
               <h1>To-Do</h1>
             </div>
             <div class="empty">
-              <h2><span id="todoTasksNumber">0 </span> <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2><span id="newTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
               <h3><span class="glyphicon glyphicon-plus" id="addTask"></span></h3>
             </div>
-            <div class="content task-container" id="newTasks">
-              <!-- <div> -->
-                <!-- <div id="task0" class="task">
-                  <div id="employee" class="taskEmp">
-                    <h3>WW</h3>
-                  </div>
-                  <div class="taskContent">
-                    <h6>Clean up shoes stores, and don't forget!</h6>
-                    <div>
-                      <p><span id="comment00">1 </span><span class="glyphicon glyphicon-comment"></span></p>
-                      <span class="btn transparent glyphicon glyphicon-chevron-down showComment"></span>
-                    </div>
-                  </div>
-                  <div class="taskImportant"></div>
-                  <div id="commentsBlock0">
-                   <p>* Clean up you shoes<p>
-                   <p>* Move your rubbish<p>
-                   <p>* Move your rubbish<p>
-                  </div>
-                </div> -->
+            <div class="content dnd-container" id="newTasks">
                
             </div>
           </div>
@@ -77,9 +68,9 @@
               <h1>Doing</h1>
             </div>
             <div class="empty">
-              <h2>10 <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2><span id="todoTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
-            <div class="content task-container" id="todo"></div>
+            <div class="content dnd-container" id="todo"></div>
           </div>
         </div>
          <div class="col-sm-4">
@@ -88,9 +79,9 @@
               <h1>Done</h1>
             </div>
             <div class="empty">
-              <h2>23 <span class="glyphicon glyphicon-tasks"></span></h2>
+              <h2><span id="doneTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
             </div>
-            <div class="content task-container" id="done"></div>
+            <div class="content dnd-container" id="done"></div>
           </div>
         </div>
       </div>
@@ -98,22 +89,74 @@
     <!-- Employees -->
     <div id="employees-block">
       <div>
-          <h4 style="display: inline-block;" > Employees (<span id="empsNumber">3</span>)</h4>
+          <h4 style="display: inline-block;" > Employees (<span id="empsNumber">0</span>)</h4>
       </div>
       <div id="employees" class="employees emps">
       </div>
     </div>
   </main>
 
-<script>
+    <div id="confirmTask" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-    $("#newTasks, #todo, #done").sortable({ connectWith: "#newTasks, #todo, #done" });
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <label class="control-label " for="emp-pin">
+                            Pin
+                        </label>
+                        <input class="form-control" id="emp-pin" name="emp-pin" placeholder="Unique PIN " type="text"/>
+                          <span class="help-block" id="hint_emp-pin">
+                           Insert your pin number here
+                          </span>
+                        <div>
+                            <button class="btn btn-primary" name="submit" type="submit" id="verify-pin">
+                                Verify PIN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
 
     $(document).ready(function() {
         var boardId = $("#board_id").val();
         var orgId = $("#orgid").val();
         populateTasks(boardId);
         populateEmployees(orgId);
+    });
+
+    $("#verify-pin").click(function()
+    {
+        var value = {"pin": $("#emp-pin").val()};
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('get_employee') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                if(result.employee != undefined)
+                {
+                    console.log(result.employee);
+                }
+                else
+                {
+                    console.log(result.error);
+                }
+            }
+        });
     });
 
     function populateTasks(boardId)
@@ -137,8 +180,8 @@
                     }
                     else
                     {
-                        element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
-                                ''+ task.color +'\" > <h3>'+ 'AA' +'</h3> </div>';
+                        element += '<div id=\"employee\ '+ task+'" class=\"taskEmp\" style=\"background-color: ' +
+                                ''+ task.color +'\" > <h3>'+ task.emp_abv +'</h3> </div>';
                     }
 
                     element += '<div class=\"taskContent\"><h6>'+ task.title +'</h6>' +
@@ -161,16 +204,40 @@
                     if(task.unassigned == true)
                     {
                         $("#newTasks").append(element);
+                        var count = parseInt($("#newTasksNumber").text());
+                        $("#newTasksNumber").text(count + 1);
                     }
                     else if(task.todo == true)
                     {
                         $("#todo").append(element);
+                        var count = parseInt($("#todoTasksNumber").text());
+                        $("#todoTasksNumber").text(count + 1);
                     }
                     else
                     {
                         $("#done").append(element);
+                        var count = parseInt($("#doneTasksNumber").text());
+                        $("#doneTasksNumber").text(count + 1);
                     }
-                    $("#newTasks, #todo, #done").sortable({ connectWith: ".task-container" });
+
+                    $("#newTasks, #todo, #done").sortable({ connectWith: ".dnd-container",
+                        placeholder: "ui-sortable-placeholder",
+                        start: function(event, ui) {
+                        },
+                        stop: function(event, ui) {
+                        },
+                        receive: function(event, ui)
+                        {
+                            var source = ui.sender.attr('id');
+                            var destination = $(this).attr('id');
+                            if(source == "newTasks" && (destination == "todo" || destination == "done" ))
+                            {
+                                console.log('Moving from new tasks');
+                                $("#confirmTask").modal('show');
+                            }
+                        }
+                    }).disableSelection();
+
 
                 }
             }
@@ -210,7 +277,7 @@
                     var emp = result.employees[i];
                     var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
                     $("#employees").append(element);
-                    $("#empsNumber").html(parseInt($("#empsNumber").val()) + 1);
+                    $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
                 }
             }
         });
