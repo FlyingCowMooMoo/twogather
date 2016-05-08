@@ -6,7 +6,7 @@
 
 /* set font family for all html elements */
 *, h1, h2, h3, h4, h5, h6 {
-	font-family: Futura,Trebuchet MS,Arial,sans-serif; 
+	font-family: Futura,Trebuchet MS,Arial,sans-serif;
 	/*font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; */
 }
 
@@ -16,18 +16,18 @@ html {
 
 hr {
 	width: 80%;
-	margin: 10px; 0; 
+	margin: 10px 0;
 }
 .navbar {
- 	border-radius: 0px;
- 	margin-bottom: 10px;
- 	/*background-color: lightGreen;*/
- }
+	border-radius: 0px;
+	margin-bottom: 10px;
+	/*background-color: lightGreen;*/
+}
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover{
 	/*background-color: green;*/
- }
+}
 
 main {
 	padding-right: 20px;
@@ -51,7 +51,7 @@ hr {
 }
 
 textarea {
-   resize: none;
+	resize: none;
 }
 
 .glyphicon {
@@ -66,19 +66,19 @@ main.sign {
 	background-image: url("../img/wallpaper.jpg");
 	/*background-color: lightBlue;*/
 	background-repeat: no-repeat;
-	background-position: center; 
+	background-position: center;
 	background-attachment: fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    position: fixed;
-    height: 100vh;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	position: fixed;
+	height: 100vh;
 }
 
 main.sign > div.state {
 	width: 500px;
-	padding: 50px 0; 
+	padding: 50px 0;
 	/*background-color: lightGreen;*/
 	/*max-height: */
 }
@@ -147,10 +147,10 @@ main.sign div.content button.log:hover {
 }
 
 main.sign div.text-center > p {
-    margin-top: 35px;
-    margin-bottom: 0;
-    color: whitesmoke;
-    font-size: 21px;
+	margin-top: 35px;
+	margin-bottom: 0;
+	color: whitesmoke;
+	font-size: 21px;
 	font-weight: 200;
 	letter-spacing: 2px;
 }
@@ -166,17 +166,17 @@ div.navbar-header > a.navbar-brand {
 }
 */
 a.navbar-brand > div.img {
-	background-image: urL("../img/logo_white.png");
+	background-image: url("../img/logo_white.png");
 	background-size: cover;
 	/*idth: 140px;
 	height: 100%;*/
 	width: 109px;
-height: 31px;
-margin-top: 5px;
+	height: 31px;
+	margin-top: 5px;
 }
 
 a.navbar-brand > div.img:hover {
-	background-image: urL("../img/logo_light_blue.png");
+	background-image: url("../img/logo_light_blue.png");
 }
 
 li.active > a {
@@ -184,9 +184,9 @@ li.active > a {
 }
 
 div.btn-group.navbar-right {
-    height: 60px;
-    padding: 10px;
-    text-align: center;
+	height: 60px;
+	padding: 10px;
+	text-align: center;
 }
 
 div.btn-group.navbar-right > a {
@@ -316,7 +316,7 @@ div.employee-new .heading button.delete {
 	position: relative;
 	top: 8px;
 	left: 10px;
-	font-size: 16px;	
+	font-size: 16px;
 }
 
 div.employee-new fieldset {
@@ -334,7 +334,7 @@ div.employee-new .form-control.input {
 div.employee-new p,
 div.employee-new span {
 	display: inline-block;
-}	
+}
 
 div.employee-new button.btn.brd/*,
 div.employee-new button.delete */{
@@ -376,7 +376,7 @@ div.state > div.heading {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	padding: 12px 11px;
-	text-align: center;	
+	text-align: center;
 }
 
 div.state h1,
@@ -384,14 +384,14 @@ div.state h2,
 div.state h3{
 	margin: 0;
 	font-weight: 500;
-}	
+}
 
 div.state > div.empty {
 	height: 60px;
 	width: 50%;
 	float: right;
 	padding: 10px;
-	text-align: center;	
+	text-align: center;
 }
 
 div.empty > * {
@@ -472,7 +472,7 @@ div.taskContent > div {
 	height: 22px;
 	/*background-color: blue;*/
 	margin: 0;
-	
+
 }
 div.taskContent > div > p {
 	display: inline-block;
@@ -572,8 +572,8 @@ div.task-new form > div.input{
 	padding: 5px 8px;
 	background-color: white;
 	margin-bottom: 10px;
-/*	width: 96%;
-margin: auto;*/
+	/*	width: 96%;
+    margin: auto;*/
 }
 
 div.task-new form > div[id^='empAssigned']  {
@@ -632,7 +632,7 @@ div.task-new div > button.btn.remove {
 	background-color: transparent;
 	margin: 0px;
 	line-height: 0;
-    margin-top: -17px;
+	margin-top: -17px;
 }
 
 .btn.add {
@@ -654,7 +654,7 @@ div.task-new div > button.btn.remove {
 	font-size: 23px;
 	position: absolute;
 	top: 26px;
- 	right: 4px;
+	right: 4px;
 }
 
 .btn.brd {
@@ -687,5 +687,4 @@ div.content div.task > div.test {
 	letter-spacing: 1px;
 	font-size: large;
 }
-
 
