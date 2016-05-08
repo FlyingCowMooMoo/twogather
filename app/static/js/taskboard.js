@@ -2,6 +2,42 @@
  * Created by pete on 8/05/2016.
  */
 
+var animations = ["fadeIn",
+    "fadeInDown",
+    "fadeInDownBig",
+    "fadeInLeft",
+    "fadeInLeftBig",
+    "fadeInRight",
+    "fadeInRightBig",
+    "fadeInUp",
+    "fadeInUpBig",
+    "flipInX",
+    "flipInY",
+    "rotateInDownLeft",
+    "rotateInDownRight",
+    "rotateInUpLeft",
+    "rotateInUpRight",
+    "rollIn",
+    "zoomIn",
+    "zoomInDown",
+    "zoomInLeft",
+    "zoomInRight",
+    "zoomInUp",
+    "slideInDown",
+    "slideInLeft",
+    "slideInRight",
+    "slideInUp",
+    "bounce",
+    "flash",
+    "pulse",
+    "rubberBand",
+    "shake",
+    "headShake",
+    "swing",
+    "tada",
+    "wobble",
+    "jello"];
+
 function alertModal(title, body)
 {
     $("#confirmTask").modal('hide');
@@ -82,7 +118,7 @@ function populateTasks(boardId)
             for (i = 0; i < result.tasks.length; ++i)
             {
                 var task = result.tasks[i];
-                var element = '<div id=\"task'+ task.id +'\" class=\"task\" data-id=\"'+ task.id +'\"> ';
+                var element = '<div id=\"task'+ task.id +'\" class=\"task animated '+ animations[Math.floor(Math.random() * animations.length)] +'\" data-id=\"'+ task.id +'\"> ';
                 if(task.unassigned == true)
                 {
                     element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
@@ -192,7 +228,7 @@ function populateEmployees(org) {
         success: function (result) {
             for (var i = 0; i < result.employees.length; ++i) {
                 var emp = result.employees[i];
-                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee animated '+ animations[Math.floor(Math.random() * animations.length)] +'" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
                 $("#employees").append(element);
                 $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
             }
