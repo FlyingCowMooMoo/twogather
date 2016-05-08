@@ -36,7 +36,7 @@ def show_board(board_id=None):
     try:
         board = TaskBoard.get(TaskBoard.id == board_id)
         return render_template('pages/board.html', id=board_id, orgid=board.org_id,
-                               orgname=board.org_name, accountname='')
+                               orgname=board.org_name, accountname='', boardname=board.name)
     except DoesNotExist as e:
         return show_error('404', e.message)
 
