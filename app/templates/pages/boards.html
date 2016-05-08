@@ -6,14 +6,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
 </head>
 <body>
+    <input type="hidden" id="orgid" value="{{ id }}">
+    <input type="hidden" id="manager-id" value="{{ mid }}">
+    <input type="hidden" id="manager-name" value="{{ name }}">
+    <input type="hidden" id="orgid" value="{{ id }}">
+    <input type="hidden" id="get-boards-url" value="{{ url_for('get_boards') }}">
+    <input type="hidden" id="base-url" value="{{ url_for('index', _external=True) }}">
+    <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
 
   <!-- Navigation -->
 	<nav class="navbar navbar-default">
@@ -32,13 +37,13 @@
          <a href="#">Hi, John</a> --> 
           <div class="btn-group nav navbar-nav navbar-right">
             <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
-              John Smith 
+                {{ name }}
               <span class="glyphicon glyphicon-menu-down"></span>
               <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
             </a>
             <ul class="dropdown-menu">
               <!-- dropdown menu links -->
-              <li class="active"><a href="#">John Smith</a></li>
+              <li class="active"><a href="#">{{ name }}</a></li>
               <li class="a"><a href="#">Employees</a></li>
               <hr>
               <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
@@ -73,6 +78,21 @@
       <div id="employees" class="employees emps"></div>
     </div>
   </main>
+
+    <div id="alert-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 id="alert-modal-title" class="modal-title"></h4>
+                </div>
+                <div id="alert-modal-body" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

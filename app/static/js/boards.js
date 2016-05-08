@@ -5,22 +5,30 @@ var boardCount = 0;
 var employeeCount = 0;
 $(function() {
 
+    var orgId = parseInt($("#orgid").val());
+    populateBoards(orgId);
+    populateEmployees(orgId);
+
 	makeEmpsDraggable();
 
 	// add a new board
 	$("#addBoard").click(function(){
+        var newId = guid();
 		var newBoard = 
-				'<div class="col-sm-3" id="board'+ boardCount + 
+				'<div class="col-sm-3" id="'+ newId +
 				'"><div class="board board-new"><div><h4 class="heading">New Board</h4>' +
               	'<button class="btn transparent delete remove">X</button></div><br/>' + 
             	'<form><fieldset class="form-group"><input type="text" class="form-control input"' +
             	' id="boardTitle" placeholder="Board Title"> </fieldset><fieldset class="form-group">' +
                 '<textarea class="form-control input" id="boardDesc" placeholder="Description" rows="2"></textarea>' +
               	'</fieldset><p>Employees:  </p><div id="empsInvolved' + boardCount + '" class="emps"></div><div class="text-center">' +
-                '<button class="btn brd save">Save</button></form></div></div>';
+                '<button class="btn brd" id="create-board" data-id="'+ newId +'" onclick="createBoard(this)">Save</button></form></div></div>';
 		$("#boards").append(newBoard);
 		boardCount ++;
 		$("#boardsNumber").text(boardCount);
+        document.getElementById("create-board").addEventListener("click", function(event){
+            event.preventDefault()
+        });
 
 		// make employees droppable at the board
 	    makeEmpsDraggable();
@@ -67,23 +75,14 @@ $(function() {
 	}
 })
 
+
 // save board or employee
 .on('click', '.save', function(){
 
 	// checks if event source is from board or employee
+    console.log($(this));
 	if ($(this).parent().parent().parent().attr('class') == 'board board-new'){ 
-		var board =
-	        '<div class="board" ondblclick="goToBoard()"><div><h2 class="text-center">' + $(this).parents('form').find('[id^="boardTitle"]').val() + '</h2>' +
-	        '<button class="btn transparent menu glyphicon glyphicon-align-justify"></button>' +
-	        '</div><br/><div class="text-center"><h2>' + $(this).parents('form').find('[id^="empsInvolved"]').children().length + 
-	        ' <span class="glyphicon glyphicon-user"></span></h2><h2>0 <span class="glyphicon glyphicon-tasks"></span></h2>' +
-	        '</div><hr/><div><p class="description">' + $(this).parents('form').find('[id^="boardDesc"]').val() + '</p>' +
-	        '</div></div>';
 
-	    // save board before delete
-	    var rootBoard =  $(this).parents('div.col-sm-3');
-	    $(rootBoard).empty();
-	    $(rootBoard).append(board);
 	}
 	else {
 		var employee =
@@ -167,8 +166,8 @@ $(function() {
 /**
  * Function to redirect to board page when board double clicked
  */
-function goToBoard(){
-		window.location.href = "board.html";
+function goToBoard(id){
+		window.location.href = $("#base-url").val() + "showboard/" + id;
 }
 
 /**
@@ -178,4 +177,108 @@ function makeEmpsDraggable() {
 	$( '#employees, [id^="empsInvolved"]' ).sortable({ connectWith: ".emps"}).disableSelection(); 
 }
 
+function populateBoards(orgId)
+{
+    var value = {"org_id": orgId};
+    $.ajax({
+        type: "POST",
+        url: $("#get-boards-url").val(),
+        data: JSON.stringify(value),
+        contentType: 'application/json;charset=UTF-8',
+        success: function (result) {
+            if(result.boards == undefined)
+            {
+                alertModal("Error", "An Error occurred while loading the boards")
+            }
+            else if(! result.boards.length > 0)
+            {
+                alertModal("Error", "This company does not have any boards")
+            }
+            else
+            {
+                for (var i = 0; i < result.boards.length; ++i) {
+                    var b = result.boards[i];
+                    //noinspection JSUnresolvedVariable
+                    addBoard(b.id, b.name, 0, b.desc, String(b.count));
 
+                }
+            }
+        }
+    });
+}
+
+$( "#create-board" ).click(function() {
+    alert( "Handler for .click() called." );
+});
+
+function createBoard(element)
+{
+    var id = $(element).data("id");
+    element = $("#" + id);
+    var title = element.find('#boardTitle').val();
+    var desc = element.find('#boardDesc').val();
+    var managerId = $("#manager-id").val();
+    $.ajax({
+        type: "POST",
+        url: $("#get-employees-url").val(),
+        data: JSON.stringify(value),
+        contentType: 'application/json;charset=UTF-8',
+        success: function (result) {
+            for (var i = 0; i < result.employees.length; ++i) {
+                var emp = result.employees[i];
+                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+                $("#employees").append(element);
+                $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
+            }
+        }
+    });
+}
+
+function addBoard(id, title, numberOfEmps, desc, count)
+{
+    var board =
+        '<div class="board" data-id="'+ id +'"ondblclick="goToBoard('+ id +')"><div><h2 class="text-center">' + title + '</h2>' +
+        '<button class="btn transparent menu glyphicon glyphicon-align-justify"></button>' +
+        '</div><br/><div class="text-center"><h2>' + numberOfEmps +
+        ' <span class="glyphicon glyphicon-user"></span></h2><h2>'+ count +' <span class="glyphicon glyphicon-tasks"></span></h2>' +
+        '</div><hr/><div><p class="description">' + desc + '</p>' +
+        '</div></div>';
+
+    $("#boards").append(board);
+    $("#boardsNumber").html(parseInt($("#boardsNumber").text()) + 1);
+}
+
+function alertModal(title, body)
+{
+    $('#alert-modal-title').html(title);
+    $('#alert-modal-body').html(body);
+    $('#alert-modal').modal('show');
+}
+
+function populateEmployees(org) {
+    var value = {"org_id": org};
+    $.ajax({
+        type: "POST",
+        url: $("#get-employees-url").val(),
+        data: JSON.stringify(value),
+        contentType: 'application/json;charset=UTF-8',
+        success: function (result) {
+            for (var i = 0; i < result.employees.length; ++i) {
+                var emp = result.employees[i];
+                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+                $("#employees").append(element);
+                $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
+            }
+        }
+    });
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}

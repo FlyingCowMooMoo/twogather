@@ -1,12 +1,13 @@
 import json
 
-from flask.ext.login import login_required, current_user
+from flask.ext.login import login_required, current_user, login_user
+from playhouse.migrate import SqliteMigrator, migrate
 
 import dbutils
 
 from app import app, db
 from flask import render_template, request, jsonify, Response, url_for
-from peewee import fn, DoesNotExist
+from peewee import fn, DoesNotExist, TextField
 
 from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
 
@@ -18,6 +19,8 @@ import utils
 @app.before_first_request
 def prepare():
     # dbutils.verify_tables(drop_tables=True, generate_data=True)
+    #m = SqliteMigrator(db.database)
+    #migrate(m.drop_column('boardtask', 'description'))
     print ('a')
 
 
@@ -27,6 +30,29 @@ def index():
     for item in tuple(TaskBoard.select()):
         items.append(item.id)
     return render_template('index.html', items=tuple(items))
+
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'GET':
+        return render_template('pages/login.html')
+    if request.method == 'POST':
+        email = request.json['email']
+        password = request.json['password']
+        try:
+            user = User.get(User.email == email)
+        except DoesNotExist:
+            return jsonify(error='Invalid Credentials')
+        if user.password == password:
+            login_user(user)
+            return jsonify(id=user.id, name=user.name)
+        else:
+            return jsonify(error='Invalid Credentials')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return jsonify(error='Invalid Credentials')
 
 
 @app.route('/showboard/<int:board_id>', methods=['GET'])
@@ -115,20 +141,77 @@ def companies():
     return render_template('companies.html', items=tuple(Organization.select()))
 
 
+
+
 @app.route('/company/<int:cid>')
+@login_required
 def company(cid=None):
+    print(current_user.email)
     if cid is None:
         return show_error('404', 'Page not found')
     else:
         try:
             org = Organization.get(Organization.id == cid)
-            boards = tuple(TaskBoard.select().where(TaskBoard.organization == org))
+            return render_template('pages/boards.html', id=org.id, name=current_user.name, mid=current_user.id)
         except DoesNotExist:
             return show_error('404', 'Page not found')
-        data = list()
-        for b in boards:
-            data.append({'id': b.id, 'name': b.name})
-        return render_template('boards.html', items=tuple(data))
+
+
+@app.route('/createboard', methods=['POST'])
+def create_board():
+    orgid = int(request.json['org_id'])
+    title = request.json['title']
+    desc = request.json['desc']
+    manager = int(request.json['manager'])
+
+    try:
+        manager = User.get(User.id == manager)
+    except DoesNotExist:
+        return jsonify(error='Invalid Manager Id')
+
+    board = TaskBoard()
+    board.creator = manager
+    board.name = title
+    board.description = desc
+    try:
+        board.save()
+        b = {'id': board.id, 'name': board.name, 'desc': board.description, 'count': 0}
+        return jsonify(board=b)
+    except Exception as e:
+        return jsonify(error=e.message)
+
+
+
+@app.route('/getboards', methods=['POST'])
+def get_boards():
+    orgid = int(request.json['org_id'])
+    try:
+        org = Organization.get(Organization.id == orgid)
+        boards = tuple(TaskBoard.select().where(TaskBoard.organization == org))
+    except DoesNotExist:
+        return jsonify(error="Invalid Board Id")
+    data = list()
+    for b in boards:
+        count = 0
+        for a in BoardTask.select():
+            if a.board_id == b.id:
+                count += 1
+        data.append({'id': b.id, 'name': b.name, 'desc': b.description, 'count': count})
+    return jsonify(boards=data)
+
+
+@app.route('/createboard')
+def create_board():
+    org = int(request.json['org_id'])
+    manager = int(request.json['manager_id'])
+    title = request.json['manager_id']
+    desc = request.json['manager_id']
+
+    try:
+        org = Organization.get(Organization.id == org)
+        manager = User.get(User.id == manager)
+    except DoesNotExist as e:
+        return jsonify(error='An error has occured\n\n' + e.message)
 
 
 @app.route('/createtask/<int:boardid>', methods=['GET'])

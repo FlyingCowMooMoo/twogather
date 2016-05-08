@@ -99,6 +99,7 @@ class TaskBoard(db.Model):
     id = PrimaryKeyField()
     name = TextField(unique=True)
     creator = ForeignKeyField(User)
+    description = TextField(null=False, default='TaskBoard description here')
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
     organization = ForeignKeyField(Organization)
     org_id = property(lambda self: self.organization.id)
@@ -109,6 +110,8 @@ class BoardTask(db.Model):
     id = PrimaryKeyField()
     board = ForeignKeyField(TaskBoard)
     task = ForeignKeyField(Task)
+    org_id = property(lambda self: self.board.organization.id)
+    board_id = property(lambda self: self.board.id)
 
 
 class Comment(db.Model):

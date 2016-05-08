@@ -688,3 +688,9 @@ div.content div.task > div.test {
 	font-size: large;
 }
 
+.ui-sortable-placeholder {
+	border: 3px dashed #aaa;
+	height: 45px;
+	width: 344px;
+	background: #ccc;
+}

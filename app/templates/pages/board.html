@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">  
-	<title>Board</title>
+	<title>{{ orgname }} - {{ boardname }}</title>
 
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
@@ -13,12 +13,7 @@
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/taskboard.js') }}"></script>
     <style>
-        .ui-sortable-placeholder {
-            border: 3px dashed #aaa;
-            height: 45px;
-            width: 344px;
-            background: #ccc;
-        }
+
     </style>
 </head>
 <body class="no-scroll">
