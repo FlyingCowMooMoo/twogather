@@ -218,17 +218,24 @@ function createBoard(element)
     var title = element.find('#boardTitle').val();
     var desc = element.find('#boardDesc').val();
     var managerId = $("#manager-id").val();
+    var orgId = $("#orgid").val();
+    var value = {"manager": managerId, "title": title, "desc": desc, "org_id": orgId};
+    console.log(value);
     $.ajax({
         type: "POST",
-        url: $("#get-employees-url").val(),
+        url: $("#create-board-url").val(),
         data: JSON.stringify(value),
         contentType: 'application/json;charset=UTF-8',
         success: function (result) {
-            for (var i = 0; i < result.employees.length; ++i) {
-                var emp = result.employees[i];
-                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
-                $("#employees").append(element);
-                $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
+            console.log(result);
+            if(result.error != undefined)
+            {
+                alertModal("Error", result.error);
+            }
+            else
+            {
+                var b = result.board;
+                addBoard(b.id, b.name, 0, b.desc, b.count);
             }
         }
     });

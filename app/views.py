@@ -166,6 +166,7 @@ def create_board():
 
     try:
         manager = User.get(User.id == manager)
+        org = Organization.get(Organization.id == orgid)
     except DoesNotExist:
         return jsonify(error='Invalid Manager Id')
 
@@ -173,6 +174,7 @@ def create_board():
     board.creator = manager
     board.name = title
     board.description = desc
+    board.organization = org
     try:
         board.save()
         b = {'id': board.id, 'name': board.name, 'desc': board.description, 'count': 0}
@@ -199,19 +201,6 @@ def get_boards():
         data.append({'id': b.id, 'name': b.name, 'desc': b.description, 'count': count})
     return jsonify(boards=data)
 
-
-@app.route('/createboard')
-def create_board():
-    org = int(request.json['org_id'])
-    manager = int(request.json['manager_id'])
-    title = request.json['manager_id']
-    desc = request.json['manager_id']
-
-    try:
-        org = Organization.get(Organization.id == org)
-        manager = User.get(User.id == manager)
-    except DoesNotExist as e:
-        return jsonify(error='An error has occured\n\n' + e.message)
 
 
 @app.route('/createtask/<int:boardid>', methods=['GET'])
