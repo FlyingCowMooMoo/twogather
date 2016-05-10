@@ -56,13 +56,14 @@ def signup():
 
 
 @app.route('/showboard/<int:board_id>', methods=['GET'])
+@login_required
 def show_board(board_id=None):
     if board_id is None:
         return show_error('400', 'No board id specified')
     try:
         board = TaskBoard.get(TaskBoard.id == board_id)
         return render_template('pages/board.html', id=board_id, orgid=board.org_id,
-                               orgname=board.org_name, accountname='', boardname=board.name)
+                               orgname=board.org_name, accountname=current_user.name, managerid=current_user.id, boardname=board.name)
     except DoesNotExist as e:
         return show_error('404', e.message)
 
