@@ -16,7 +16,7 @@ class Board():
 class Task():
     def __init__(self, id=None, title=None, desc=None, logo_class=None, priority=None, pin=None, color=None,
                  urgent=False, startdate=None,
-                 updatedate=None, unassigned=True, todo=False, done=False, comments=list(), emp_abv=None):
+                 updatedate=None, unassigned=True, todo=False, done=False, comments=list(), emp_abv=None, emp_id=None):
         self.id = id
         self.title = title
         self.desc = desc
@@ -32,6 +32,7 @@ class Task():
         self.done = done
         self.comments = comments
         self.emp_abv = emp_abv
+        self.emp_id = emp_id
 
     @staticmethod
     def create_from_dbmodel(dbmodel=None, comments=list()):
@@ -54,20 +55,23 @@ class Task():
         logo = None
         pin = None
         emp_abv = 'N/A'
+        emp_id = 'N/A'
         if dbmodel.marked_by is not None:
             color = dbmodel.marked_by.color.hex_code
             logo = dbmodel.marked_by.logo.image_name
             pin = dbmodel.marked_by.pin
             emp_abv = dbmodel.marked_by.get_abv()
+            emp_id = dbmodel.marked_by.id
         return Task(dbmodel.id, dbmodel.title, dbmodel.description, logo, dbmodel.marked_as_high_priority,
                     pin, color, dbmodel.marked_as_high_priority, dbmodel.assigned_at,
-                    dbmodel.completed_at, unassigned, todo, done, comments, emp_abv)
+                    dbmodel.completed_at, unassigned, todo, done, comments, emp_abv, emp_id)
 
     def to_dict(self):
         return {'id': self.id, 'title': self.title, 'desc': self.desc, 'pin': self.pin, 'color': self.color,
                 'logo_class': self.logo_class, 'priority': self.priority, 'urgent': self.urgent,
                 'startdate': self.startdate, 'updatedate': self.updatedate, 'unassigned': self.unassigned,
-                'todo': self.todo, 'done': self.done, 'comments': self.comments, 'emp_abv': self.emp_abv}
+                'todo': self.todo, 'done': self.done, 'comments': self.comments, 'emp_abv': self.emp_abv,
+                'emp_id': self.emp_id}
 
 
 class Employee():

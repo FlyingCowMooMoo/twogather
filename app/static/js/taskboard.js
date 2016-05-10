@@ -110,6 +110,38 @@ $("#verify-pin").click(function()
     });
 });
 
+function sortTasks(employeeId)
+{
+    var todo = [];
+    var done = [];
+    $(".task").each(function (){
+        var parent = $(this).parent().attr('id');
+        var empId = $(this).find("#employee").data("id");
+        if(parent == "todo" && empId == employeeId)
+        {
+            todo.push($(this));
+            $(this).remove();
+        }
+        if(parent == "done" && empId == employeeId)
+        {
+            done.push($(this));
+            $(this).remove();
+        }
+    });
+    console.log(done);
+    for (var i = 0; i < todo.length; i++)
+    {
+        console.log('loopy');
+        $("#todo").prepend(todo[i]);
+    }
+    for (var j = 0; j < done.length; j++)
+    {
+        console.log('loopy');
+        $("#done").prepend(done[j]);
+    }
+
+}
+
 function populateTasks(boardId)
 {
     var value = {"board_id": boardId};
@@ -131,8 +163,8 @@ function populateTasks(boardId)
                 }
                 else
                 {
-                    element += '<div id=\"employee\ '+ task+'" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" > <h3>'+ task.emp_abv +'</h3> </div>';
+                    element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
+                        ''+ task.color +'\" onclick="sortTasks(' + task.emp_id + ');" data-id="'+task.emp_id+'"> <h3>'+ task.emp_abv +'</h3> </div>';
                 }
 
                 element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
