@@ -38,6 +38,11 @@ var animations = ["fadeIn",
     "wobble",
     "jello"];
 
+function randomAnim()
+{
+    var r = animations[Math.floor(Math.random() * animations.length)];
+    return "animated " + r;
+}
 function alertModal(title, body)
 {
     $("#confirmTask").modal('hide');
@@ -118,21 +123,21 @@ function populateTasks(boardId)
             for (i = 0; i < result.tasks.length; ++i)
             {
                 var task = result.tasks[i];
-                var element = '<div id=\"task'+ task.id +'\" class=\"task animated '+ animations[Math.floor(Math.random() * animations.length)] +'\" data-id=\"'+ task.id +'\"> ';
+                var element = '<div id=\"task'+ task.id +'\" class=\"task '+ randomAnim() +'\" data-id=\"'+ task.id +'\"> ';
                 if(task.unassigned == true)
                 {
-                    element += '<div id=\"employee\" class=\"taskEmp\" style=\"background-color: ' +
+                    element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
                         ''+ task.color +'\" > <h3>U</h3> </div>';
                 }
                 else
                 {
-                    element += '<div id=\"employee\ '+ task+'" class=\"taskEmp\" style=\"background-color: ' +
+                    element += '<div id=\"employee\ '+ task+'" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
                         ''+ task.color +'\" > <h3>'+ task.emp_abv +'</h3> </div>';
                 }
 
-                element += '<div class=\"taskContent\"><h6>'+ task.title +'</h6>' +
+                element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
                     '<div><p><span id=\"comment00\">'+ task.comments.length +' ' +
-                    '</span><span class=\"glyphicon glyphicon-comment\"></span>' +
+                    '</span><span class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
                     '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\"></span> ' +
                     '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
                 if(task.comments.length > 0)
@@ -142,7 +147,7 @@ function populateTasks(boardId)
                         var comment = task.comments[i];
                         if(comment != undefined)
                         {
-                            element += '<p>* '+ comment.text +'<p> ';
+                            element += '<p class"'+ randomAnim() +'">* '+ comment.text +'<p> ';
                         }
                     }
                 }
@@ -209,12 +214,57 @@ function populateComments(taskId)
             var i;
             for (i = 0; i < result.comments.length; ++i) {
                 var element = '<p id="comment' + i + '">' + result.comments[i]['text'] +
-                    '<span class="glyphicon glyphicon-remove remove"></span></p>';
+                    '<span class="glyphicon glyphicon-remove remove '+ randomAnim() +'"></span></p>';
                 $("#comments-" + taskId).append(element);
                 $("#empsNumber").html(parseInt(this.val()) + 1);
             }
         }
     });
+}
+
+function submitCreateTaskForm(id)
+{
+    console.log("yay");
+    var element = $("#task" + id).select();
+}
+
+function createTaskForm()
+{
+    console.log("lol");
+    // create a new task
+    var tid = guid();
+
+    var newTask = '<form class=form-horizontal id=create-task-form-'+ tid +'><fieldset><legend>Create A Task</legend>' +
+        '<div class=form-group><label class="col-md-4 control-label"for=selectbasic>Board</label><div class=col-md-6>' +
+        '<select class=form-control id=selectboard name=selectboard></select></div></div><div class=form-group>' +
+        '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
+        '<input id=taskname name=taskname class="form-control input-md"placeholder="Task name here like a title"required> ' +
+        '<span class=help-block>help</span></div></div><div class=form-group>' +
+        '<label class="col-md-4 control-label"for=taskdesc>Task Description</label>' +
+        '<div class=col-md-6><input id=taskdesc name=taskdesc class="form-control input-md"placeholder="Task Description"required> ' +
+        '<span class=help-block>help</span></div></div><div class=form-group>' +
+        '<label class="col-md-4 control-label"for=employee>Assign To Employee</label>' +
+        '<div class=col-md-6><select class=form-control id=employee name=employee>' +
+        '<option value=none>None</option>';
+
+        $(".employee").each(function(){
+            newTask += '<option value="'+ $(this).data("id") +'" style="' +
+                'background-color: '+ $(this).css('backgroundColor') +'">'+ $(this).children('#name').html() +'</option>'
+        });
+
+        newTask +='</select></div></div><div class=form-group>' +
+        '<label class="col-md-4 control-label"for=employee>Manager</label><div class=col-md-6>' +
+        '<select class=form-control id=manager name=manager>';
+
+
+
+        newTask += '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
+        '<div class=col-md-4><label class=radio-inline for=urgent-0><input id=urgent-0 name=urgent type=radio value=yes> Yes</label><label class=radio-inline for=urgent-1>' +
+        '<input id=urgent-1 name=urgent type=radio value=no checked> No</label></div></div><div class=form-group><label class="col-md-4 control-label"for=taskname>' +
+        '</label><div class=col-md-6><button onclick="submitCreateTaskForm(' + tid + ');" class="btn btn-success"id=submit type=submit value=Send></div></div></fieldset></form>';
+
+    //$("#newTasks").append(newTask);
+    alertModal("New Task", newTask);
 }
 
 
@@ -228,7 +278,7 @@ function populateEmployees(org) {
         success: function (result) {
             for (var i = 0; i < result.employees.length; ++i) {
                 var emp = result.employees[i];
-                var element = '<div id="employee_2" style=\"background-color:' + emp.color + ' \" class="employee animated '+ animations[Math.floor(Math.random() * animations.length)] +'" ondrag="dragg()"> <p>'+ emp.fname + " " + emp.lname +'</p></div>';
+                var element = '<div id="employee-' + emp.id + '" data-id="' + emp.id + '" style=\"background-color:' + emp.color + ' \" class="employee '+ randomAnim() +'" ondrag="dragg()"> <p id="name">'+ emp.fname + " " + emp.lname +'</p></div>';
                 $("#employees").append(element);
                 $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
             }
@@ -236,4 +286,13 @@ function populateEmployees(org) {
     });
 }
 
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
 

@@ -441,6 +441,7 @@ div.task > div {
 	height: 60px;
 	/*position: relative;*/
 	/*top: -42px;*/
+	white-space: nowrap;
 	float: left;
 	display: inline-block;
 }
@@ -457,8 +458,9 @@ div.task div.taskEmp {
 
 div.task div.taskContent {
 	width: 194px;
-	padding: 5px;
-	background-color: whitesmoke
+	/*padding: 5px;*/
+	background-color: whitesmoke;
+    white-space: nowrap;
 }
 
 div.taskContent h6 {
