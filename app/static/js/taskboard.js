@@ -1,5 +1,5 @@
 /**
- * Created by pete on 8/05/2016.
+ * Created by pete on 8/05/2016. testewefwtretretre
  */
 
 var animations = ["fadeIn",
@@ -128,16 +128,14 @@ function sortTasks(employeeId)
             $(this).remove();
         }
     });
-    console.log(done);
-    for (var i = 0; i < todo.length; i++)
+    var i;
+    for (i = 0; i < todo.length; i++)
     {
-        console.log('loopy');
         $("#todo").prepend(todo[i]);
     }
-    for (var j = 0; j < done.length; j++)
+    for (i = 0; i < done.length; i++)
     {
-        console.log('loopy');
-        $("#done").prepend(done[j]);
+        $("#done").prepend(done[i]);
     }
 
 }
@@ -179,7 +177,7 @@ function populateTasks(boardId)
                         var comment = task.comments[i];
                         if(comment != undefined)
                         {
-                            element += '<p class"'+ randomAnim() +'">* '+ comment.text +'<p> ';
+                            element += '<p class="comment">* '+ comment.text +'<p> ';
                         }
                     }
                 }
@@ -254,10 +252,57 @@ function populateComments(taskId)
     });
 }
 
+function sib(id)
+{
+    console.log(id);
+    submitCreateTaskForm(id);
+}
+
 function submitCreateTaskForm(id)
 {
-    console.log("yay");
-    var element = $("#task" + id).select();
+    var element = $("#create-task-form-" + id);
+    var taskName = element.find("#taskname").val();
+    var taskDesc = element.find("#taskdesc").val();
+    var emp = element.find("#employee").val();
+    var man = element.find("#manager").val();
+    var urgent = element.find("#urgent-1").val();
+    var board = element.find("#selectboard").val();
+    var data = {};
+    data['board_id'] = board;
+    data['task_title'] = taskName;
+    data['task_desc'] = taskDesc;
+    data['employee_id'] = emp;
+    data['manager_id'] = man;
+    data['urgent'] = false;
+    if(urgent == "yes")
+    {
+        data['urgent'] = true
+    }
+    data = JSON.stringify(data);
+    console.log(data);
+    $.ajax({
+        url: $("#create-task-url").val(),
+        type: 'POST',
+        data: data,
+        contentType: 'application/json;charset=UTF-8',
+        cache: false,
+        success: function(response) {
+            if(response.error != undefined)
+            {
+                alertModal("Error", response.error);
+            }
+            else
+            {
+                alertModal("Success", "Created a new task");
+                $(".task").remove();
+                var boardId = $("#board_id").val();
+                populateTasks(boardId);
+            }
+        },
+        error: function(error) {
+            alertModal("Error", error);
+        }
+    });
 }
 
 function createTaskForm()
@@ -266,9 +311,13 @@ function createTaskForm()
     // create a new task
     var tid = guid();
 
-    var newTask = '<form class=form-horizontal id=create-task-form-'+ tid +'><fieldset><legend>Create A Task</legend>' +
+    var newTask = '<form class="form-horizontal nosub" id="create-task-form-'+ tid +'"><fieldset><legend>Create A Task</legend>' +
         '<div class=form-group><label class="col-md-4 control-label"for=selectbasic>Board</label><div class=col-md-6>' +
-        '<select class=form-control id=selectboard name=selectboard></select></div></div><div class=form-group>' +
+        '<select class=form-control id="selectboard" name=selectboard>';
+
+    newTask += '<option value="'+ $("#board_id").val() +'">'+ $("#board_name").val() +'</option>';
+
+    newTask += '</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
         '<input id=taskname name=taskname class="form-control input-md"placeholder="Task name here like a title"required> ' +
         '<span class=help-block>help</span></div></div><div class=form-group>' +
@@ -279,26 +328,26 @@ function createTaskForm()
         '<div class=col-md-6><select class=form-control id=employee name=employee>' +
         '<option value=none>None</option>';
 
-        $(".employee").each(function(){
-            newTask += '<option value="'+ $(this).data("id") +'" style="' +
-                'background-color: '+ $(this).css('backgroundColor') +'">'+ $(this).children('#name').html() +'</option>'
-        });
+    $(".employee").each(function(){
+        newTask += '<option value="'+ $(this).data("id") +'" style="' +
+            'background-color: '+ $(this).css('backgroundColor') +'">'+ $(this).children('#name').html() +'</option>'
+    });
 
-        newTask +='</select></div></div><div class=form-group>' +
+    newTask +='</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=employee>Manager</label><div class=col-md-6>' +
         '<select class=form-control id=manager name=manager>';
 
+    newTask += '<option value="'+ $("#manager-id").val() +'">'+ $("#manager-name").val() +'</option>';
 
-
-        newTask += '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
+    newTask += '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
         '<div class=col-md-4><label class=radio-inline for=urgent-0><input id=urgent-0 name=urgent type=radio value=yes> Yes</label><label class=radio-inline for=urgent-1>' +
         '<input id=urgent-1 name=urgent type=radio value=no checked> No</label></div></div><div class=form-group><label class="col-md-4 control-label"for=taskname>' +
-        '</label><div class=col-md-6><button onclick="submitCreateTaskForm(' + tid + ');" class="btn btn-success"id=submit type=submit value=Send></div></div></fieldset></form>';
+        '</label><div class=col-md-6>' +
+        '<input type="button" class="btn btn-success" onclick="sib(\''+ tid +'\');" value="Create Task" />' +
+        '</div></div></fieldset></form>';
 
-    //$("#newTasks").append(newTask);
     alertModal("New Task", newTask);
 }
-
 
 function populateEmployees(org) {
     var value = {"org_id": org};

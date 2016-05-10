@@ -203,7 +203,6 @@ def get_boards():
     return jsonify(boards=data)
 
 
-
 @app.route('/createtask/<int:boardid>', methods=['GET'])
 def create_task(boardid):
     employees = list()
@@ -239,7 +238,7 @@ def submit_create_task():
         board_id = int(request.json['board_id'])
         task_title = request.json['task_title']
         task_desc = request.json['task_desc']
-        if request.json['employee_id'] != 'NONE':
+        if request.json['employee_id'] != 'none':
             employee_id = request.json['employee_id']
         manager_id = int(request.json['manager_id'])
         urgent = utils.to_bool(request.json['urgent'])
@@ -250,7 +249,7 @@ def submit_create_task():
     try:
         assign_to_employee = False
         board = TaskBoard.get(TaskBoard.id == board_id)
-        if employee_id != 'NONE':
+        if request.json['employee_id'] != 'none':
             assign_to_employee = True
             employee = EmployeePin.get(EmployeePin.pin == employee_id)
         manager = User.get(User.id == manager_id)

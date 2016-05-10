@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">  
-	<title>{{ orgname }} - {{ boardname }}</title>
+    <meta charset="UTF-8">
+    <title>{{ orgname }} - {{ boardname }}</title>
 
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
@@ -18,161 +18,164 @@
     </style>
 </head>
 <body class="no-scroll">
-    <input type="hidden" id="orgid" value="{{ orgid }}">
-    <input type="hidden" id="board_id" value="{{ id }}">
-    <input type="hidden" id="manager-id" value="{{ managerid }}">
-    <input type="hidden" id="get-employee-url" value="{{ url_for('get_employee') }}">
-    <input type="hidden" id="get-tasks-url" value="{{ url_for('get_tasks') }}">
-    <input type="hidden" id="mark-task-url" value="{{ url_for('mark_task') }}">
-    <input type="hidden" id="get-comments-url" value="{{ url_for('get_comments') }}">
-    <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
+<input type="hidden" id="orgid" value="{{ orgid }}">
+<input type="hidden" id="board_id" value="{{ id }}">
+<input type="hidden" id="board_name" value="{{ boardname }}">
+<input type="hidden" id="manager-id" value="{{ managerid }}">
+<input type="hidden" id="manager-name" value="{{ accountname }}">
+<input type="hidden" id="get-employee-url" value="{{ url_for('get_employee') }}">
+<input type="hidden" id="get-tasks-url" value="{{ url_for('get_tasks') }}">
+<input type="hidden" id="mark-task-url" value="{{ url_for('mark_task') }}">
+<input type="hidden" id="get-comments-url" value="{{ url_for('get_comments') }}">
+<input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
+<input type="hidden" id="create-task-url" value="{{ url_for('submit_create_task') }}">
 
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="boards.page">
-                    <div class="img"></div>
-                </a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="boards.html">{{ orgname }}</a></li>
-                <li ><a href="board.html">{{ boardname }}</a></li>
-            </ul>
-            <!--   <ul class="nav navbar-nav navbar-right">
-                <li>
-                 <a href="#">Hi, John</a> -->
-            <div class="btn-group nav navbar-nav navbar-right">
-                <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
-                    {{ accountname }}
-                    <span class="glyphicon glyphicon-menu-down"></span>
-                    <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
-                </a>
-                <ul class="dropdown-menu">
-                    <!-- dropdown menu links -->
-                    <li class="active"><a href="#">{{ accountname }}</a></li>
-                    <li class="a"><a href="#">Employees</a></li>
-                    <hr>
-                    <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
-                </ul>
-            </div>
-            <!-- </li> -->
-
+<!-- Navigation -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="boards.page">
+                <div class="img"></div>
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="boards.html">{{ orgname }}</a></li>
+            <li ><a href="board.html">{{ boardname }}</a></li>
+        </ul>
+        <!--   <ul class="nav navbar-nav navbar-right">
+            <li>
+             <a href="#">Hi, John</a> -->
+        <div class="btn-group nav navbar-nav navbar-right">
+            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ accountname }}
+                <span class="glyphicon glyphicon-menu-down"></span>
+                <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li class="active"><a href="#">{{ accountname }}</a></li>
+                <li class="a"><a href="#">Employees</a></li>
+                <hr>
+                <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
             </ul>
         </div>
-    </nav>
+        <!-- </li> -->
 
-  <!-- Body -->
-  <main>
+        </ul>
+    </div>
+</nav>
+
+<!-- Body -->
+<main>
     <!-- Boards -->
     <div class="grid" id="states-block">
-      <div class="row boards" id="states">
-        <div class="col-sm-4">
-          <div class="state">
-            <div class="heading">
-              <h1>To-Do</h1>
+        <div class="row boards" id="states">
+            <div class="col-sm-4">
+                <div class="state">
+                    <div class="heading">
+                        <h1>To-Do</h1>
+                    </div>
+                    <div class="empty">
+                        <h2><span id="newTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
+                        <h3><span class="glyphicon glyphicon-plus" onclick="createTaskForm()" id="addTask"></span></h3>
+                    </div>
+                    <div class="content dnd-container" id="newTasks">
+
+                    </div>
+                </div>
             </div>
-            <div class="empty">
-              <h2><span id="newTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
-              <h3><span class="glyphicon glyphicon-plus" onclick="createTaskForm()" id="addTask"></span></h3>
-            </div>
-            <div class="content dnd-container" id="newTasks">
-               
-            </div>
-          </div>
-        </div>
 
 
-         <div class="col-sm-4">
-          <div class="state">
-            <div class="heading">
-              <h1>Doing</h1>
+            <div class="col-sm-4">
+                <div class="state">
+                    <div class="heading">
+                        <h1>Doing</h1>
+                    </div>
+                    <div class="empty">
+                        <h2><span id="todoTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
+                    </div>
+                    <div class="content dnd-container" id="todo"></div>
+                </div>
             </div>
-            <div class="empty">
-              <h2><span id="todoTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
+            <div class="col-sm-4">
+                <div class="state">
+                    <div class="heading">
+                        <h1>Done</h1>
+                    </div>
+                    <div class="empty">
+                        <h2><span id="doneTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
+                    </div>
+                    <div class="content dnd-container" id="done"></div>
+                </div>
             </div>
-            <div class="content dnd-container" id="todo"></div>
-          </div>
         </div>
-         <div class="col-sm-4">
-          <div class="state">
-            <div class="heading">
-              <h1>Done</h1>
-            </div>
-            <div class="empty">
-              <h2><span id="doneTasksNumber">0</span> <span class="glyphicon glyphicon-tasks"></span></h2>
-            </div>
-            <div class="content dnd-container" id="done"></div>
-          </div>
-        </div>
-      </div>
     </div>
     <!-- Employees -->
     <div id="employees-block">
-      <div>
-          <h4 style="display: inline-block;" > Employees (<span id="empsNumber">0</span>)</h4>
-      </div>
-      <div id="employees" class="employees emps">
-      </div>
+        <div>
+            <h4 style="display: inline-block;" > Employees (<span id="empsNumber">0</span>)</h4>
+        </div>
+        <div id="employees" class="employees emps">
+        </div>
     </div>
-  </main>
+</main>
 
-    <div id="confirmTask" class="modal fade" role="dialog">
-        <input type="hidden" id="task-action" value="none">
-        <input type="hidden" id="task-id" value="none">
-        <div class="modal-dialog">
+<div id="confirmTask" class="modal fade" role="dialog">
+    <input type="hidden" id="task-action" value="none">
+    <input type="hidden" id="task-id" value="none">
+    <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Move Task</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group" id="emp-pin-form">
-                        <h3 id="emp-pin-form-error" style="background-color: lightcoral"></h3>
-                        <label class="control-label " for="emp-pin">
-                            Pin
-                        </label>
-                        <input class="form-control" id="emp-pin" name="emp-pin" placeholder="Unique PIN " type="text"/>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Move Task</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="emp-pin-form">
+                    <h3 id="emp-pin-form-error" style="background-color: lightcoral"></h3>
+                    <label class="control-label " for="emp-pin">
+                        Pin
+                    </label>
+                    <input class="form-control" id="emp-pin" name="emp-pin" placeholder="Unique PIN " type="text"/>
                           <span class="help-block" id="hint_emp-pin">
                            Insert your pin number here
                           </span>
-                        <div>
-                            <button class="btn btn-primary" name="submit" type="submit" id="verify-pin">
-                                Verify PIN
-                            </button>
-                        </div>
-                    </div>
-                    <div id="emp-pin-emp-display">
-                        <h1 id="emp-pin-emp-display-name"></h1>
-                        <h1 id="emp-pin-emp-display-pin"></h1>
+                    <div>
+                        <button class="btn btn-primary" name="submit" type="submit" id="verify-pin">
+                            Verify PIN
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="emp-pin-confirm">Confirm Action</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div id="emp-pin-emp-display">
+                    <h1 id="emp-pin-emp-display-name"></h1>
+                    <h1 id="emp-pin-emp-display-pin"></h1>
                 </div>
             </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="emp-pin-confirm">Confirm Action</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
-    </div>
 
-    <div id="alert-modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 id="alert-modal-title" class="modal-title"></h4>
-                </div>
-                <div id="alert-modal-body" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+    </div>
+</div>
+
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="alert-modal-title" class="modal-title"></h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
 
 </body>
