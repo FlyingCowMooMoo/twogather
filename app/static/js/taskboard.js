@@ -201,7 +201,7 @@ function populateTasks(boardId)
                 element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
                     '<div><p><span id=\"comment00\">'+ task.comments.length +' ' +
                     '</span><span class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
-                    '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\"></span> ' +
+                    '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
                     '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
                 if(task.comments.length > 0)
                 {
@@ -263,6 +263,25 @@ function populateTasks(boardId)
             }
         }
     });
+}
+
+function showComments(element)
+{
+    // save trigerrin button
+    var element = $(element);
+
+    if(element.hasClass('glyphicon-chevron-down'))
+    {
+        element.removeClass('glyphicon-chevron-down');
+        element.addClass('glyphicon-chevron-up');
+    }
+    else
+    {
+        element.removeClass('glyphicon-chevron-up');
+        element.addClass('glyphicon-chevron-down');
+    }
+
+    element.parents('div.task').find('[id^="commentsBlock"]').slideToggle('fast', function() {});
 }
 
 function populateComments(taskId)

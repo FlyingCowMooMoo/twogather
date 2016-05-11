@@ -10,6 +10,7 @@
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.2/Chart.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 <body>
@@ -23,7 +24,8 @@
             <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
         </div>
 
-        <div class="content">
+        <div class="container">
+            <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
             <canvas id="report-canvas" width="800" height="600"></canvas>
         </div>
     </div>
@@ -79,6 +81,29 @@
         }
     });
 
+
+
+</script>
+
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', '#'],
+            ['Todo',     {{ t }}],
+            ['Doing',      {{ td }}],
+            ['Done',  {{ d }}]
+        ]);
+
+        var options = {
+            title: 'Tasks',
+            is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
 </script>
 </body>
 </html>
