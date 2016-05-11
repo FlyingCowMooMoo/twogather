@@ -7,7 +7,7 @@ import dbutils
 
 from app import app, db
 from flask import render_template, request, jsonify, Response, url_for
-from peewee import fn, DoesNotExist, TextField
+from peewee import fn, DoesNotExist, TextField, BooleanField
 
 from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
 
@@ -19,8 +19,8 @@ import utils
 @app.before_first_request
 def prepare():
     # dbutils.verify_tables(drop_tables=True, generate_data=True)
-    #m = SqliteMigrator(db.database)
-    #migrate(m.drop_column('boardtask', 'description'))
+    # m = SqliteMigrator(db.database)
+    # migrate(m.add_column('task', 'hidden', BooleanField(default=False)))
     print ('a')
 
 
@@ -63,7 +63,8 @@ def show_board(board_id=None):
     try:
         board = TaskBoard.get(TaskBoard.id == board_id)
         return render_template('pages/board.html', id=board_id, orgid=board.org_id,
-                               orgname=board.org_name, accountname=current_user.name, managerid=current_user.id, boardname=board.name)
+                               orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,
+                               boardname=board.name)
     except DoesNotExist as e:
         return show_error('404', e.message)
 
@@ -75,8 +76,19 @@ def get_tasks():
     query = tuple(Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id))
     tasks = list()
     for item in query:
-        tasks.append(viewmodels.Task.create_from_dbmodel(item, dbutils.get_comments(item.id)).to_dict())
+        if not item.hidden:
+            tasks.append(viewmodels.Task.create_from_dbmodel(item, dbutils.get_comments(item.id)).to_dict())
     return jsonify(tasks=tasks)
+
+
+@app.route('/hidetask', methods=['POST'])
+def hide_task():
+    task = request.json['task_id']
+    try:
+        task = Task.get(Task.id == task)
+        return jsonify(msg='All good')
+    except DoesNotExist as e:
+        return jsonify(error='An error occurred ' + e.message)
 
 
 @app.route('/getemployee', methods=['POST'])
@@ -121,7 +133,6 @@ def mark_task():
     return jsonify(msg=msg)
 
 
-
 @app.route('/getemployees', methods=['POST'])
 def get_employees():
     ordid = int(request.json['org_id'])
@@ -140,8 +151,6 @@ def get_employees():
 @app.route('/companies')
 def companies():
     return render_template('companies.html', items=tuple(Organization.select()))
-
-
 
 
 @app.route('/company/<int:cid>')
@@ -182,7 +191,6 @@ def create_board():
         return jsonify(board=b)
     except Exception as e:
         return jsonify(error=e.message)
-
 
 
 @app.route('/getboards', methods=['POST'])

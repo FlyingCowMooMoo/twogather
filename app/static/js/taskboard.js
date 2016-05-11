@@ -85,6 +85,7 @@ $("#verify-pin").click(function()
     $("#emp-pin-emp-display-name").hide();
     $("#emp-pin-emp-display-pin").hide();
     var value = {"pin": $("#emp-pin").val()};
+    console.log('yay');
     $.ajax({
         type : "POST",
         url : $("#get-employee-url").val(),
@@ -137,7 +138,6 @@ function sortTasks(employeeId)
     {
         $("#done").prepend(done[i]);
     }
-
 }
 
 function populateTasks(boardId)

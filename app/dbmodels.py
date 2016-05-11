@@ -82,6 +82,7 @@ class Task(db.Model):
     completed_at = DateTimeField(null=True)
     marked_by = ForeignKeyField(EmployeePin, null=True)
     marked_as_high_priority = BooleanField(default=False)
+    hidden = BooleanField(default=False)
 
 
 class TaskCompletion(db.Model):
