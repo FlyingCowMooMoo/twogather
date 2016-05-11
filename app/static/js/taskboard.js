@@ -258,6 +258,20 @@ function sib(id)
     submitCreateTaskForm(id);
 }
 
+function enableEmployeeMode()
+{
+    $("#addTask").fadeOut();
+    $(".navbar").fadeOut();
+    $("#employees-block").fadeOut();
+}
+
+function disableEmployeeMode()
+{
+    $("#addTask").fadeIn();
+    $(".navbar").fadeIn();
+    $("#employees-block").fadeIn();
+}
+
 function submitCreateTaskForm(id)
 {
     var element = $("#create-task-form-" + id);
