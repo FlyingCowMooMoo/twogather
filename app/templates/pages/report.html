@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Report</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
@@ -23,11 +23,8 @@
             <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
         </div>
 
-        <!-- Loging block -->
         <div class="content">
-            {{ total }}
-            {{ td }}
-            <canvas id="report-canvas" width="400" height="400"></canvas>
+            <canvas id="report-canvas" width="800" height="600"></canvas>
         </div>
     </div>
 </main>
@@ -48,14 +45,26 @@
 </div>
 
 <script>
-    var ctx = document.getElementById("report-canvas");
-    var data = {};
+
+    function randomColor() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    }
+    var ctx = document.getElementById("report-canvas").getContext("2d");
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ["Todo", "Doing", "Done"],
             datasets: [{
                 label: '# of Tasks',
+                fillColor: [randomColor(), randomColor(), randomColor()],
+                strokeColor: randomColor(),
+                pointColor: randomColor(),
+                pointStrokeColor: randomColor(),
+                pointHighlightFill: randomColor(),
+                pointHighlightStroke: randomColor(),
                 data: [{{ t }}, {{ td }}, {{ d }}]
             }]
         },
@@ -69,6 +78,7 @@
             }
         }
     });
+
 </script>
 </body>
 </html>
