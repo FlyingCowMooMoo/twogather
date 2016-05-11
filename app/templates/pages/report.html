@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.2/Chart.min.js"></script>
+
+</head>
+<body>
+
+<!-- Body -->
+<main id="login" class="sign">
+    <div class="state">
+
+        <!-- Logo -->
+        <div class="heading">
+            <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
+        </div>
+
+        <!-- Loging block -->
+        <div class="content">
+            {{ total }}
+            {{ td }}
+            <canvas id="report-canvas" width="400" height="400"></canvas>
+        </div>
+    </div>
+</main>
+
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="alert-modal-title" class="modal-title"></h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var ctx = document.getElementById("report-canvas");
+    var data = {};
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Todo", "Doing", "Done"],
+            datasets: [{
+                label: '# of Tasks',
+                data: [{{ t }}, {{ td }}, {{ d }}]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+</body>
+</html>

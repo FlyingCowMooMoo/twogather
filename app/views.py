@@ -74,6 +74,20 @@ def show_board(board_id=None):
         return show_error('404', e.message)
 
 
+@app.route('/report/<int:board_id>', methods=['GET'])
+def report(board_id):
+    if board_id is None:
+        return show_error('400', 'No board id specified')
+    try:
+        board = TaskBoard.get(TaskBoard.id == board_id)
+        t = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_task).count()
+        td = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_todo).count()
+        d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_completed).count()
+        return render_template('pages/report.html', total=t+td+d, t=t, td=td, d=d)
+    except DoesNotExist as e:
+        return show_error('404', e.message)
+
+
 @app.route('/gettasks', methods=['POST'])
 def get_tasks():
     board_id = int(request.json['board_id'])
