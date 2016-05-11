@@ -34,6 +34,7 @@ class User(db.Model, UserMixin):
     active = BooleanField(default=True)
     confirmed_at = DateTimeField(null=True)
     name = TextField(null=True)
+    organization = ForeignKeyField(Organization)
 
     def get_name(self):
         if self.name is None:

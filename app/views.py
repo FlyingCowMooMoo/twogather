@@ -7,7 +7,7 @@ import dbutils
 
 from app import app, db
 from flask import render_template, request, jsonify, Response, url_for
-from peewee import fn, DoesNotExist, TextField, BooleanField
+from peewee import fn, DoesNotExist, TextField, BooleanField, ForeignKeyField
 
 from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
 
@@ -21,6 +21,11 @@ def prepare():
     # dbutils.verify_tables(drop_tables=True, generate_data=True)
     # m = SqliteMigrator(db.database)
     # migrate(m.add_column('task', 'hidden', BooleanField(default=False)))
+    # migrate(m.add_column('user', 'organization_id', ForeignKeyField(Organization, null=True, to_field=Organization.id)))
+    # for u in User.select():
+    #   org = (Organization.select().order_by(fn.Random())).get()
+    #  u.organization = org
+    # u.save()
     print ('a')
 
 
@@ -45,7 +50,7 @@ def signin():
             return jsonify(error='Invalid Credentials')
         if user.password == password:
             login_user(user)
-            return jsonify(id=user.id, name=user.name)
+            return jsonify(id=user.id, name=user.name, url=url_for('company', cid=user.organization.id))
         else:
             return jsonify(error='Invalid Credentials')
 
