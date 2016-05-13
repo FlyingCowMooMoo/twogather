@@ -13,20 +13,40 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
+
+<style>
+    main.resign {
+        background-image: url("{{ url_for('static', filename='img/wallpaper.jpg') }}");
+        /*background-color: lightBlue;*/
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        position: fixed;
+        height: 100vh;
+    }
+</style>
 <body>
 
 <!-- Body -->
-<main id="login" class="sign">
-    <div class="state">
+<main class="resign">
+    <div class="center-block">
 
         <!-- Logo -->
         <div class="heading">
             <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
         </div>
 
-        <div class="container">
-            <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-            <canvas id="report-canvas" width="800" height="600"></canvas>
+        <div>
+            <div class="row">
+                <div class="">
+                    <div id="piechart_3d" ></div>
+                    <canvas id="report-canvas" width="800" height="600"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -99,6 +119,7 @@
         var options = {
             title: 'Tasks',
             is3D: true,
+            backgroundColor: { fill:'transparent' }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
