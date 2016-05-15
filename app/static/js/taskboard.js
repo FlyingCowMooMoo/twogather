@@ -58,8 +58,8 @@ $(document).ready(function() {
     populateEmployees(orgId);
 });
 
-$("#emp-pin-confirm").click(function(){
-
+function confirmEmpPin()
+{
     var pin = $("#emp-pin-emp-display-pin").text();
     var action = $("#task-action").val();
     var task = $("#task-id").val();
@@ -70,13 +70,27 @@ $("#emp-pin-confirm").click(function(){
         data: JSON.stringify(value),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {
-            $("#task" + task).detach().appendTo('#' + action);
-            alertModal('Success', result.msg);
+            if(result.error != undefined)
+            {
+                alertModal('Success', result.msg);
+            }
+            else
+            {
+                $(".task").remove();
+                var boardId = $("#board_id").val();
+                populateTasks(boardId);
+                alertModal('Success', result.msg);
+            }
         },
         error: function(result){
-            alertModal('Success', result.error);
+            alertModal('Error', result.error);
         }
     });
+}
+
+$("#emp-pin-confirm").click(function(){
+
+    confirmEmpPin();
 });
 
 
@@ -97,7 +111,7 @@ function verifyPin()
             {
                 console.log(result.employee);
                 $("#emp-pin-form").fadeOut();
-                $("#emp-pin-emp-display").css('background-color', result.employee.color);
+                $("#emp-pin-emp-display-pin").css('background-color', result.employee.color);
                 $("#emp-pin-emp-display-name").text(result.employee.fname + " " + result.employee.lname);
                 $("#emp-pin-emp-display-pin").text(result.employee.pin);
                 $("#emp-pin-emp-display").fadeIn();
@@ -114,34 +128,7 @@ function verifyPin()
 
 $("#verify-pin").click(function()
 {
-    $("#emp-pin-emp-display").hide();
-    $("#emp-pin-emp-display-name").hide();
-    $("#emp-pin-emp-display-pin").hide();
-    var value = {"pin": $("#emp-pin").val()};
-    console.log('yay');
-    $.ajax({
-        type : "POST",
-        url : $("#get-employee-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            if(result.employee != undefined)
-            {
-                console.log(result.employee);
-                $("#emp-pin-form").fadeOut();
-                $("#emp-pin-emp-display").css('background-color', result.employee.color);
-                $("#emp-pin-emp-display-name").text(result.employee.fname + " " + result.employee.lname);
-                $("#emp-pin-emp-display-pin").text(result.employee.pin);
-                $("#emp-pin-emp-display").fadeIn();
-                $("#emp-pin-emp-display-name").fadeIn();
-                $("#emp-pin-emp-display-pin").fadeIn();
-            }
-            else
-            {
-                $("#emp-pin-form-error").text(result.error);
-            }
-        }
-    });
+    verifyPin();
 });
 
 function sortTasks(employeeId)
@@ -190,13 +177,15 @@ function populateTasks(boardId)
                 if(task.unassigned == true)
                 {
                     element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" > <h3>U</h3> </div>';
+                        ''+ task.color +'\" > <h3 id="emp-name-d">U</h3> </div>';
                 }
                 else
                 {
                     element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" onclick="sortTasks(' + task.emp_id + ');" data-id="'+task.emp_id+'"> <h3>'+ task.emp_abv +'</h3> </div>';
+                        ''+ task.color +'\" data-id="'+task.emp_id+'"> <h3>'+ task.emp_abv +'</h3> </div>';
                 }
+                //removed from above to fix bugs
+                //onclick="sortTasks(' + task.emp_id + ');"
 
                 element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
                     '<div><p><span id=\"comment00\">'+ task.comments.length +' ' +
@@ -248,13 +237,18 @@ function populateTasks(boardId)
                         var taskId = ui.item.attr("data-id");
                         if(source == "newTasks" && (destination == "todo" || destination == "done" ))
                         {
+                            console.log("Moving task id " + taskId + " from " + source + " to " + destination);
                             $("#task-action").val(destination);
                             $("#task-id").val(taskId);
                             $("#confirmTask").modal('show');
                         }
-                        if(destination == "newTasks")
+                        else if(destination == "newTasks")
                         {
                             alertModal("Error", "You can't move a task to the unassigned pile")
+                        }
+                        else 
+                        {
+                            alertModal("Error", "Invalid Action")
                         }
                     }
                 }).disableSelection();
