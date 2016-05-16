@@ -217,6 +217,6 @@ function populateEmployees(org) {
  * Function to make employees draggable to boards
  */
 function makeEmpsDraggable() {
-	$( '#employees, [id^="empAssigned"]' ).sortable({ connectWith: ".emps"}).disableSelection(); 
+	//$( '#employees, [id^="empAssigned"]' ).sortable({ connectWith: ".emps"}).disableSelection();
 }
 

@@ -408,12 +408,12 @@ div.empty span#addTask:hover {
 }
 
 div.state > div.content {
-	height: 500px;
-	max-height: 500px;
+	height: 100%;
 	width: 100%;
 	border-radius: 0 3px 3px 3px;
 	margin-bottom: 20px;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: hidden;
 	background-color: darkGray;
 	border: 10px solid lightGray;
 	border-top: 15px solid lightGray;
@@ -439,8 +439,6 @@ div.content > div.task {
 
 div.task > div {
 	height: 60px;
-	/*position: relative;*/
-	/*top: -42px;*/
 	white-space: nowrap;
 	float: left;
 	display: inline-block;

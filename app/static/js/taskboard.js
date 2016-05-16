@@ -176,19 +176,17 @@ function populateTasks(boardId)
                 var element = '<div id=\"task'+ task.id +'\" class=\"task '+ randomAnim() +'\" data-id=\"'+ task.id +'\"> ';
                 if(task.unassigned == true)
                 {
-                    element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" > <h3 id="emp-name-d">U</h3> </div>';
+                    element += '<div id="employee" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
+                        ''+ "lightGray" +'\" > <h5 id="emp-name-d">U</h5> </div>';
                 }
                 else
                 {
-                    element += '<div id=\"employee\" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" data-id="'+task.emp_id+'"> <h3>'+ task.emp_abv +'</h3> </div>';
+                    element += '<div id="employee" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
+                        ''+ task.color +'\" data-id="'+task.emp_id+'"> <h5>'+ task.emp_abv +'</h5> </div>';
                 }
-                //removed from above to fix bugs
-                //onclick="sortTasks(' + task.emp_id + ');"
 
                 element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
-                    '<div><p><span id=\"comment00\">'+ task.comments.length +' ' +
+                    '<div><p><span id=\"comment'+ task.id +'\">'+ task.comments.length +' ' +
                     '</span><span class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
                     '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
                     '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
@@ -199,7 +197,7 @@ function populateTasks(boardId)
                         var comment = task.comments[i];
                         if(comment != undefined)
                         {
-                            element += '<p class="comment">* '+ comment.text +'<p> ';
+                            element += '<p>* '+ comment.text +'</p> ';
                         }
                     }
                 }
@@ -222,7 +220,6 @@ function populateTasks(boardId)
                     var count = parseInt($("#doneTasksNumber").text());
                     $("#doneTasksNumber").text(count + 1);
                 }
-
                 $("#newTasks, #todo, #done").sortable({ connectWith: ".dnd-container",
                     placeholder: "ui-sortable-placeholder",
                     start: function(event, ui) {
@@ -255,6 +252,7 @@ function populateTasks(boardId)
 
 
             }
+            fixHeight();
         }
     });
 }
@@ -467,5 +465,20 @@ function guid() {
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
         s4() + '-' + s4() + s4() + s4();
+}
+
+/* Hacky as fuck do not try this at home*/
+function fixHeight()
+{
+    var h = 0;
+    $("div.content").each(function()
+    {
+        if($(this).height() > h)
+        {
+            h = $(this).height();
+        }
+    });
+    $("div.content").height(h);
+
 }
 
