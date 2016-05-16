@@ -479,6 +479,5 @@ function fixHeight()
         }
     });
     $("div.content").height(h);
-
 }
 

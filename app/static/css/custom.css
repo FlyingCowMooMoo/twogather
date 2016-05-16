@@ -412,6 +412,7 @@ div.state > div.content {
 	width: 100%;
 	border-radius: 0 3px 3px 3px;
 	margin-bottom: 20px;
+	overflow: auto;
 	overflow-x: hidden;
 	overflow-y: hidden;
 	background-color: darkGray;
