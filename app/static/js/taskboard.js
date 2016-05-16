@@ -309,6 +309,7 @@ function enableEmployeeMode()
     $("#addTask").fadeOut();
     $(".navbar").fadeOut();
     $("#employees-block").fadeOut();
+    $("#toggleEmpMode").show();
 }
 
 function disableEmployeeMode()
@@ -316,6 +317,37 @@ function disableEmployeeMode()
     $("#addTask").fadeIn();
     $(".navbar").fadeIn();
     $("#employees-block").fadeIn();
+    $("#toggleEmpMode").hide();
+}
+
+function showLogin()
+{
+    $('#login-modal').modal('show');
+}
+
+
+function toggleEmployeeMode()
+{
+    var email = $("#te-email").val();
+    var password = $("#te-password").val();
+    var value = {"email": email, "password": password};
+    $('#login-modal').modal('hide');
+    $.ajax({
+        type: "POST",
+        url: $("#login-url").val(),
+        data: JSON.stringify(value),
+        contentType: 'application/json;charset=UTF-8',
+        success: function (result) {
+            if(result.error != undefined)
+            {
+                alertModal("Error", result.error);
+            }
+            else
+            {
+                disableEmployeeMode();
+            }
+        }
+    });
 }
 
 function submitCreateTaskForm(id)

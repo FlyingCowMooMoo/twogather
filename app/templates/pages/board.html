@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lm.css') }}"/>
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
@@ -28,6 +29,7 @@
 <input type="hidden" id="get-comments-url" value="{{ url_for('get_comments') }}">
 <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
 <input type="hidden" id="create-task-url" value="{{ url_for('submit_create_task') }}">
+<input type="hidden" id="login-url" value="{{ url_for('signin') }}">
 
 
 <!-- Navigation -->
@@ -67,6 +69,9 @@
 
 <!-- Body -->
 <main>
+
+    <input type="submit" id="toggleEmpMode" value="Toggle Manager Mode" style="display: none;" onclick="event.preventDefault(); showLogin();"/>
+
     <!-- Boards -->
     <div class="grid" id="states-block">
         <div class="row boards" id="states">
@@ -171,6 +176,25 @@
             <div id="alert-modal-body" class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal for employee mode-->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <h1>Login to Your Account</h1>
+            <br>
+            <form>
+                <input type="text" name="email" id="te-email" placeholder="Email">
+                <input type="password" name="pass" id="te-password" placeholder="Password">
+                <input type="submit" name="login" class="login loginmodal-submit" onclick="event.preventDefault(); toggleEmployeeMode();" value="Login">
+            </form>
+
+            <div class="login-help">
+                <a href="#">You are required to login in order to toggle employee mode</a>
             </div>
         </div>
     </div>
