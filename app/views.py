@@ -115,8 +115,9 @@ def report(board_id):
         board = TaskBoard.get(TaskBoard.id == board_id)
         t = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_task).count()
         td = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_todo).count()
-        d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_completed).count()
-        return render_template('pages/report.html', total=t+td+d, t=t, td=td, d=d)
+        d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                Task.marked_as_completed).count()
+        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d)
     except DoesNotExist as e:
         return show_error('404', e.message)
 
@@ -287,34 +288,6 @@ def get_boards():
                 count += 1
         data.append({'id': b.id, 'name': b.name, 'desc': b.description, 'count': count})
     return jsonify(boards=data)
-
-
-@app.route('/createtask/<int:boardid>', methods=['GET'])
-def create_task(boardid):
-    employees = list()
-    boards = list()
-    managers = list()
-    task_board = TaskBoard.get(TaskBoard.id == boardid)
-    boards.append({'id': task_board.id, 'name': task_board.name})
-    for value in EmployeePin.select().where(EmployeePin.organization == task_board.organization):
-        if value.first_name and value.last_name:
-            name = ' '.join((value.first_name, value.last_name))
-        else:
-            name = 'No name specified'
-        employees.append(
-                {'pin': value.pin, 'color': value.color.hex_code, 'image': value.logo.image_name, 'name': name})
-    for value in User.select():
-        managers.append({'id': value.id, 'name': value.name})
-    return render_template('createtask.html', employees=tuple(employees), boards=tuple(boards),
-                           managers=tuple(managers))
-
-
-@app.route('/tasks/<int:id>')
-def task_details():
-    try:
-        task = Task.get(Task.id == id)
-    except DoesNotExist:
-        return show_error('404', 'Could not find this task')
 
 
 @app.route('/submitcreatetask', methods=['POST'])
