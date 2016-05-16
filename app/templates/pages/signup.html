@@ -10,11 +10,10 @@
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/taskboard.js') }}"></script>
 
 </head>
 <body>
-
+<input type="hidden" id="register-url" value="{{ url_for('signup') }}">
   <!-- Body -->
   <main id="signup" class="sign">
     <div class="state">
@@ -25,7 +24,7 @@
         <p>* All fields are required.</p>
         <form>
           <fieldset class="form-group">
-            <input type="text" class="form-control input" id="warehouse" placeholder="Warehose Name">
+            <input type="text" class="form-control input" id="warehouse" placeholder="Warehouse Name">
           </fieldset>
           <fieldset class="form-group">
             <input type="text" class="form-control input" id="manager" placeholder="Manager Name">
@@ -40,12 +39,67 @@
             <input type="password" class="form-control input" id="password" placeholder="Password">
           </fieldset>
           <div class="text-center">
-            <button class="btn brd log" type="button" onclick="location.href='boards.html';">Sign up</button>
+            <button class="btn brd log" type="button" onclick="register()">Sign up</button>
           </div>
         </form>
       </div>
     </div>
+      <!-- Popup Modal Thing -->
+      <div id="alert-modal" class="modal fade">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 id="alert-modal-title" class="modal-title"></h4>
+                  </div>
+                  <div id="alert-modal-body" class="modal-body"></div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
   </main>
 
+<script>
+    function register()
+    {
+        var company = $("#warehouse").val();
+        var name = $("#manager").val();
+        var email = $("#email").val();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var value = {"company": company, "name": name, "email": email, "username": username, "password": password};
+        $.ajax({
+            type : "POST",
+            url : $("#register-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                if(result.error != undefined)
+                {
+                    alertModal('Error', result.msg);
+                }
+                else
+                {
+                    var link = '<a href="' + result.url + '">' + result.url + '</a>';
+                    var el = '<p>' + result.msg + ' </p><br/><p>Your new warehouse URL: ' + link + ' </p>';
+                    alertModal('Success', el);
+                }
+            },
+            error: function(result){
+                alertModal('Error', result.error);
+            }
+        });
+    }
+    function alertModal(title, body)
+    {
+        $('#alert-modal-title').html(title);
+        $('#alert-modal-body').html(body);
+        $('#alert-modal').modal('show');
+    }
+
+</script>
 </body>
 </html>

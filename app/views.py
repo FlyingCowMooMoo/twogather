@@ -57,6 +57,43 @@ def signin():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if request.method == 'GET':
+        return render_template('pages/signup.html')
+    if request.method == 'POST':
+        cm = request.json['company']
+        name = request.json['name']
+        email = request.json['email']
+        username = request.json['username']
+        password = request.json['password']
+
+        query = User.select().where(User.username == username)
+        if query.exists():
+            return jsonify(error='Username already in use')
+        query = User.select().where(User.email == email)
+        if query.exists():
+            return jsonify(error='Email already in use')
+        query = Organization.select().where(Organization.name == cm)
+        if query.exists():
+            return jsonify(error='A warehouse already exists with the specified name')
+
+        manager = User()
+        manager.email = email
+        manager.name = name
+        manager.password = password
+        manager.save()
+
+        c = Organization()
+        c.name = cm
+        c.save()
+
+        manager = User.get(User.email == email)
+        c = Organization.get(Organization.name == cm)
+
+        manager.organization = c
+        manager.save()
+
+        return jsonify(msg='You have successfully signed up', url=url_for('company', cid=c.id))
+
     return jsonify(error='Invalid Credentials')
 
 
