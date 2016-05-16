@@ -291,7 +291,7 @@ function populateTasks(boardId)
                     {
                         for (var j = 0; j < task.comments.length; j++)
                         {
-                            var comment = task.comments[i];
+                            var comment = task.comments[j];
                             if (comment != undefined)
                             {
                                 element += '<p>* ' + comment.text +

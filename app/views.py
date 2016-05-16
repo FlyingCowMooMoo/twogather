@@ -1,12 +1,12 @@
 import json
 
-from flask.ext.login import login_required, current_user, login_user
+from flask.ext.login import login_required, current_user, login_user, logout_user
 from playhouse.migrate import SqliteMigrator, migrate
 
 import dbutils
 
 from app import app, db
-from flask import render_template, request, jsonify, Response, url_for
+from flask import render_template, request, jsonify, Response, url_for, redirect
 from peewee import fn, DoesNotExist, TextField, BooleanField, ForeignKeyField
 
 from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
@@ -31,10 +31,7 @@ def prepare():
 
 @app.route('/', methods=['GET'])
 def index():
-    items = list()
-    for item in tuple(TaskBoard.select()):
-        items.append(item.id)
-    return render_template('index.html', items=tuple(items))
+    return redirect(url_for('signin'))
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -353,8 +350,12 @@ def get_comments():
     except DoesNotExist as e:
         return jsonify(error='Invalid Task Id ' + e.message)
 
-    return Response(response=data, status=200, mimetype="application/json")
-
 
 def show_error(code=None, msg=None):
     return render_template('error.html', code=code, msg=msg)
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect(url_for('signin'))
