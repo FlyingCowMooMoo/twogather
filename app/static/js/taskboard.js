@@ -58,6 +58,53 @@ $(document).ready(function() {
     populateEmployees(orgId);
 });
 
+function addCommentForm(taskId)
+{
+    var formId = guid();
+
+    var functionCall = 'submitComment(this,'+taskId +')';
+    var element = '<form class="form-horizontal" id="' + formId.trim() +'"><fieldset><legend>Form Name</legend>' +
+        '<div class="form-group"> <label class="col-md-4 control-label" for="ctext">Comment Text</label> ' +
+        '<div class="col-md-4"> <textarea class="form-control" id="ctext" name="ctext">Text</textarea> ' +
+        '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="submit-comment-form">' +
+        '</label> <div class="col-md-4"> ' +
+        '<button onclick="event.preventDefault();' +  functionCall + '" id="submit-comment-form" ' +
+        'name="submit-comment-form" class="btn btn-primary" data-id="' + formId+'">Submit</button></div></div></fieldset></form>';
+    alertModal("New Comment", element);
+}
+
+function submitComment(id, task)
+{
+    console.log(id);
+    var element = $("#" + $(id).data("id"));
+    var comment = element.find("#ctext").val();
+    var value = {"author_type": "manager", "text": comment, "task_id": task, "author_id": $("#manager-id").val()};
+    console.log("yay" + id + " " + task)
+    $.ajax({
+        type : "POST",
+        url : $("#create-comment-url").val(),
+        data: JSON.stringify(value),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            if(result.error != undefined)
+            {
+                alertModal('Success', result.msg);
+            }
+            else
+            {
+                $(".task").remove();
+                var boardId = $("#board_id").val();
+                populateTasks(boardId);
+                alertModal('Success', result.msg);
+            }
+        },
+        error: function(result){
+            alertModal('Error', result.error);
+        }
+    });
+
+}
+
 function confirmEmpPin()
 {
     var pin = $("#emp-pin-emp-display-pin").text();
@@ -184,10 +231,9 @@ function populateTasks(boardId)
                     element += '<div id="employee" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
                         ''+ task.color +'\" data-id="'+task.emp_id+'"> <h5>'+ task.emp_abv +'</h5> </div>';
                 }
-
                 element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
                     '<div><p><span id=\"comment'+ task.id +'\">'+ task.comments.length +' ' +
-                    '</span><span class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
+                    '</span><span ondblclick="addCommentForm('+ task.id +')" class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
                     '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
                     '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
                 if(task.comments.length > 0)

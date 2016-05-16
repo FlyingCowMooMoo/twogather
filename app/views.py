@@ -143,6 +143,32 @@ def hide_task():
         return jsonify(error='An error occurred ' + e.message)
 
 
+@app.route('/addcomment', methods=['POST'])
+def add_comment():
+    task = request.json['task_id']
+    text = request.json['text']
+    author_type = request.json['author_type']
+    author_id = request.json['author_id']
+    try:
+        task = Task.get(Task.id == task)
+        c = Comment()
+        c.text = text
+        if author_type == 'manager':
+            a = User.get(User.id == author_id)
+            c.created_by_manager = a
+        else:
+            a = EmployeePin.get(EmployeePin.pin == author_id)
+            c.created_by_employee = a
+        c.save()
+        tc = TaskComment()
+        tc.comment = c
+        tc.task = task
+        tc.save()
+        return jsonify(msg='Created a new comment')
+    except DoesNotExist as e:
+        return jsonify(error='An error occurred ' + e.message)
+
+
 @app.route('/getemployee', methods=['POST'])
 def get_employee():
     if request.json['pin'] is None:
