@@ -1,95 +1,94 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">  
-	<title>Login</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
 </head>
+
 <body>
 
-  <!-- Body -->
-  <main id="login" class="sign">
+<!-- Body -->
+<main id="login" class="sign">
     <div class="state">
-    
-      <!-- Logo -->
-      <div class="heading">
-          <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
-      </div>
 
-      <!-- Loging block -->
-      <div class="content">
-        <form>
-          <fieldset class="form-group">
-            <input type="text" class="form-control input" id="username" placeholder="Username">
-          </fieldset>
-          <fieldset class="form-group">
-            <input type="password" class="form-control input" id="password" placeholder="Password">
-          </fieldset>
-           <a href="#">Forgot username or password?</a>
-          <div class="text-center">
-            <button type="button" class="btn brd log" onclick="login()">Login</button>
-            <p>or</p>
-            <button type="button" class="btn brd log" onclick="location.href='{{ url_for('signup') }}';">Sign up</button>
-          </div>
-        </form>
-      </div>
+        <!-- Logo -->
+        <div class="heading">
+            <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
+        </div>
+
+        <!-- Loging block -->
+        <div class="content">
+            <form>
+                <fieldset class="form-group">
+                    <input type="text" class="form-control input" id="username" placeholder="Username">
+                </fieldset>
+                <fieldset class="form-group">
+                    <input type="password" class="form-control input" id="password" placeholder="Password">
+                </fieldset>
+                <a href="#">Forgot username or password?</a>
+                <div class="text-center">
+                    <button type="button" class="btn brd log" onclick="login()">Login</button>
+                    <p>or</p>
+                    <button type="button" class="btn brd log" onclick="location.href='{{ url_for('signup') }}';">Sign up</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </main>
+</main>
 
-  <div id="alert-modal" class="modal fade">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 id="alert-modal-title" class="modal-title"></h4>
-              </div>
-              <div id="alert-modal-body" class="modal-body"></div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-          </div>
-      </div>
-  </div>
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 id="alert-modal-title" class="modal-title"></h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
+    function alertModal(title, body) {
+        $('#alert-modal-title').html(title);
+        $('#alert-modal-body').html(body);
+        $('#alert-modal').modal('show');
+    }
 
-function alertModal(title, body)
-{
-    $('#alert-modal-title').html(title);
-    $('#alert-modal-body').html(body);
-    $('#alert-modal').modal('show');
-}
-
-function login()
-{
-    var email = $("#username").val();
-    var password = $("#password").val();
-    var value = {"email": email, "password": password};
-    $.ajax({
-        type: "POST",
-        url: "{{ url_for('signin') }}",
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function (result) {
-            if(result.error != undefined)
-            {
-                alertModal("Error", result.error);
+    function login() {
+        var email = $("#username").val();
+        var password = $("#password").val();
+        var value = {
+            "email": email,
+            "password": password
+        };
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('signin') }}",
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                if (result.error != undefined) {
+                    alertModal("Error", result.error);
+                } else {
+                    location.href = result.url
+                }
             }
-            else
-            {
-                location.href=result.url
-            }
-        }
-    });
-}
-
-
+        });
+    }
 </script>
 </body>
+
 </html>

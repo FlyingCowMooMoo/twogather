@@ -1,98 +1,106 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">  
-	<title>Boards</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+    <meta charset="UTF-8">
+    <title>Boards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
 </head>
-<body>
-    <input type="hidden" id="orgid" value="{{ id }}">
-    <input type="hidden" id="manager-id" value="{{ mid }}">
-    <input type="hidden" id="manager-name" value="{{ name }}">
-    <input type="hidden" id="get-boards-url" value="{{ url_for('get_boards') }}">
-    <input type="hidden" id="base-url" value="{{ url_for('index', _external=True) }}">
-    <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
-    <input type="hidden" id="create-board-url" value="{{ url_for('create_board') }}">
 
-  <!-- Navigation -->
-	<nav class="navbar navbar-default">
+<body>
+<input type="hidden" id="orgid" value="{{ id }}">
+<input type="hidden" id="manager-id" value="{{ mid }}">
+<input type="hidden" id="manager-name" value="{{ name }}">
+<input type="hidden" id="get-boards-url" value="{{ url_for('get_boards') }}">
+<input type="hidden" id="base-url" value="{{ url_for('index', _external=True) }}">
+<input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
+<input type="hidden" id="create-board-url" value="{{ url_for('create_board') }}">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default">
     <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">
-          <div class="img"></div>
-          <!-- <img src="../static/img/logo_white.png" alt="Gatha Logo"> -->
-        </a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Bunnings</a></li>
-      </ul>
-    <!--   <ul class="nav navbar-nav navbar-right">
-        <li>
-         <a href="#">Hi, John</a> --> 
-          <div class="btn-group nav navbar-nav navbar-right">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <div class="img"></div>
+                <!-- <img src="../static/img/logo_white.png" alt="Gatha Logo"> -->
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Bunnings</a>
+            </li>
+        </ul>
+        <!--   <ul class="nav navbar-nav navbar-right">
+    <li>
+     <a href="#">Hi, John</a> -->
+        <div class="btn-group nav navbar-nav navbar-right">
             <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
                 {{ name }}
-              <span class="glyphicon glyphicon-menu-down"></span>
-              <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
+                <span class="glyphicon glyphicon-menu-down"></span>
+                <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
             </a>
             <ul class="dropdown-menu">
-              <!-- dropdown menu links -->
-              <li class="active"><a href="#">{{ name }}</a></li>
-              <li class="a"><a href="#">Employees</a></li>
-              <hr>
-              <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+                <!-- dropdown menu links -->
+                <li class="active"><a href="#">{{ name }}</a>
+                </li>
+                <li class="a"><a href="#">Employees</a>
+                </li>
+                <hr>
+                <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
+                </li>
             </ul>
-          </div>
+        </div>
         <!-- </li> -->
-        
-      </ul>
-    </div>
-  </nav>
 
-  <!-- Body -->
-  <main>
+        </ul>
+    </div>
+</nav>
+
+<!-- Body -->
+<main>
     <!-- Boards -->
     <div class="grid" id="boards-block">
-      <div class="row">
-        <div class="col-sm-12"> 
-          <h4 class="heading" ><span id="boardsNumber">0 </span>
-          <span class="glyphicon glyphicon-list-alt"></span></h4>
-          <button id="addBoard" class="btn transparent add glyphicons glyphicon-plus"></button>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="heading"><span id="boardsNumber">0 </span>
+                    <span class="glyphicon glyphicon-list-alt"></span></h4>
+                <button id="addBoard" class="btn transparent add glyphicons glyphicon-plus"></button>
+            </div>
         </div>
-      </div>
-      <div class="row boards" id="boards"></div>
+        <div class="row boards" id="boards"></div>
     </div>
     <!-- Employees -->
     <div id="employees-block">
-      <div>
-          <h4 class="heading"  ><span id="empsNumber">0 </span>
-          <span class="glyphicon glyphicon-user"></span></h4>
-          <button id="addEmployee" class="btn transparent add glyphicons glyphicon-plus"></button> 
-      </div>
-      <div id="employees" class="employees emps"></div>
+        <div>
+            <h4 class="heading"><span id="empsNumber">0 </span>
+                <span class="glyphicon glyphicon-user"></span></h4>
+            <button id="addEmployee" class="btn transparent add glyphicons glyphicon-plus"></button>
+        </div>
+        <div id="employees" class="employees emps"></div>
     </div>
-  </main>
+</main>
 
-    <div id="alert-modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 id="alert-modal-title" class="modal-title"></h4>
-                </div>
-                <div id="alert-modal-body" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 id="alert-modal-title" class="modal-title"></h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
 </body>
+
 </html>

@@ -1,7 +1,6 @@
 /**
- * Created by pete on 8/05/2016. testewefwtretretre
+ * Created by pete on 8/05/2016.
  */
-
 var animations = ["fadeIn",
     "fadeInDown",
     "fadeInDownBig",
@@ -36,13 +35,15 @@ var animations = ["fadeIn",
     "swing",
     "tada",
     "wobble",
-    "jello"];
+    "jello"
+];
 
 function randomAnim()
 {
     var r = animations[Math.floor(Math.random() * animations.length)];
     return "animated " + r;
 }
+
 function alertModal(title, body)
 {
     $("#confirmTask").modal('hide');
@@ -51,7 +52,8 @@ function alertModal(title, body)
     $('#alert-modal').modal('show');
 }
 
-$(document).ready(function() {
+$(document).ready(function()
+{
     var boardId = $("#board_id").val();
     var orgId = $("#orgid").val();
     populateTasks(boardId);
@@ -62,14 +64,17 @@ function addCommentForm(taskId)
 {
     var formId = guid();
 
-    var functionCall = 'submitComment(this,'+taskId +')';
-    var element = '<form class="form-horizontal" id="' + formId.trim() +'"><fieldset><legend>Form Name</legend>' +
+    var functionCall = 'submitComment(this,' + taskId + ')';
+    var element = '<form class="form-horizontal" id="' + formId.trim() +
+        '"><fieldset><legend>Form Name</legend>' +
         '<div class="form-group"> <label class="col-md-4 control-label" for="ctext">Comment Text</label> ' +
         '<div class="col-md-4"> <textarea class="form-control" id="ctext" name="ctext">Text</textarea> ' +
         '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="submit-comment-form">' +
         '</label> <div class="col-md-4"> ' +
-        '<button onclick="event.preventDefault();' +  functionCall + '" id="submit-comment-form" ' +
-        'name="submit-comment-form" class="btn btn-primary" data-id="' + formId+'">Submit</button></div></div></fieldset></form>';
+        '<button onclick="event.preventDefault();' + functionCall +
+        '" id="submit-comment-form" ' +
+        'name="submit-comment-form" class="btn btn-primary" data-id="' +
+        formId + '">Submit</button></div></div></fieldset></form>';
     alertModal("New Comment", element);
 }
 
@@ -78,30 +83,38 @@ function submitComment(id, task)
     console.log(id);
     var element = $("#" + $(id).data("id"));
     var comment = element.find("#ctext").val();
-    var value = {"author_type": "manager", "text": comment, "task_id": task, "author_id": $("#manager-id").val()};
+    var value = {
+        "author_type": "manager",
+        "text": comment,
+        "task_id": task,
+        "author_id": $("#manager-id").val()
+    };
     console.log("yay" + id + " " + task)
-    $.ajax({
-        type : "POST",
-        url : $("#create-comment-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            if(result.error != undefined)
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#create-comment-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
             {
-                alertModal('Success', result.msg);
-            }
-            else
+                if (result.error != undefined)
+                {
+                    alertModal('Success', result.msg);
+                }
+                else
+                {
+                    $(".task").remove();
+                    var boardId = $("#board_id").val();
+                    populateTasks(boardId);
+                    alertModal('Success', result.msg);
+                }
+            },
+            error: function(result)
             {
-                $(".task").remove();
-                var boardId = $("#board_id").val();
-                populateTasks(boardId);
-                alertModal('Success', result.msg);
+                alertModal('Error', result.error);
             }
-        },
-        error: function(result){
-            alertModal('Error', result.error);
-        }
-    });
+        });
 
 }
 
@@ -110,32 +123,40 @@ function confirmEmpPin()
     var pin = $("#emp-pin-emp-display-pin").text();
     var action = $("#task-action").val();
     var task = $("#task-id").val();
-    var value = {"pin": pin, "action": action, "task": task};
-    $.ajax({
-        type : "POST",
-        url : $("#mark-task-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            if(result.error != undefined)
+    var value = {
+        "pin": pin,
+        "action": action,
+        "task": task
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#mark-task-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
             {
-                alertModal('Success', result.msg);
-            }
-            else
+                if (result.error != undefined)
+                {
+                    alertModal('Success', result.msg);
+                }
+                else
+                {
+                    $(".task").remove();
+                    var boardId = $("#board_id").val();
+                    populateTasks(boardId);
+                    alertModal('Success', result.msg);
+                }
+            },
+            error: function(result)
             {
-                $(".task").remove();
-                var boardId = $("#board_id").val();
-                populateTasks(boardId);
-                alertModal('Success', result.msg);
+                alertModal('Error', result.error);
             }
-        },
-        error: function(result){
-            alertModal('Error', result.error);
-        }
-    });
+        });
 }
 
-$("#emp-pin-confirm").click(function(){
+$("#emp-pin-confirm").click(function()
+{
 
     confirmEmpPin();
 });
@@ -146,31 +167,39 @@ function verifyPin()
     $("#emp-pin-emp-display").hide();
     $("#emp-pin-emp-display-name").hide();
     $("#emp-pin-emp-display-pin").hide();
-    var value = {"pin": $("#emp-pin").val()};
+    var value = {
+        "pin": $("#emp-pin").val()
+    };
     console.log('yay');
-    $.ajax({
-        type : "POST",
-        url : $("#get-employee-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            if(result.employee != undefined)
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-employee-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
             {
-                console.log(result.employee);
-                $("#emp-pin-form").fadeOut();
-                $("#emp-pin-emp-display-pin").css('background-color', result.employee.color);
-                $("#emp-pin-emp-display-name").text(result.employee.fname + " " + result.employee.lname);
-                $("#emp-pin-emp-display-pin").text(result.employee.pin);
-                $("#emp-pin-emp-display").fadeIn();
-                $("#emp-pin-emp-display-name").fadeIn();
-                $("#emp-pin-emp-display-pin").fadeIn();
+                if (result.employee != undefined)
+                {
+                    console.log(result.employee);
+                    $("#emp-pin-form").fadeOut();
+                    $("#emp-pin-emp-display-pin").css(
+                        'background-color', result.employee.color
+                    );
+                    $("#emp-pin-emp-display-name").text(result.employee
+                            .fname + " " + result.employee.lname);
+                    $("#emp-pin-emp-display-pin").text(result.employee
+                        .pin);
+                    $("#emp-pin-emp-display").fadeIn();
+                    $("#emp-pin-emp-display-name").fadeIn();
+                    $("#emp-pin-emp-display-pin").fadeIn();
+                }
+                else
+                {
+                    $("#emp-pin-form-error").text(result.error);
+                }
             }
-            else
-            {
-                $("#emp-pin-form-error").text(result.error);
-            }
-        }
-    });
+        });
 }
 
 $("#verify-pin").click(function()
@@ -182,15 +211,16 @@ function sortTasks(employeeId)
 {
     var todo = [];
     var done = [];
-    $(".task").each(function (){
+    $(".task").each(function()
+    {
         var parent = $(this).parent().attr('id');
         var empId = $(this).find("#employee").data("id");
-        if(parent == "todo" && empId == employeeId)
+        if (parent == "todo" && empId == employeeId)
         {
             todo.push($(this));
             $(this).remove();
         }
-        if(parent == "done" && empId == employeeId)
+        if (parent == "done" && empId == employeeId)
         {
             done.push($(this));
             $(this).remove();
@@ -209,98 +239,139 @@ function sortTasks(employeeId)
 
 function populateTasks(boardId)
 {
-    var value = {"board_id": boardId};
-    $.ajax({
-        type : "POST",
-        url : $("#get-tasks-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            var i;
-            for (i = 0; i < result.tasks.length; ++i)
+    var value = {
+        "board_id": boardId
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-tasks-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
             {
-                var task = result.tasks[i];
-                var element = '<div id=\"task'+ task.id +'\" class=\"task '+ randomAnim() +'\" data-id=\"'+ task.id +'\"> ';
-                if(task.unassigned == true)
+                var i;
+                for (i = 0; i < result.tasks.length; ++i)
                 {
-                    element += '<div id="employee" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ "lightGray" +'\" > <h5 id="emp-name-d">U</h5> </div>';
-                }
-                else
-                {
-                    element += '<div id="employee" class=\"taskEmp '+ randomAnim() +'\" style=\"background-color: ' +
-                        ''+ task.color +'\" data-id="'+task.emp_id+'"> <h5>'+ task.emp_abv +'</h5> </div>';
-                }
-                element += '<div class=\"taskContent '+ randomAnim() +'\"><h6>'+ task.title +'</h6>' +
-                    '<div><p><span id=\"comment'+ task.id +'\">'+ task.comments.length +' ' +
-                    '</span><span ondblclick="addCommentForm('+ task.id +')" class=\"glyphicon glyphicon-comment '+ randomAnim() +'\"></span>' +
-                    '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
-                    '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
-                if(task.comments.length > 0)
-                {
-                    for (var j = 0; j < task.comments.length; j++)
+                    var task = result.tasks[i];
+                    var element = '<div id=\"task' + task.id +
+                        '\" class=\"task ' + randomAnim() +
+                        '\" data-id=\"' + task.id + '\"> ';
+                    if (task.unassigned == true)
                     {
-                        var comment = task.comments[i];
-                        if(comment != undefined)
+                        element +=
+                            '<div id="employee" class=\"taskEmp ' +
+                            randomAnim() +
+                            '\" style=\"background-color: ' +
+                            '' + "lightGray" +
+                            '\" > <h5 id="emp-name-d">U</h5> </div>';
+                    }
+                    else
+                    {
+                        element +=
+                            '<div id="employee" class=\"taskEmp ' +
+                            randomAnim() +
+                            '\" style=\"background-color: ' +
+                            '' + task.color + '\" data-id="' + task
+                                .emp_id + '"> <h5>' + task.emp_abv +
+                            '</h5> </div>';
+                    }
+                    element += '<div class=\"taskContent ' +
+                        randomAnim() + '\"><h6>' + task.title +
+                        '</h6>' +
+                        '<div><p><span id=\"comment' + task.id +
+                        '\">' + task.comments.length + ' ' +
+                        '</span><span ondblclick="addCommentForm(' +
+                        task.id +
+                        ')" class=\"glyphicon glyphicon-comment ' +
+                        randomAnim() + '\"></span>' +
+                        '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
+                        '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                    if (task.comments.length > 0)
+                    {
+                        for (var j = 0; j < task.comments.length; j++)
                         {
-                            element += '<p>* '+ comment.text +'</p> ';
+                            var comment = task.comments[i];
+                            if (comment != undefined)
+                            {
+                                element += '<p>* ' + comment.text +
+                                    '</p> ';
+                            }
                         }
                     }
-                }
-                element += '</div></div>';
-                if(task.unassigned == true)
-                {
-                    $("#newTasks").append(element);
-                    var count = parseInt($("#newTasksNumber").text());
-                    $("#newTasksNumber").text(count + 1);
-                }
-                else if(task.todo == true)
-                {
-                    $("#todo").append(element);
-                    var count = parseInt($("#todoTasksNumber").text());
-                    $("#todoTasksNumber").text(count + 1);
-                }
-                else
-                {
-                    $("#done").append(element);
-                    var count = parseInt($("#doneTasksNumber").text());
-                    $("#doneTasksNumber").text(count + 1);
-                }
-                $("#newTasks, #todo, #done").sortable({ connectWith: ".dnd-container",
-                    placeholder: "ui-sortable-placeholder",
-                    start: function(event, ui) {
-                    },
-                    stop: function(event, ui) {
-                    },
-                    receive: function(event, ui)
+                    element += '</div></div>';
+                    if (task.unassigned == true)
                     {
-                        ui.sender.sortable("cancel");
-                        var source = ui.sender.attr('id');
-                        var destination = $(this).attr('id');
-                        var taskId = ui.item.attr("data-id");
-                        if(source == "newTasks" && (destination == "todo" || destination == "done" ))
-                        {
-                            console.log("Moving task id " + taskId + " from " + source + " to " + destination);
-                            $("#task-action").val(destination);
-                            $("#task-id").val(taskId);
-                            $("#confirmTask").modal('show');
-                        }
-                        else if(destination == "newTasks")
-                        {
-                            alertModal("Error", "You can't move a task to the unassigned pile")
-                        }
-                        else 
-                        {
-                            alertModal("Error", "Invalid Action")
-                        }
+                        $("#newTasks").append(element);
+                        var count = parseInt($("#newTasksNumber").text());
+                        $("#newTasksNumber").text(count + 1);
                     }
-                }).disableSelection();
+                    else if (task.todo == true)
+                    {
+                        $("#todo").append(element);
+                        var count = parseInt($("#todoTasksNumber").text());
+                        $("#todoTasksNumber").text(count + 1);
+                    }
+                    else
+                    {
+                        $("#done").append(element);
+                        var count = parseInt($("#doneTasksNumber").text());
+                        $("#doneTasksNumber").text(count + 1);
+                    }
+                    $("#newTasks, #todo, #done").sortable(
+                        {
+                            connectWith: ".dnd-container",
+                            placeholder: "ui-sortable-placeholder",
+                            start: function(event, ui) {},
+                            stop: function(event, ui) {},
+                            receive: function(event, ui)
+                            {
+                                ui.sender.sortable("cancel");
+                                var source = ui.sender.attr(
+                                    'id');
+                                var destination = $(this).attr(
+                                    'id');
+                                var taskId = ui.item.attr(
+                                    "data-id");
+                                if (source == "newTasks" &&
+                                    (destination == "todo" ||
+                                    destination ==
+                                    "done"))
+                                {
+                                    console.log(
+                                        "Moving task id " +
+                                        taskId +
+                                        " from " +
+                                        source + " to " +
+                                        destination);
+                                    $("#task-action").val(
+                                        destination);
+                                    $("#task-id").val(
+                                        taskId);
+                                    $("#confirmTask").modal(
+                                        'show');
+                                }
+                                else if (destination ==
+                                    "newTasks")
+                                {
+                                    alertModal("Error",
+                                        "You can't move a task to the unassigned pile"
+                                    )
+                                }
+                                else
+                                {
+                                    alertModal("Error",
+                                        "Invalid Action"
+                                    )
+                                }
+                            }
+                        }).disableSelection();
 
 
+                }
+                fixHeight();
             }
-            fixHeight();
-        }
-    });
+        });
 }
 
 function showComments(element)
@@ -308,7 +379,7 @@ function showComments(element)
     // save trigerrin button
     var element = $(element);
 
-    if(element.hasClass('glyphicon-chevron-down'))
+    if (element.hasClass('glyphicon-chevron-down'))
     {
         element.removeClass('glyphicon-chevron-down');
         element.addClass('glyphicon-chevron-up');
@@ -319,27 +390,36 @@ function showComments(element)
         element.addClass('glyphicon-chevron-down');
     }
 
-    element.parents('div.task').find('[id^="commentsBlock"]').slideToggle('fast', function() {});
+    element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
+        'fast',
+        function() {});
 }
 
 function populateComments(taskId)
 {
-    var value = {"task_id": taskId};
-    $.ajax({
-        type : "POST",
-        url : $("#get-comments-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-            var i;
-            for (i = 0; i < result.comments.length; ++i) {
-                var element = '<p id="comment' + i + '">' + result.comments[i]['text'] +
-                    '<span class="glyphicon glyphicon-remove remove '+ randomAnim() +'"></span></p>';
-                $("#comments-" + taskId).append(element);
-                $("#empsNumber").html(parseInt(this.val()) + 1);
+    var value = {
+        "task_id": taskId
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-comments-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                var i;
+                for (i = 0; i < result.comments.length; ++i)
+                {
+                    var element = '<p id="comment' + i + '">' +
+                        result.comments[i]['text'] +
+                        '<span class="glyphicon glyphicon-remove remove ' +
+                        randomAnim() + '"></span></p>';
+                    $("#comments-" + taskId).append(element);
+                    $("#empsNumber").html(parseInt(this.val()) + 1);
+                }
             }
-        }
-    });
+        });
 }
 
 function sib(id)
@@ -374,24 +454,29 @@ function toggleEmployeeMode()
 {
     var email = $("#te-email").val();
     var password = $("#te-password").val();
-    var value = {"email": email, "password": password};
+    var value = {
+        "email": email,
+        "password": password
+    };
     $('#login-modal').modal('hide');
-    $.ajax({
-        type: "POST",
-        url: $("#login-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function (result) {
-            if(result.error != undefined)
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#login-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
             {
-                alertModal("Error", result.error);
+                if (result.error != undefined)
+                {
+                    alertModal("Error", result.error);
+                }
+                else
+                {
+                    disableEmployeeMode();
+                }
             }
-            else
-            {
-                disableEmployeeMode();
-            }
-        }
-    });
+        });
 }
 
 function submitCreateTaskForm(id)
@@ -410,35 +495,38 @@ function submitCreateTaskForm(id)
     data['employee_id'] = emp;
     data['manager_id'] = man;
     data['urgent'] = false;
-    if(urgent == "yes")
+    if (urgent == "yes")
     {
         data['urgent'] = true
     }
     data = JSON.stringify(data);
     console.log(data);
-    $.ajax({
-        url: $("#create-task-url").val(),
-        type: 'POST',
-        data: data,
-        contentType: 'application/json;charset=UTF-8',
-        cache: false,
-        success: function(response) {
-            if(response.error != undefined)
+    $.ajax(
+        {
+            url: $("#create-task-url").val(),
+            type: 'POST',
+            data: data,
+            contentType: 'application/json;charset=UTF-8',
+            cache: false,
+            success: function(response)
             {
-                alertModal("Error", response.error);
-            }
-            else
+                if (response.error != undefined)
+                {
+                    alertModal("Error", response.error);
+                }
+                else
+                {
+                    alertModal("Success", "Created a new task");
+                    $(".task").remove();
+                    var boardId = $("#board_id").val();
+                    populateTasks(boardId);
+                }
+            },
+            error: function(error)
             {
-                alertModal("Success", "Created a new task");
-                $(".task").remove();
-                var boardId = $("#board_id").val();
-                populateTasks(boardId);
+                alertModal("Error", error);
             }
-        },
-        error: function(error) {
-            alertModal("Error", error);
-        }
-    });
+        });
 }
 
 function createTaskForm()
@@ -447,11 +535,14 @@ function createTaskForm()
     // create a new task
     var tid = guid();
 
-    var newTask = '<form class="form-horizontal nosub" id="create-task-form-'+ tid +'"><fieldset><legend>Create A Task</legend>' +
+    var newTask =
+        '<form class="form-horizontal nosub" id="create-task-form-' + tid +
+        '"><fieldset><legend>Create A Task</legend>' +
         '<div class=form-group><label class="col-md-4 control-label"for=selectbasic>Board</label><div class=col-md-6>' +
         '<select class=form-control id="selectboard" name=selectboard>';
 
-    newTask += '<option value="'+ $("#board_id").val() +'">'+ $("#board_name").val() +'</option>';
+    newTask += '<option value="' + $("#board_id").val() + '">' + $(
+            "#board_name").val() + '</option>';
 
     newTask += '</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
@@ -464,47 +555,67 @@ function createTaskForm()
         '<div class=col-md-6><select class=form-control id=employee name=employee>' +
         '<option value=none>None</option>';
 
-    $(".employee").each(function(){
-        newTask += '<option value="'+ $(this).data("id") +'" style="' +
-            'background-color: '+ $(this).css('backgroundColor') +'">'+ $(this).children('#name').html() +'</option>'
+    $(".employee").each(function()
+    {
+        newTask += '<option value="' + $(this).data("id") +
+            '" style="' +
+            'background-color: ' + $(this).css('backgroundColor') +
+            '">' + $(this).children('#name').html() + '</option>'
     });
 
-    newTask +='</select></div></div><div class=form-group>' +
+    newTask += '</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=employee>Manager</label><div class=col-md-6>' +
         '<select class=form-control id=manager name=manager>';
 
-    newTask += '<option value="'+ $("#manager-id").val() +'">'+ $("#manager-name").val() +'</option>';
+    newTask += '<option value="' + $("#manager-id").val() + '">' + $(
+            "#manager-name").val() + '</option>';
 
-    newTask += '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
+    newTask +=
+        '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
         '<div class=col-md-4><label class=radio-inline for=urgent-0><input id=urgent-0 name=urgent type=radio value=yes> Yes</label><label class=radio-inline for=urgent-1>' +
         '<input id=urgent-1 name=urgent type=radio value=no checked> No</label></div></div><div class=form-group><label class="col-md-4 control-label"for=taskname>' +
         '</label><div class=col-md-6>' +
-        '<input type="button" class="btn btn-success" onclick="sib(\''+ tid +'\');" value="Create Task" />' +
+        '<input type="button" class="btn btn-success" onclick="sib(\'' +
+        tid + '\');" value="Create Task" />' +
         '</div></div></fieldset></form>';
 
     alertModal("New Task", newTask);
 }
 
-function populateEmployees(org) {
-    var value = {"org_id": org};
-    $.ajax({
-        type: "POST",
-        url: $("#get-employees-url").val(),
-        data: JSON.stringify(value),
-        contentType: 'application/json;charset=UTF-8',
-        success: function (result) {
-            for (var i = 0; i < result.employees.length; ++i) {
-                var emp = result.employees[i];
-                var element = '<div id="employee-' + emp.id + '" data-id="' + emp.id + '" style=\"background-color:' + emp.color + ' \" class="employee '+ randomAnim() +'" ondrag="dragg()"> <p id="name">'+ emp.fname + " " + emp.lname +'</p></div>';
-                $("#employees").append(element);
-                $("#empsNumber").html(parseInt($("#empsNumber").text()) + 1);
+function populateEmployees(org)
+{
+    var value = {
+        "org_id": org
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-employees-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                for (var i = 0; i < result.employees.length; ++i)
+                {
+                    var emp = result.employees[i];
+                    var element = '<div id="employee-' + emp.id +
+                        '" data-id="' + emp.id +
+                        '" style=\"background-color:' + emp.color +
+                        ' \" class="employee ' + randomAnim() +
+                        '" ondrag="dragg()"> <p id="name">' + emp.fname +
+                        " " + emp.lname + '</p></div>';
+                    $("#employees").append(element);
+                    $("#empsNumber").html(parseInt($("#empsNumber")
+                            .text()) + 1);
+                }
             }
-        }
-    });
+        });
 }
 
-function guid() {
-    function s4() {
+function guid()
+{
+    function s4()
+    {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
             .substring(1);
@@ -519,11 +630,10 @@ function fixHeight()
     var h = 0;
     $("div.content").each(function()
     {
-        if($(this).height() > h)
+        if ($(this).height() > h)
         {
             h = $(this).height();
         }
     });
     $("div.content").height(h);
 }
-
