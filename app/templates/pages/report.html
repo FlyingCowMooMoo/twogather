@@ -1,130 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Report</title>
+    <title>{{ orgname }} - {{ boardname }}</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}" />
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.2/Chart.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+    <style>
+    </style>
 </head>
 
-<style>
-    main.resign {
-        background-image: url("{{ url_for('static', filename='img/wallpaper.jpg') }}");
-        /*background-color: lightBlue;*/
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-        position: fixed;
-        height: 100vh;
-    }
-</style>
 <body>
 
-<!-- Body -->
-<main class="resign">
-    <div class="center-block">
 
-        <!-- Logo -->
-        <div class="heading">
-            <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
+<!-- Navigation -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="boards.page">
+                <div class="img"></div>
+            </a>
         </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="boards.html">{{ orgname }}</a>
+            </li>
+            <li><a href="board.html">{{ boardname }}</a>
+            </li>
+        <div class="btn-group nav navbar-nav navbar-right">
+            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ accountname }}
+                <span class="glyphicon glyphicon-menu-down"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li class="active"><a href="#">{{ accountname }}</a>
+                </li>
+                <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
+                </li>
+                <hr>
+                <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
+                </li>
+            </ul>
+        </div>
+        <!-- </li> -->
 
-        <div>
-            <div class="row">
-                <div class="">
-                    <div id="piechart_3d" ></div>
-                    <canvas id="report-canvas" width="800" height="600"></canvas>
-                </div>
+        </ul>
+    </div>
+</nav>
+
+<!-- Body -->
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <canvas class="myChart" width="400" height="400"></canvas>
             </div>
         </div>
     </div>
+    <script>
+        var ctx = document.getElementsByClassName("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["ToDo", "Doing", "Done"],
+                datasets: [{
+                    label: '# of Tasks',
+                    data: [{{ t }}, {{ td }}, {{ d }}]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </main>
 
-<div id="alert-modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 id="alert-modal-title" class="modal-title"></h4>
-            </div>
-            <div id="alert-modal-body" class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-
-    function randomColor() {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
-    }
-    var ctx = document.getElementById("report-canvas").getContext("2d");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Todo", "Doing", "Done"],
-            datasets: [{
-                label: '# of Tasks',
-                fillColor: [randomColor(), randomColor(), randomColor()],
-                strokeColor: randomColor(),
-                pointColor: randomColor(),
-                pointStrokeColor: randomColor(),
-                pointHighlightFill: randomColor(),
-                pointHighlightStroke: randomColor(),
-                data: [{{ t }}, {{ td }}, {{ d }}]
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-    });
-
-
-
-</script>
-
-<script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', '#'],
-            ['Todo',     {{ t }}],
-            ['Doing',      {{ td }}],
-            ['Done',  {{ d }}]
-        ]);
-
-        var options = {
-            title: 'Tasks',
-            is3D: true,
-            backgroundColor: { fill:'transparent' }
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-    }
-</script>
 </body>
+
 </html>

@@ -114,7 +114,9 @@ def report(board_id):
         td = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_todo).count()
         d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
                                                                 Task.marked_as_completed).count()
-        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d)
+        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, id=board_id, orgid=board.org_id,
+                               orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,
+                               boardname=board.name)
     except DoesNotExist as e:
         return show_error('404', e.message)
 
