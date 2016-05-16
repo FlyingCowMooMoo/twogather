@@ -63,12 +63,8 @@ def signup():
         cm = request.json['company']
         name = request.json['name']
         email = request.json['email']
-        username = request.json['username']
         password = request.json['password']
 
-        query = User.select().where(User.username == username)
-        if query.exists():
-            return jsonify(error='Username already in use')
         query = User.select().where(User.email == email)
         if query.exists():
             return jsonify(error='Email already in use')

@@ -24,22 +24,19 @@
         <p>* All fields are required.</p>
         <form>
           <fieldset class="form-group">
-            <input type="text" class="form-control input" id="warehouse" placeholder="Warehouse Name">
+            <input type="text" class="form-control input" id="warehouse" placeholder="Warehouse Name" required>
           </fieldset>
           <fieldset class="form-group">
-            <input type="text" class="form-control input" id="manager" placeholder="Manager Name">
+            <input type="text" class="form-control input" id="manager" placeholder="Manager Name" required>
           </fieldset>
           <fieldset class="form-group">
-            <input type="email" class="form-control input" id="email" placeholder="Email">
+            <input type="email" class="form-control input" id="email" placeholder="Email" required>
           </fieldset>
           <fieldset class="form-group">
-            <input type="text" class="form-control input" id="username" placeholder="Username">
-          </fieldset>
-          <fieldset class="form-group">
-            <input type="password" class="form-control input" id="password" placeholder="Password">
+            <input type="password" class="form-control input" id="password" placeholder="Password" required>
           </fieldset>
           <div class="text-center">
-            <button class="btn brd log" type="button" onclick="register()">Sign up</button>
+            <button class="btn brd log" type="button" onclick="event.preventDefault(); register();">Sign up</button>
           </div>
         </form>
       </div>
@@ -68,9 +65,8 @@
         var company = $("#warehouse").val();
         var name = $("#manager").val();
         var email = $("#email").val();
-        var username = $("#username").val();
         var password = $("#password").val();
-        var value = {"company": company, "name": name, "email": email, "username": username, "password": password};
+        var value = {"company": company, "name": name, "email": email, "password": password};
         $.ajax({
             type : "POST",
             url : $("#register-url").val(),
