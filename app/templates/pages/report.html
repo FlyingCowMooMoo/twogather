@@ -13,7 +13,7 @@
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
     <style>
     </style>
 </head>
@@ -60,34 +60,36 @@
 <main>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <canvas class="myChart" width="400" height="400"></canvas>
+            <div class="col-md-offset-5 col-md-2">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6">
+                        <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        var ctx = document.getElementsByClassName("myChart");
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["ToDo", "Doing", "Done"],
-                datasets: [{
-                    label: '# of Tasks',
-                    data: [{{ t }}, {{ td }}, {{ d }}]
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
 </main>
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['ToDo',     {{ t }}],
+            ['Doing',      {{ td }}],
+            ['Done',  {{ d }}]
+        ]);
+
+        var options = {
+            title: 'Tasks',
+            is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
+</script>
 
 </body>
 

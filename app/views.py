@@ -240,7 +240,8 @@ def company(cid=None):
     else:
         try:
             org = Organization.get(Organization.id == cid)
-            return render_template('pages/boards.html', id=org.id, name=current_user.name, mid=current_user.id)
+            return render_template('pages/boards.html', id=org.id, name=current_user.name, mid=current_user.id,
+                                   orgname=org.name)
         except DoesNotExist:
             return show_error('404', 'Page not found')
 
