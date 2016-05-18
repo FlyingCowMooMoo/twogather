@@ -60,7 +60,7 @@ class EmployeePin(db.Model):
     last_name = TextField(null=True)
     organization = ForeignKeyField(Organization)
     hex_color = property(lambda self: self.color.hex_code)
-    logo_url = property(lambda self: self.logo.image_name)
+    #logo_url = property(lambda self: self.logo.image_name)
 
     def get_abv(self):
         if self.first_name is not None and self.last_name is not None:

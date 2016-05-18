@@ -1,4 +1,6 @@
 import json
+import random
+import string
 
 from flask.ext.login import login_required, current_user, login_user, logout_user
 from playhouse.migrate import SqliteMigrator, migrate
@@ -9,7 +11,7 @@ from app import app, db
 from flask import render_template, request, jsonify, Response, url_for, redirect
 from peewee import fn, DoesNotExist, TextField, BooleanField, ForeignKeyField
 
-from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization
+from dbmodels import TaskBoard, Comment, TaskComment, BoardTask, Task, EmployeePin, User, Organization, Color
 
 import wwwmodels as viewmodels
 
@@ -32,6 +34,48 @@ def prepare():
 @app.route('/', methods=['GET'])
 def index():
     return redirect(url_for('signin'))
+
+
+@app.route('/createemployee', methods=['POST'])
+def create_employee():
+    fn = request.json['first-name']
+    ln = request.json['last-name']
+    color = request.json['color']
+    org = int(request.json['org'])
+    try:
+        org = Organization.get(Organization.id == org)
+    except:
+        return jsonify(error='Invalid Warehouse')
+
+    valid_pin = False
+    pin = ''
+    while not valid_pin:
+        pin = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
+        try:
+            EmployeePin.get(EmployeePin.pin == pin)
+        except DoesNotExist:
+            valid_pin = True
+    try:
+        try:
+            c = Color.get(Color.hex_code == color)
+        except:
+            c = Color()
+            c.hex_code = color
+            c.save()
+            color = Color.get(Color.hex_code == color)
+
+        emp = EmployeePin()
+        emp.pin = pin
+        emp.color = color
+        emp.first_name = fn
+        emp.last_name = ln
+        emp.organization = org
+        emp.save()
+        emp = {"id": emp.id, "color": emp.hex_color, "pin": emp.pin,
+           "fname": emp.first_name, "lname": emp.last_name}
+        return jsonify(employee=emp)
+    except Exception as e:
+        return jsonify(error='An error occurred.Details: ' + e.message)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -102,6 +146,7 @@ def show_board(board_id=None):
                                boardname=board.name)
     except DoesNotExist as e:
         return show_error('404', e.message)
+
 
 
 @app.route('/report/<int:board_id>', methods=['GET'])
@@ -176,7 +221,7 @@ def get_employee():
     pin = request.json['pin']
     try:
         emp = EmployeePin.get(EmployeePin.pin == pin)
-        emp = {"id": emp.id, "color": emp.hex_color, "logo": emp.logo_url, "pin": emp.pin,
+        emp = {"id": emp.id, "color": emp.hex_color, "pin": emp.pin,
                "fname": emp.first_name, "lname": emp.last_name}
         return jsonify(employee=emp)
     except DoesNotExist:
@@ -218,7 +263,7 @@ def get_employees():
     try:
         org = Organization.get(Organization.id == ordid)
         for emp in EmployeePin.select().where(EmployeePin.organization == org):
-            employees.append({"id": emp.id, "color": emp.hex_color, "logo": emp.logo_url, "pin": emp.pin,
+            employees.append({"id": emp.id, "color": emp.hex_color, "pin": emp.pin,
                               "fname": emp.first_name, "lname": emp.last_name})
         # return Response(response=jsonify(employees=employees), status=200, mimetype="application/json")
         return jsonify(employees=employees)

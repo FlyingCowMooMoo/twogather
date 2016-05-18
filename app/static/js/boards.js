@@ -23,15 +23,13 @@ $(function()
             '<form><fieldset class="form-group"><input type="text" class="form-control input"' +
             ' id="boardTitle" placeholder="Board Title"> </fieldset><fieldset class="form-group">' +
             '<textarea class="form-control input" id="boardDesc" placeholder="Description" rows="2"></textarea>' +
-            '</fieldset><p>Employees:  </p><div id="empsInvolved' +
-            boardCount +
-            '" class="emps"></div><div class="text-center">' +
+            '</fieldset></div><div class="text-center">' +
             '<button class="btn brd" id="create-board" data-id="' +
             newId +
             '" onclick="createBoard(this)">Save</button></form></div></div>';
         $("#boards").append(newBoard);
         boardCount++;
-        $("#boardsNumber").text(boardCount);
+        //$("#boardsNumber").text(boardCount);
         document.getElementById("create-board").addEventListener(
             "click",
             function(event)
@@ -46,29 +44,7 @@ $(function()
     // add new employee
     $("#addEmployee").click(function()
     {
-
-        // generate random PIN number
-        var randomPIN = Math.floor(Math.random() * (99999 -
-            10000 + 1) + 10000);
-        var newEmployee =
-            '<div id="employee' + employeeCount +
-            '" class="employee employee-new">' +
-            '<div class="heading"><p>New Employee</p><button class="btn transparent delete remove">X</button>' +
-            '</div><form><fieldset class="form-group"><input type="text" class="form-control input" id="firstName' +
-            employeeCount + '"' +
-            ' placeholder="First Name" autocomplete="off"><input type="text" class="form-control input" id="lastName' +
-            employeeCount +
-            '" placeholder="Last Name" autocomplete="off">' +
-            '<input type="text" class="form-control input" id="phone' +
-            employeeCount +
-            '" placeholder="Phone Number" autocomplete="off"></fieldset>' +
-            '<div class="text-center"><p>PIN</p><span>: E' +
-            randomPIN +
-            '</span></div><div class="text-center">' +
-            '<button class="btn brd save">Save</button></div></form></div>';
-        $("#employees").append(newEmployee);
-        employeeCount++;
-        $("#empsNumber").text(employeeCount);
+        createEmployeeForm();
 
         // make employee draggable to board
         makeEmpsDraggable();
@@ -220,6 +196,54 @@ function makeEmpsDraggable()
         }).disableSelection();
 }
 
+function createEmployee(form)
+{
+    form = $("#" + $(form).data("id"));
+    var fn = form.find("#first-name").val();
+    var ln = form.find("#last-name").val();
+    var c = form.find("#color").val();
+    var value = {
+        "first-name": fn,
+        "last-name": ln,
+        "color": c,
+        "org": $("#orgid").val()
+    };
+    console.log(value);
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#create-employee-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if(result.error != undefined)
+                {
+                    alertModal("Error", result.error)
+                }
+                else
+                {
+                    var element = '<div id="emp-pin-emp-display"> <h1 id="emp-pin-emp-display-name"></h1> ' +
+                        '<h1>A new employee has been created!</h1><h1 id="emp-pin-emp-display-pin"></h1> </div>';
+                    alertModal("Success", element);
+                    $("#emp-pin-emp-display-pin").css(
+                        'background-color', result.employee.color
+                    );
+                    $("#emp-pin-emp-display-name").text(result.employee
+                            .fname + " " + result.employee.lname);
+                    $("#emp-pin-emp-display-pin").text(result.employee
+                        .pin);
+                    $("#emp-pin-emp-display").fadeIn();
+                    $("#emp-pin-emp-display-name").fadeIn();
+                    $("#emp-pin-emp-display-pin").fadeIn();
+                    $(".employee").remove();
+                    var orgId = parseInt($("#orgid").val());
+                    populateEmployees(orgId);
+                }
+            }
+        });
+}
+
 function populateBoards(orgId)
 {
     var value = {
@@ -263,6 +287,28 @@ $("#create-board").click(function()
 {
     alert("Handler for .click() called.");
 });
+
+function createEmployeeForm()
+{
+    var formId = guid();
+    var form = '<form class="form-horizontal" id="'+ formId +'"><fieldset><legend>Create an Employee</legend><div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="first-name">First Name</label> <div class="col-md-4"> ' +
+        '<input id="first-name" name="first-name" type="text" placeholder="First Name" class="form-control input-md" required=""> ' +
+        '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="last-name">Last Name</label> ' +
+        '<div class="col-md-4"> <input id="last-name" name="last-name" type="text" placeholder="Last Name" class="form-control input-md" required=""> ' +
+        '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="textinput">Employee Color</label> ' +
+        '<div class="col-md-4"> <div id="cp11" class="input-group colorpicker-component colorpicker-element">' +
+        '<input type="text" id="color" value="" class="form-control" readonly/><span class="input-group-addon">' +
+        '<i></i></span></div></div></div><div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="singlebutton"></label> <div class="col-md-4"> ' +
+        '<button id="singlebutton" data-id="'+ formId +'" name="singlebutton"  onclick="event.preventDefault();' +
+        'createEmployee(this);" class="btn btn-primary">Create Employee</button> </div></div></fieldset></form>';
+
+    alertModal("", form);
+    $('.hex-input').on('click touchstart mousedown', function(){$(this).focus()})
+    $('#cp11').colorpicker();
+    $(".colorpicker-alpha").hide();
+}
 
 function createBoard(element)
 {

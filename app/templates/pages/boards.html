@@ -6,10 +6,12 @@
     <title>Boards</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-colorpicker.min.css') }}" />
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
 </head>
 
@@ -21,6 +23,7 @@
 <input type="hidden" id="base-url" value="{{ url_for('index', _external=True) }}">
 <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees') }}">
 <input type="hidden" id="create-board-url" value="{{ url_for('create_board') }}">
+<input type="hidden" id="create-employee-url" value="{{ url_for('create_employee') }}">
 
 <!-- Navigation -->
 <nav class="navbar navbar-default">

@@ -254,6 +254,7 @@ function populateTasks(boardId)
                 for (i = 0; i < result.tasks.length; ++i)
                 {
                     var task = result.tasks[i];
+                    console.log(task);
                     var element = '<div id=\"task' + task.id +
                         '\" class=\"task ' + randomAnim() +
                         '\" data-id=\"' + task.id + '\"> ';
@@ -380,13 +381,16 @@ function showComments(element)
     // save trigerrin button
     var element = $(element);
 
+    var h = 0;
     if (element.hasClass('glyphicon-chevron-down'))
     {
         element.removeClass('glyphicon-chevron-down');
         element.addClass('glyphicon-chevron-up');
         element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
             'fast',
-            function() {});
+            function() {
+                h = $(this).height();
+            });
         //var ch = element.parents('div.task').find('[id^="commentsBlock"]').height();
         //$(".content").each(function () {
         //    $(this).height($(this).height() + ch);
@@ -398,12 +402,15 @@ function showComments(element)
         element.addClass('glyphicon-chevron-down');
         element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
             'fast',
-            function() {});
-        //var ch = element.parents('div.task').find('[id^="commentsBlock"]').height();
-        //$(".content").each(function () {
-        //    $(this).height($(this).height() - ch);
-        //});
+            function() {
+                h = $(this).height();
+            });
     }
+    var a = element.parents('div.task').find('[id^="commentsBlock:first"]');
+    setTimeout(function(){
+        $("div.content").height($("div.content").height() + h);
+        fixHeight($("div.content").height());
+    }, 100);
     
 }
 
@@ -444,7 +451,7 @@ function enableEmployeeMode()
 {
     $("#addTask").fadeOut();
     $(".navbar").fadeOut();
-    $("#employees-block").fadeOut();
+    //$("#employees-block").fadeOut();
     $("#toggleEmpMode").show();
 }
 
@@ -452,7 +459,7 @@ function disableEmployeeMode()
 {
     $("#addTask").fadeIn();
     $(".navbar").fadeIn();
-    $("#employees-block").fadeIn();
+    //$("#employees-block").fadeIn();
     $("#toggleEmpMode").hide();
 }
 
@@ -512,7 +519,6 @@ function submitCreateTaskForm(id)
         data['urgent'] = true
     }
     data = JSON.stringify(data);
-    console.log(data);
     $.ajax(
         {
             url: $("#create-task-url").val(),
@@ -543,7 +549,6 @@ function submitCreateTaskForm(id)
 
 function createTaskForm()
 {
-    console.log("lol");
     // create a new task
     var tid = guid();
 
@@ -637,14 +642,24 @@ function guid()
 }
 
 /* Hacky as fuck do not try this at home*/
-function fixHeight()
+function fixHeight(hh)
 {
+    var eh = 0;
+    if (typeof hh === 'undefined')
+    {
+        eh = 0;
+    }
+    else
+    {
+        eh = h;
+    }
     var h = 0;
     $("div.content").each(function()
     {
-        if ($(this).height() > h)
+        var number = $(this).height();
+        if (number > h)
         {
-            h = $(this).height();
+            h = number + eh;
         }
     });
     $("div.content").height(h);
