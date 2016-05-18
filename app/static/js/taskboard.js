@@ -269,7 +269,8 @@ function populateTasks(boardId)
                     else
                     {
                         element +=
-                            '<div id="employee" class=\"taskEmp ' +
+                            '<div ondblclick="sortTasks(' + task
+                                .emp_id + ')" id="employee" class=\"taskEmp ' +
                             randomAnim() +
                             '\" style=\"background-color: ' +
                             '' + task.color + '\" data-id="' + task
@@ -383,16 +384,27 @@ function showComments(element)
     {
         element.removeClass('glyphicon-chevron-down');
         element.addClass('glyphicon-chevron-up');
+        element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
+            'fast',
+            function() {});
+        //var ch = element.parents('div.task').find('[id^="commentsBlock"]').height();
+        //$(".content").each(function () {
+        //    $(this).height($(this).height() + ch);
+        //});
     }
     else
     {
         element.removeClass('glyphicon-chevron-up');
         element.addClass('glyphicon-chevron-down');
+        element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
+            'fast',
+            function() {});
+        //var ch = element.parents('div.task').find('[id^="commentsBlock"]').height();
+        //$(".content").each(function () {
+        //    $(this).height($(this).height() - ch);
+        //});
     }
-
-    element.parents('div.task').find('[id^="commentsBlock"]').slideToggle(
-        'fast',
-        function() {});
+    
 }
 
 function populateComments(taskId)
