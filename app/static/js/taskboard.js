@@ -288,7 +288,15 @@ function populateTasks(boardId)
                         ')" class=\"glyphicon glyphicon-comment ' +
                         randomAnim() + '\"></span>' +
                         '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
-                        '</div></div><div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                        '</div></div>';
+                    if(task.urgent == true)
+                    {
+                        element += '<div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                    }
+                    else
+                    {
+                        element += '<div style="background-color:#ff0000;" class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                    }
                     if (task.comments.length > 0)
                     {
                         for (var j = 0; j < task.comments.length; j++)
