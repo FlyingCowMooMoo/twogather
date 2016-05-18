@@ -677,25 +677,95 @@ function fixHeight(hh)
 function cm()
 {
     $.contextMenu({
-        // define which elements trigger this menu
         selector: ".task",
-        // define the elements of the menu
         callback: function(key, options) {
             var m = "clicked: " + key;
             window.console && console.log(m) || alert(m);
         },
         items: {
-            foo: {name: "Foo", callback: function(key, opt){ console.log(key) }},
+            foo: {name: "Assign To Employee", callback: function(key, opt)
+            {
+                var target = opt.$trigger;
+                showAssignPanel(target.data("id"));
+            }},
             bar: {name: "Toggle Urgency", callback: function(key, opt)
             {
                 var target = opt.$trigger;
                 toggleUrgency(target.data("id"));
             }}
         }
-        // there's more, have a look at the demos and docs...
     });
 }
 
+function showAssignPanel(id)
+{
+
+    var value = {
+        "org_id": $("#orgid").val()
+    };
+    var did = guid();
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-employees-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                var data = '';
+                for (var i = 0; i < result.employees.length; ++i)
+                {
+                    var emp = result.employees[i];
+                    data[emp.pin] = emp.fname + emp.lname;
+                    data += '<option style="background-color:' + emp.color + '" value="'+ emp.pin +'">' + emp.fname + " " + emp.lname + '</option>';
+                }
+                var element = '<form class="form-horizontal" id="'+ did +'"><fieldset><legend>Form Name</legend><div class="form-group"> ' +
+                    '<label class="col-md-4 control-label" for="employee">Employee</label> ' +
+                    '<div class="col-md-4"> <select id="employee" name="employee" class="form-control"> ' +
+                    '' + data +'</select>' +
+                    ' </div></div><div class="form-group"> <label class="col-md-4 control-label" for="singlebutton">' +
+                    '</label> <div class="col-md-4"> <input type="hidden" id="tid" value="' + id + '"> ' +
+                    '<button id="singlebutton" name="singlebutton" data-id="'+ did +'"class="btn btn-primary" onclick="event.preventDefault();' +
+                    'assignTask(this);">Assign Task</button> ' +
+                    '</div></div></fieldset></form>';
+
+                alertModal("Assign To Employee", element);
+            }
+        });
+    //assign_task-url
+}
+
+function assignTask(form)
+{
+    var taskId = $(form).data("id");
+    form = $("#" + taskId);
+    var value = {
+        "emp": form.find("#employee").val(),
+        "task": form.find("#tid").val()
+    };
+    console.log(value);
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#assign_task-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if(result.error != undefined)
+                {
+                    alertModal("Error", result.error)
+                }
+                else
+                {
+                    alertModal("Assign To Employee", result.msg);
+                    $(".task").remove();
+                    var boardId = $("#board_id").val();
+                    populateTasks(boardId);
+                }
+            }
+        });
+}
 function toggleUrgency(id)
 {
     //toggle_urgency-url

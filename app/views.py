@@ -54,6 +54,28 @@ def toggle_urgency():
     except Exception as e:
         return jsonify(error='An error has occurred ' + e.message)
 
+
+@app.route('/assigntask', methods=['POST'])
+def assign_task():
+    emp_id = request.json['emp']
+    print request.json
+    task_id = int(request.json['task'])
+    try:
+        emp = EmployeePin.get(EmployeePin.pin == emp_id)
+    except DoesNotExist:
+        return jsonify(error='Invalid Employee')
+    try:
+        task = Task.get(Task.id == task_id)
+    except DoesNotExist:
+        return jsonify(error='Invalid Employee')
+    try:
+        task.marked_by = emp
+        task.save()
+        return jsonify(msg='Task has been assigned to ' + emp.first_name + " " + emp.last_name)
+    except Exception as e:
+        return jsonify(error='An error has occurred ' + e.message)
+
+
 @app.route('/createemployee', methods=['POST'])
 def create_employee():
     fn = request.json['first-name']
