@@ -289,7 +289,7 @@ function populateTasks(boardId)
                         randomAnim() + '\"></span>' +
                         '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
                         '</div></div>';
-                    if(task.urgent == true)
+                    if(task.urgent == false)
                     {
                         element += '<div class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
                     }
@@ -382,6 +382,7 @@ function populateTasks(boardId)
                 fixHeight();
             }
         });
+    cm()
 }
 
 function showComments(element)
@@ -671,4 +672,53 @@ function fixHeight(hh)
         }
     });
     $("div.content").height(h);
+}
+
+function cm()
+{
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".task",
+        // define the elements of the menu
+        callback: function(key, options) {
+            var m = "clicked: " + key;
+            window.console && console.log(m) || alert(m);
+        },
+        items: {
+            foo: {name: "Foo", callback: function(key, opt){ console.log(key) }},
+            bar: {name: "Toggle Urgency", callback: function(key, opt)
+            {
+                var target = opt.$trigger;
+                toggleUrgency(target.data("id"));
+            }}
+        }
+        // there's more, have a look at the demos and docs...
+    });
+}
+
+function toggleUrgency(id)
+{
+    //toggle_urgency-url
+    var value = {
+        "task": id
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#toggle_urgency-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if(result.error != undefined)
+                {
+                    alertModal("Error", result.error());
+                }
+                alertModal("Success", result.msg);
+                $(".task").remove();
+                var boardId = $("#board_id").val();
+                populateTasks(boardId);
+
+            }
+        });
 }

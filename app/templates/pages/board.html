@@ -10,10 +10,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/lm.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.contextMenu.min.css') }}" />
 
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.ui.position.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.contextMenu.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/taskboard.js') }}"></script>
     <style>
     </style>
@@ -33,6 +36,7 @@
 <input type="hidden" id="create-task-url" value="{{ url_for('submit_create_task') }}">
 <input type="hidden" id="login-url" value="{{ url_for('signin') }}">
 <input type="hidden" id="create-comment-url" value="{{ url_for('add_comment') }}">
+<input type="hidden" id="toggle_urgency-url" value="{{ url_for('toggle_urgency') }}">
 
 
 <!-- Navigation -->
@@ -212,6 +216,14 @@
         </div>
     </div>
 </div>
+
+<ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none" >
+    <li><a tabindex="-1" href="#">Action</a></li>
+    <li><a tabindex="-1" href="#">Another action</a></li>
+    <li><a tabindex="-1" href="#">Something else here</a></li>
+    <li class="divider"></li>
+    <li><a tabindex="-1" href="#">Separated link</a></li>
+</ul>
 </body>
 
 </html>

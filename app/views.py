@@ -36,6 +36,24 @@ def index():
     return redirect(url_for('signin'))
 
 
+@app.route('/toggleurgency', methods=['POST'])
+def toggle_urgency():
+    task = int(request.json['task'])
+    try:
+        t = Task.get(Task.id == task)
+        if t.marked_as_high_priority:
+            t.marked_as_high_priority = False
+            msg = 'Task has been unmarked as urgent'
+        else:
+            t.marked_as_high_priority = True
+            msg = 'Task has been marked as urgent'
+        t.save()
+        return jsonify(msg=msg)
+    except DoesNotExist:
+        return jsonify(error='Invalid Task')
+    except Exception as e:
+        return jsonify(error='An error has occurred ' + e.message)
+
 @app.route('/createemployee', methods=['POST'])
 def create_employee():
     fn = request.json['first-name']
