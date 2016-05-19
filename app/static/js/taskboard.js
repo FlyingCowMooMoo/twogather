@@ -343,8 +343,14 @@ function populateTasks(boardId)
                                     'id');
                                 var taskId = ui.item.attr(
                                     "data-id");
-                                if (source == "newTasks" &&
-                                    (destination == "todo" ||
+                                if (source ==
+                                "done")
+                                {
+                                    alertModal("Error",
+                                        "You can't mark a task already done as not done"
+                                    )
+                                }
+                                else if ((destination == "todo" ||
                                     destination ==
                                     "done"))
                                 {

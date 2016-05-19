@@ -27,7 +27,7 @@ $(function()
             '<button class="btn brd" id="create-board" data-id="' +
             newId +
             '" onclick="createBoard(this)">Save</button></form></div></div>';
-        $("#boards").append(newBoard);
+        $("#boards").parent().prepend(newBoard);
         boardCount++;
         //$("#boardsNumber").text(boardCount);
         document.getElementById("create-board").addEventListener(
@@ -76,24 +76,7 @@ $(function()
     .on('click', '.save', function()
     {
 
-        // checks if event source is from board or employee
-        console.log($(this));
-        if ($(this).parent().parent().parent().attr('class') ==
-            'board board-new')
-        {
-
-        }
-        else
-        {
-            var employee =
-                '<p><span>' + $(this).parents('form').find(
-                    '[id^="firstName"]').val() + '</span> <span>' +
-                $(this).parents('form').find('[id^="lastName"]').val() +
-                '</p>';
-            var rootEmployee = $(this).parents('div.employee');
-            $(rootEmployee).empty();
-            $(rootEmployee).append(employee).removeClass('employee-new');
-        }
+        $(this).remove();
     })
 
     // edit board
