@@ -15,15 +15,18 @@ html {
 }
 
 hr {
-	width: 80%;
-	margin: 10px 0;
+	width: 92%;
+	margin: 16px 4%;
 }
 .navbar {
 	border-radius: 0px;
 	margin-bottom: 10px;
 	/*background-color: lightGreen;*/
 }
-
+/*    padding: 5px 0px;
+    border-radius: 3px;
+    text-align: center;
+}*/
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover{
 	/*background-color: green;*/
@@ -646,9 +649,9 @@ div.task-new div > button.btn.remove {
 
 .btn.menu {
 	font-size: 28px;
-	position: absolute;
-	top: 30px;
-	right: 13px;
+	position: relative;
+	top: -34px;
+	right: 16px;
 }
 
 .btn.delete {
