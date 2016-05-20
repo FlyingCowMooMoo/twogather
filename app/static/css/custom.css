@@ -368,6 +368,7 @@ div#states-block {
 div.state {
 	margin-left: auto;
 	margin-right: auto;
+	min-width: 100px;
 	width:300px;
 }
 /*
@@ -538,8 +539,6 @@ div.task-new span.glyphicon-remove {
 	margin-right: 3px;
 	cursor: pointer;
 }
-
-
 
 div.task-new div.heading {
 	top: -34px;
@@ -721,4 +720,116 @@ div.content div.task > div.test {
 	height: 45px;
 	width: 344px;
 	background: #ccc;
+}
+
+
+/* Different screen sizes */
+
+/* Tablets */
+/* Portrait and Landscape */
+/*@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {*/
+ @media screen and (max-width: 1124px) {
+
+
+ 	/* board page*/
+
+ 	/* tasks block */
+ 	div.state {
+ 		width: 250px;
+ 	}
+
+ 	div.state > div.heading {
+ 		height: 45px;
+ 	}
+
+ 	div.state > div.heading > h1,
+ 	div.state > div.empty > h2 {
+ 		font-size: 29px;
+ 	}
+
+ 	div.state > div.empty {
+ 		height: 45px;
+ 		padding: 5px;
+ 	}
+
+ 	div.state > div.empty > h3 {
+ 		font-size: 24px;
+ 	}
+
+ 	div.state > div.content {
+	    border: 7px solid lightGray;
+	    border-top: 13px solid lightGray;
+	}
+
+	div.content > div.task {
+ 	   height: 50px;
+	}
+
+	div.task > div {
+ 	   height: 50px;
+	}
+
+	div.task > div.taskEmp {
+    	width: 50px;
+    	padding: 4px 5px;
+	}
+
+	div.content div > h5 {
+	    font-size: 19px;
+	}
+
+	div.task div.taskContent {
+ 	   width: 161px;	
+	}
+
+	div.taskContent h6 {
+		height: 27px;
+		width: 158px;
+		font-size: 12px;
+		padding-top: 2px;
+	}
+
+	div.taskContent > div {
+    	height: 19px;
+	}
+
+	div.taskContent > div > p {
+    	font-size: 14px;
+	}
+
+	div.taskContent > div > span.btn.transparent {
+    	font-size: 18px;
+	}
+
+	/* employees block */
+	div#employees-block h4.empsInBoard {
+		font-size: 16px;
+	}
+
+	div.employee p {
+		font-size: 11px;
+	}
+
+	/* boards page */
+
+	main div > h4.heading {
+    	font-size: 25px;
+	}
+
+	.btn.transparent {
+	    font-size: 42px;
+	    margin-top: -12px;
+	}
+
+	.btn.menu {
+    	font-size: 25px;
+    	top: -32px;
+	}
+
+	div.board > div > h2 {
+		font-size: 24px;	
+	}
 }
