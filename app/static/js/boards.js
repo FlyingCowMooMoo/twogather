@@ -388,7 +388,7 @@ function addBoard(id, title, numberOfEmps, desc, count)
     var board =
         '<div class="board" data-id="' + id + '"ondblclick="goToBoard(' +
         id + ')"><div><h2 class="text-center">' + title + '</h2>' +
-        '<button class="btn transparent menu glyphicon glyphicon-align-justify"></button>' +
+        '<button class="btn transparent menu btnIcon glyphicon glyphicon-align-justify"></button>' +
         '</div><br/><div class="text-center"><h2>' + numberOfEmps +
         ' <span class="glyphicon glyphicon-user"></span></h2><h2>' + count +
         ' <span class="glyphicon glyphicon-tasks"></span></h2>' +

@@ -34,25 +34,24 @@
             </li>
             <li><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
             </li>
-        <div class="btn-group nav navbar-nav navbar-right">
-            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
-                {{ accountname }}
-                <span class="glyphicon glyphicon-menu-down"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <!-- dropdown menu links -->
-                <li class="active"><a href="#">{{ accountname }}</a>
-                </li>
-                <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
-                </li>
-                <hr>
-                <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
-                </li>
-            </ul>
-        </div>
         <!-- </li> -->
-
         </ul>
+       <div class="btn-group nav navbar-nav navbar-right">
+        <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+            {{ accountname }}
+            <span class="glyphicon glyphicon-menu-down"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+            <li class="active"><a href="#">{{ accountname }}</a>
+            </li>
+            <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
+            </li>
+            <hr>
+            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
+            </li>
+        </ul>
+    </div>
     </div>
 </nav>
 
@@ -84,6 +83,7 @@
                 <div id="piechart_3d"  style="height:400px"></div>
             </div>
         </div>
+        <hr/>
         <div class="row">
              <div class="col-md-3" style="padding: 20px 0;">
                 <h4>

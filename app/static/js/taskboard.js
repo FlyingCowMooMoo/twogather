@@ -40,7 +40,8 @@ var animations = ["fadeIn",
 
 function randomAnim()
 {
-    var r = animations[Math.floor(Math.random() * animations.length)];
+    // var r = animations[Math.floor(Math.random() * animations.length)];
+    var r = "fadeInRight";
     return "animated " + r;
 }
 
@@ -256,13 +257,13 @@ function populateTasks(boardId)
                     var task = result.tasks[i];
                     console.log(task);
                     var element = '<div id=\"task' + task.id +
-                        '\" class=\"task ' + randomAnim() +
+                        '\" class=\"task animated fadeInDown' +// randomAnim() +
                         '\" data-id=\"' + task.id + '\"> ';
                     if (task.unassigned == true)
                     {
                         element +=
-                            '<div id="employee" class=\"taskEmp ' +
-                            randomAnim() +
+                            '<div id="employee" class=\"taskEmp' +
+                            // randomAnim() +
                             '\" style=\"background-color: ' +
                             '' + "lightGray" +
                             '\" > <h5 id="emp-name-d">U</h5> </div>';
@@ -272,22 +273,24 @@ function populateTasks(boardId)
                         element +=
                             '<div ondblclick="sortTasks(' + task
                                 .emp_id + ')" id="employee" class=\"taskEmp ' +
-                            randomAnim() +
+                            // randomAnim() +
                             '\" style=\"background-color: ' +
                             '' + task.color + '\" data-id="' + task
                                 .emp_id + '"> <h5>' + task.emp_abv +
                             '</h5> </div>';
                     }
                     element += '<div class=\"taskContent ' +
-                        randomAnim() + '\"><h6>' + task.title +
+                        // randomAnim() + 
+                        '\"><h6>' + task.title +
                         '</h6>' +
                         '<div><p><span id=\"comment' + task.id +
                         '\">' + task.comments.length + ' ' +
                         '</span><span ondblclick="addCommentForm(' +
                         task.id +
-                        ')" class=\"glyphicon glyphicon-comment ' +
-                        randomAnim() + '\"></span>' +
-                        '</p><span class=\"btn transparent glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
+                        ')" class=\"btnIcon glyphicon glyphicon-comment ' +
+                        // randomAnim() + 
+                        '\"></span>' +
+                        '</p><span class=\"btn transparent btnIcon glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
                         '</div></div>';
                     if(task.urgent == false)
                     {
@@ -295,7 +298,7 @@ function populateTasks(boardId)
                     }
                     else
                     {
-                        element += '<div style="background-color:#ff0000;" class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                        element += '<div style="background-color:#DB2929;" class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
                     }
                     if (task.comments.length > 0)
                     {
@@ -448,7 +451,8 @@ function populateComments(taskId)
                     var element = '<p id="comment' + i + '">' +
                         result.comments[i]['text'] +
                         '<span class="glyphicon glyphicon-remove remove ' +
-                        randomAnim() + '"></span></p>';
+                        // randomAnim() + 
+                        '"></span></p>';
                     $("#comments-" + taskId).append(element);
                     $("#empsNumber").html(parseInt(this.val()) + 1);
                 }
@@ -633,7 +637,8 @@ function populateEmployees(org)
                     var element = '<div id="employee-' + emp.id +
                         '" data-id="' + emp.id +
                         '" style=\"background-color:' + emp.color +
-                        ' \" class="employee ' + randomAnim() +
+                        ' \" class="employee animated fadeInRight' +
+                        //+ randomAnim() +
                         '" ondrag="dragg()"> <p id="name">' + emp.fname +
                         " " + emp.lname + '</p></div>';
                     $("#employees").append(element);
