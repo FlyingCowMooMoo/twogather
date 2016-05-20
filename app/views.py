@@ -2,6 +2,7 @@ import json
 import random
 import string
 
+import datetime
 from flask.ext.login import login_required, current_user, login_user, logout_user
 from playhouse.migrate import SqliteMigrator, migrate
 
@@ -28,6 +29,11 @@ def prepare():
     #   org = (Organization.select().order_by(fn.Random())).get()
     #  u.organization = org
     # u.save()
+    # for t in Task.select():
+    #    if t.marked_as_completed and t.completed_at is None:
+    #        t.completed_at = dbutils.random_date(t.assigned_at, datetime.datetime.now())
+    #        t.save()
+
     print ('a')
 
 
@@ -112,7 +118,7 @@ def create_employee():
         emp.organization = org
         emp.save()
         emp = {"id": emp.id, "color": emp.hex_color, "pin": emp.pin,
-           "fname": emp.first_name, "lname": emp.last_name}
+               "fname": emp.first_name, "lname": emp.last_name}
         return jsonify(employee=emp)
     except Exception as e:
         return jsonify(error='An error occurred.Details: ' + e.message)
@@ -188,20 +194,60 @@ def show_board(board_id=None):
         return show_error('404', e.message)
 
 
-
 @app.route('/report/<int:board_id>', methods=['GET'])
 def report(board_id):
     if board_id is None:
         return show_error('400', 'No board id specified')
     try:
         board = TaskBoard.get(TaskBoard.id == board_id)
-        t = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_task).count()
-        td = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id, Task.marked_as_todo).count()
-        d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
-                                                                Task.marked_as_completed).count()
-        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, id=board_id, orgid=board.org_id,
+        try:
+            t = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                    Task.marked_as_task).count()
+        except DoesNotExist:
+            t = 0
+        try:
+            td = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                     Task.marked_as_todo).count()
+        except DoesNotExist:
+            td = 0
+        try:
+            d = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                    Task.marked_as_completed).count()
+        except DoesNotExist:
+            d = 0
+        try:
+            c = Task.select().where(Task.assigned_at.between(datetime.date.today() - datetime.timedelta(days=30),
+                                                             datetime.date.today())).count()
+        except DoesNotExist:
+            c = 0
+        try:
+            f = Task.select().where(Task.completed_at.between(datetime.date.today() - datetime.timedelta(days=30),
+                                                              datetime.date.today())).count()
+        except DoesNotExist:
+            f = 0
+
+        start_date = datetime.date.today() - datetime.timedelta(days=30)
+        end_date = datetime.date.today()
+        data = list()
+        for today in utils.daterange(start_date, end_date):
+            print("lol")
+            try:
+                assigned = Task.select().where(Task.assigned_at.between(today - datetime.timedelta(
+                        days=1), today)).count()
+            except DoesNotExist:
+                assigned = 0
+
+            try:
+                completed = Task.select().where(Task.completed_at.between(today - datetime.timedelta(
+                        days=1), today)).count()
+            except DoesNotExist:
+                completed = 0
+            data.append({"date": today, "assigned": assigned, "completed": completed})
+        print(data)
+        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, c=c, f=f, id=board_id,
+                               orgid=board.org_id,
                                orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,
-                               boardname=board.name, bid=board.id)
+                               boardname=board.name, bid=board.id, lastdays=tuple(data))
     except DoesNotExist as e:
         return show_error('404', e.message)
 
@@ -291,6 +337,7 @@ def mark_task():
         task.marked_as_task = False
         task.marked_as_completed = True
         task.marked_as_todo = False
+        task.marked_as_completed = datetime.datetime.now()
     task.save()
     msg = ' '.join(('Task was marked as', action, 'by employee with PIN', emp.pin))
     return jsonify(msg=msg)

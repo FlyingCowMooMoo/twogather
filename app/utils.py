@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+
 def to_bool(value):
     """
         Convert a string to a boolean
@@ -20,3 +23,8 @@ def to_bool(value):
         return valid[lower_value]
     else:
         raise ValueError('invalid literal for boolean: "%s"' % value)
+
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)

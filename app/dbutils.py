@@ -9,6 +9,9 @@ from config import IMAGE_FOLDER_LOCATION, BASEDIR
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
     LogoImage, Color, Comment, TaskComment, Organization
 
+from datetime import timedelta
+from random import randint
+
 
 def verify_tables(drop_tables=False, generate_data=False):
     if drop_tables:
@@ -224,3 +227,8 @@ def get_comments(task_id):
         return tuple(data)
     except DoesNotExist as e:
         return tuple()
+
+
+def random_date(start, end):
+    return start + timedelta(
+            seconds=randint(0, int((end - start).total_seconds())))
