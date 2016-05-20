@@ -216,34 +216,28 @@ def report(board_id):
                                                                     Task.marked_as_completed).count()
         except DoesNotExist:
             d = 0
-        try:
-            c = Task.select().where(Task.assigned_at.between(datetime.date.today() - datetime.timedelta(days=30),
-                                                             datetime.date.today())).count()
-        except DoesNotExist:
-            c = 0
-        try:
-            f = Task.select().where(Task.completed_at.between(datetime.date.today() - datetime.timedelta(days=30),
-                                                              datetime.date.today())).count()
-        except DoesNotExist:
-            f = 0
 
-        start_date = datetime.date.today() - datetime.timedelta(days=10)
+        start_date = datetime.date.today() - datetime.timedelta(days=30)
         end_date = datetime.date.today()
         data = list()
         for today in utils.daterange(start_date, end_date):
             try:
-                assigned = Task.select().where(Task.assigned_at.between(today - datetime.timedelta(
-                        days=1), today)).count()
+                assigned = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                               Task.assigned_at.between(
+                                                                                   today - datetime.timedelta(days=1),
+                                                                                   today)).count()
             except DoesNotExist:
                 assigned = 0
 
             try:
-                completed = Task.select().where(Task.completed_at.between(today - datetime.timedelta(
-                        days=1), today)).count()
+                completed = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
+                                                                                Task.completed_at.between(
+                                                                                    today - datetime.timedelta(days=1),
+                                                                                    today)).count()
             except DoesNotExist:
                 completed = 0
             data.append({"date": today, "assigned": assigned, "completed": completed})
-        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, c=c, f=f, id=board_id,
+        return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, id=board_id,
                                orgid=board.org_id,
                                orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,
                                boardname=board.name, bid=board.id, lastdays=tuple(data))
