@@ -209,9 +209,13 @@ function createEmployee(form)
                     var element = '<div id="emp-pin-emp-display"> <h1 id="emp-pin-emp-display-name"></h1> ' +
                         '<h1>A new employee has been created!</h1><h1 id="emp-pin-emp-display-pin"></h1> </div>';
                     alertModal("Success", element);
-                    $("#emp-pin-emp-display-pin").css(
-                        'background-color', result.employee.color
-                    );
+                    $("#emp-pin-emp-display-pin").css({
+                        'background-color': result.employee.color,
+                        'padding': '5px 0px',
+                        'border-radius': '3px',
+                        'text-align': 'center'
+                    });
+                    
                     $("#emp-pin-emp-display-name").text(result.employee
                             .fname + " " + result.employee.lname);
                     $("#emp-pin-emp-display-pin").text(result.employee
