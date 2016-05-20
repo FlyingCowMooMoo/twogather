@@ -44,7 +44,8 @@
 
 <!-- Navigation -->
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+       
+    <div class="container-fluid" id="toggleMngMode">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{ url_for('show_board', board_id=id) }}">
                 <div class="img"></div>
@@ -56,20 +57,15 @@
             <li><a href="{{ url_for('show_board', board_id=id) }}">{{ boardname }}</a>
             </li>
         </ul>
-        <!--   <ul class="nav navbar-nav navbar-right">
-            <li>
-             <a href="#">Hi, John</a> -->
         <div class="btn-group nav navbar-nav navbar-right">
             <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
                 {{ accountname }}
                 <span class="glyphicon glyphicon-menu-down"></span>
-                <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
             </a>
             <ul class="dropdown-menu">
-                <!-- dropdown menu links -->
                 <li class="active"><a href="#">{{ accountname }}</a>
                 </li>
-                <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
+                <li class="a"><a href="#" onclick="enableEmployeeMode()">Switch to Employees</a>
                 </li>
                 <hr>
                 <li class="a"><a href="{{ url_for('report', board_id=id) }}">Reports</a>
@@ -79,17 +75,34 @@
                 </li>
             </ul>
         </div>
-        <!-- </li> -->
+    </div> 
 
+     <div class="container-fluid" id="toggleEmpMode" style="display: none;">
+        <div class="navbar-header">
+            <a class="navbar-brand not-clickable">
+                <div class="img"></div>
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a class="not-clickable">{{ orgname }}</a>
+            </li>
+            <li><a class="not-clickable">{{ boardname }}</a>
+            </li>
         </ul>
+        <div class="btn-group nav navbar-nav navbar-right">
+              <button type="submit" id="switchMode" onclick="event.preventDefault(); showLogin();">
+                Switch to Manager
+              </button>
+        </div>
     </div>
+
 </nav>
 
 <!-- Body -->
 <main>
 
-    <input type="submit" id="toggleEmpMode" value="Toggle Manager Mode" style="display: none;" onclick="event.preventDefault(); showLogin();" />
-
+    <!-- <input type="submit" id="toggleEmpMode" value="Toggle Manager Mode" style="display: none;" onclick="event.preventDefault(); showLogin();" />
+ -->
     <!-- Boards -->
     <div class="grid" id="states-block">
         <div class="row boards" id="states">

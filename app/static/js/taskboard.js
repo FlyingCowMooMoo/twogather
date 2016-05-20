@@ -469,15 +469,16 @@ function sib(id)
 function enableEmployeeMode()
 {
     $("#addTask").fadeOut();
-    $(".navbar").fadeOut();
+    // $(".navbar").fadeOut();
+     $("div#toggleMngMode").hide();
     //$("#employees-block").fadeOut();
-    $("#toggleEmpMode").show();
+    $("#toggleEmpMode").fadeIn();
 }
 
 function disableEmployeeMode()
 {
     $("#addTask").fadeIn();
-    $(".navbar").fadeIn();
+    $("#toggleMngMode").fadeIn();
     //$("#employees-block").fadeIn();
     $("#toggleEmpMode").hide();
 }

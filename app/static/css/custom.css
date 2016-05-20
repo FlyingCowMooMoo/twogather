@@ -359,6 +359,21 @@ body.no-scroll {
 	overflow: hidden;
 }
 
+nav.navbar button#switchMode {
+	font-size: 20px;
+	color: #f2f2f2;
+	font-weight: 300;
+	letter-spacing: 1px;
+	background-color: transparent;
+	border: 0;
+	padding-top: 8px;
+}
+
+nav.navbar button#switchMode:hover,
+nav.navbar button#switchMode:focus {
+	color: #bdccdb;
+}
+
 div#states-block {
 	float: left;
 	width: 85%;
@@ -722,15 +737,30 @@ div.content div.task > div.test {
 	background: #ccc;
 }
 
+.not-clickable {
+   pointer-events: none;
+   cursor: default;
+}
+
 
 /* Different screen sizes */
 
+/* Large computer screens */
+/* Landscape */
+ @media screen and (min-width: 1600px) {
+	div.state {
+ 		width: 400px;
+ 	}
+
+	div.task div.taskContent {
+   		width: 294px;
+   	}
+
+ }
+
+
 /* Tablets */
-/* Portrait and Landscape */
-/*@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) {*/
+/* Landscape */
  @media screen and (max-width: 1124px) {
 
 
