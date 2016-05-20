@@ -745,12 +745,22 @@ div.content div.task > div.test {
 
 /* Different screen sizes */
 
+/* Large computer screens */
+/* Landscape */
+ @media screen and (min-width: 1600px) {
+	div.state {
+ 		width: 400px;
+ 	}
+
+	div.task div.taskContent {
+   		width: 294px;
+   	}
+
+ }
+
+
 /* Tablets */
-/* Portrait and Landscape */
-/*@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) {*/
+/* Landscape */
  @media screen and (max-width: 1124px) {
 
 
