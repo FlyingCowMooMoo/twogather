@@ -3,6 +3,49 @@
  */
 var boardCount = 0;
 var employeeCount = 0;
+
+var empColors = [
+    "#CFAFAF",
+    "#E7A1A1",
+    "#DDDDA8",
+    "#E9D2D2",
+    "#FFECE5",
+    "#CDB2A5",
+    "#FFCD72",
+    "#FEECA1",
+    "#E2E095",
+    "#D9D9BF",
+    "#CCE281",
+    "#B5D397",
+    "#B7E2B7",
+    "#CCE281",
+    "#96E5CD",
+    "#8DE0CD",
+    "#8BD5C7",
+    "#9CEDE9",
+    "#E4B29A",
+    "#99bbff",
+    "#C1D2D2",
+    "#A4C9C9",
+    "#D2C9C1",
+    "#FFB872",
+    "#AFE2EB",
+    "#B8DBE6",
+    "#C2D4DE",
+    "#C7E8FD",
+    "#C4D5E7",
+    "#E8EAFA",
+    "#B2ABDA",
+    "#BEB2D7",
+    "#F2BA49",
+    "#FFB347",
+    "#C7C0CD",
+    "#D0A9F3",
+    "#E1D4E8",
+    "#E7DCE7",
+    "#F69DAF",
+    "#CFAAC7"
+];
 $(function()
 {
 
@@ -284,17 +327,23 @@ function createEmployeeForm()
         '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="last-name">Last Name</label> ' +
         '<div class="col-md-4"> <input id="last-name" name="last-name" type="text" placeholder="Last Name" class="form-control input-md" required=""> ' +
         '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="textinput">Employee Color</label> ' +
-        '<div class="col-md-4"> <div id="cp11" class="input-group colorpicker-component colorpicker-element">' +
-        '<input type="text" id="color" value="" class="form-control" readonly/><span class="input-group-addon">' +
-        '<i></i></span></div></div></div><div class="form-group"> ' +
+        '<div class="col-md-4">' +
+        ' <div id="cp11" class="input-group">' +
+        '<select id="color" name="color" class="form-control" style="background-color:' + empColors[0] +'!important"> ';
+    for (var i = 0; i < empColors.length; ++i)
+    {
+        form += '<option style="background-color:' + empColors[i] +'!important" value="' + empColors[i] +'">' + empColors[i] +'</option> ';
+    }
+    form +='</select></div></div></div><div class="form-group"> ' +
         '<label class="col-md-4 control-label" for="singlebutton"></label> <div class="col-md-4"> ' +
         '<button id="singlebutton" data-id="'+ formId +'" name="singlebutton"  onclick="event.preventDefault();' +
         'createEmployee(this);" class="btn btn-primary">Create Employee</button> </div></div></fieldset></form>';
 
     alertModal("", form);
-    $('.hex-input').on('click touchstart mousedown', function(){$(this).focus()})
-    $('#cp11').colorpicker();
-    $(".colorpicker-alpha").hide();
+    $('#color').on('change', function(){
+        var selected = $(this).find("option:selected").val();
+        $(this).css("background-color", selected);
+    });
 }
 
 function createBoard(element)
