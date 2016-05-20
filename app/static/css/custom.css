@@ -370,6 +370,14 @@ div.state {
 	margin-right: auto;
 	width:300px;
 }
+/*
+div.state div.empty span#addTask {
+	color: #454545;
+}
+
+div.state div.empty span#addTask:hover {
+	color: gray;
+}*/
 
 div.state > div.heading {
 	height: 60px;
@@ -452,7 +460,7 @@ div.task div.taskEmp {
 	background-color: lightsalmon;
 	width: 60px;
 	border-radius: 3px 0 0 3px;
-	padding: 15px 5px;
+	padding: 10px 5px;
 	text-align: center;
 	color: white;
 	cursor: default;
@@ -466,16 +474,17 @@ div.task div.taskContent {
 }
 
 div.taskContent h6 {
-	height: 30px;
+	height: 35px;
 	width: 180px;
 	margin: 0;
+	padding: 4px 0 0 4px;
 }
 
 div.taskContent > div {
 	width: 100%;
 	height: 22px;
-	/*background-color: blue;*/
 	margin: 0;
+	padding-left: 4px;
 
 }
 div.taskContent > div > p {
@@ -485,10 +494,14 @@ div.taskContent > div > p {
 
 div.taskContent > div > span.btn.transparent {
 	font-size: 20px;
-	margin-top: -4px;
-	right: -20px;
-	position: relative;
 	float: right;
+	position: relative;
+	top: -13px;
+	right: -15px;
+	}
+
+div.content div > h5{
+	font-size: 21px;
 }
 
 div.task div.taskImportant {
@@ -629,6 +642,15 @@ div.task-new div > button.btn.remove {
 
 /* buttons */
 
+/* makes sure icon buttons colours are unified */
+.btnIcon {
+	color: #454545 !important;
+	cursor: pointer;
+}
+.btnIcon:hover {
+	color: gray !important;
+}
+
 .btn.transparent {
 	font-size: 50px;
 	min-height: 30px;
@@ -643,15 +665,17 @@ div.task-new div > button.btn.remove {
 	min-height: 45px;
 }
 
-.transparent:hover{
-	color: gray;
-}
-
 .btn.menu {
 	font-size: 28px;
 	position: relative;
 	top: -34px;
 	right: 16px;
+}
+
+
+.btn.menu:hover,
+.transparent:hover {
+	color: gray;
 }
 
 .btn.delete {
