@@ -21,6 +21,7 @@ import utils
 
 @app.before_first_request
 def prepare():
+    # dbutils.new_random_boards()
     # dbutils.verify_tables(drop_tables=True, generate_data=True)
     # m = SqliteMigrator(db.database)
     # migrate(m.add_column('task', 'hidden', BooleanField(default=False)))
@@ -226,11 +227,10 @@ def report(board_id):
         except DoesNotExist:
             f = 0
 
-        start_date = datetime.date.today() - datetime.timedelta(days=30)
+        start_date = datetime.date.today() - datetime.timedelta(days=10)
         end_date = datetime.date.today()
         data = list()
         for today in utils.daterange(start_date, end_date):
-            print("lol")
             try:
                 assigned = Task.select().where(Task.assigned_at.between(today - datetime.timedelta(
                         days=1), today)).count()
@@ -243,7 +243,6 @@ def report(board_id):
             except DoesNotExist:
                 completed = 0
             data.append({"date": today, "assigned": assigned, "completed": completed})
-        print(data)
         return render_template('pages/report.html', total=t + td + d, t=t, td=td, d=d, c=c, f=f, id=board_id,
                                orgid=board.org_id,
                                orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,

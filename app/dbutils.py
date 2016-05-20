@@ -9,7 +9,7 @@ from config import IMAGE_FOLDER_LOCATION, BASEDIR
 from dbmodels import Role, User, UserRoles, EmployeePin, Task, TaskCompletion, MarkedAsTodo, TaskBoard, BoardTask, \
     LogoImage, Color, Comment, TaskComment, Organization
 
-from datetime import timedelta
+import datetime
 from random import randint
 
 
@@ -43,16 +43,32 @@ def verify_tables(drop_tables=False, generate_data=False):
         populate_dummy_comments()
 
 
+def new_random_boards():
+    Task.drop_table(True)
+    TaskBoard.drop_table(True)
+    BoardTask.drop_table(True)
+    Comment.drop_table(True)
+    TaskComment.drop_table(True)
+    EmployeePin.drop_table(True)
+    db.database.create_tables(
+            [Task, TaskBoard, BoardTask, TaskComment, EmployeePin, Comment], True)
+    populate_dummy_employees()
+    generate_random_boards()
+    populate_dummy_comments()
+
+
 def generate_random_boards(number=5, tasks_per_board=20):
-    # managers = (User.select().join(UserRoles).join(Role).where(UserRoles.role.name == 'Manager')).order_by(
-    #    fn.Random()).limit(number)
-    # lol = tuple(UserRoles.select(UserRoles.role == Role.get(Role.name == 'Manager')).limit(number))
     for org in Organization.select():
         random_manager = tuple(User.select().order_by(fn.Random()).limit(number))
         for _ in range(number):
             manager = random.choice(random_manager)
             board = TaskBoard()
-            board.name = ' '.join((manager.name, '\'s board', str(random.sample(xrange(10), 4))))
+            noun = random.choice((
+                "driver", "protocol", "bandwidth", "panel", "microchip", "program", "port", "card", "array", "interface",
+                "system",
+                "sensor", "firewall", "hard drive", "pixel", "alarm", "feed", "monitor", "application", "transmitter", "bus",
+                "circuit", "capacitor", "matrix"))
+            board.name = ' '.join(('The ', noun.title(),  ' board'))
             board.creator = manager
             board.organization = org
             board.save()
@@ -83,6 +99,9 @@ def generate_dummy_task(org=None):
     task.title = title
     task.description = title
     emp = (EmployeePin.select().where(EmployeePin.organization == org).order_by(fn.Random())).get()
+    task.assigned_at = random_date(datetime.date.today() - datetime.timedelta(days=30), datetime.date.today())
+    if random.choice([True, False]):
+        task.marked_by = emp
     if action == 'unassigned':
         task.marked_as_task = True
     elif action == 'todo':
@@ -93,6 +112,7 @@ def generate_dummy_task(org=None):
         task.marked_as_task = False
         task.marked_as_completed = True
         task.marked_by = emp
+        task.completed_at = random_date(task.assigned_at, datetime.date.today())
     task.marked_as_high_priority = random.choice([True, False])
     task.save()
     return task
@@ -105,12 +125,10 @@ def populate_dummy_employees():
     for line in reader:
         random_query = Color.select().order_by(fn.Random())
         color = random_query.get()
-        random_query = LogoImage.select().order_by(fn.Random())
-        logo = random_query.get()
         random_query = Organization.select().order_by(fn.Random())
         org = random_query.get()
         d = {'pin': line[0].rstrip(), 'first_name': line[1].rstrip(), 'last_name': line[2].rstrip(),
-             'email': line[3].rstrip(), 'color': color, 'logo': logo, 'organization': org}
+             'email': line[3].rstrip(), 'color': color, 'organization': org}
         data.append(d)
     with db.database.atomic():
         EmployeePin.insert_many(data).execute()
@@ -230,5 +248,5 @@ def get_comments(task_id):
 
 
 def random_date(start, end):
-    return start + timedelta(
+    return start + datetime.timedelta(
             seconds=randint(0, int((end - start).total_seconds())))

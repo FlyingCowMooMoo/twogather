@@ -58,7 +58,6 @@ class Task():
         emp_id = 'N/A'
         if dbmodel.marked_by is not None:
             color = dbmodel.marked_by.color.hex_code
-            logo = dbmodel.marked_by.logo.image_name
             pin = dbmodel.marked_by.pin
             emp_abv = dbmodel.marked_by.get_abv()
             emp_id = dbmodel.marked_by.id

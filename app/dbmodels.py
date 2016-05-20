@@ -99,7 +99,7 @@ class MarkedAsTodo(db.Model):
 
 class TaskBoard(db.Model):
     id = PrimaryKeyField()
-    name = TextField(unique=True)
+    name = TextField(unique=False, null=False)
     creator = ForeignKeyField(User)
     description = TextField(null=False, default='TaskBoard description here')
     created_at = DateTimeField(null=False, default=datetime.datetime.now)
