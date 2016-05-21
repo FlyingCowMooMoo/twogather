@@ -255,11 +255,10 @@ function populateTasks(boardId)
                 for (i = 0; i < result.tasks.length; ++i)
                 {
                     var task = result.tasks[i];
-                    console.log(task);
                     var element = '<div id=\"task' + task.id +
                         '\" class=\"task animated fadeInDown' +// randomAnim() +
                         '\" data-id=\"' + task.id + '\"> ';
-                    if (task.unassigned == true)
+                    if (task.emp_abv  == "N/A")
                     {
                         element +=
                             '<div id="employee" class=\"taskEmp' +
@@ -290,7 +289,8 @@ function populateTasks(boardId)
                         ')" class=\"btnIcon glyphicon glyphicon-comment ' +
                         // randomAnim() + 
                         '\"></span>' +
-                        '</p><span class=\"btn transparent btnIcon glyphicon glyphicon-chevron-down showComment\" onclick="showComments(this)"></span> ' +
+                        '</p><span class=\"btn transparent btnIcon glyphicon glyphicon-chevron-down showComment\" ' +
+                        'onclick="showComments(this)"></span> ' +
                         '</div></div>';
                     if(task.urgent == false)
                     {
@@ -298,7 +298,8 @@ function populateTasks(boardId)
                     }
                     else
                     {
-                        element += '<div style="background-color:#DB2929;" class=\"taskImportant\"></div><div id=\"commentsBlock0\">';
+                        element += '<div style="background-color:#DB2929;" class=\"taskImportant\"></div>' +
+                            '<div id=\"commentsBlock0\">';
                     }
                     if (task.comments.length > 0)
                     {
@@ -583,10 +584,12 @@ function createTaskForm()
 
     newTask += '</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
-        '<input id=taskname name=taskname class="form-control input-md"placeholder="Task name here like a title"required> ' +
+        '<input id=taskname name=taskname class="form-control input-md"placeholder="' +
+        'Task name here like a title"required> ' +
         '<span class=help-block>help</span></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskdesc>Task Description</label>' +
-        '<div class=col-md-6><input id=taskdesc name=taskdesc class="form-control input-md"placeholder="Task Description"required> ' +
+        '<div class=col-md-6><input id=taskdesc name=taskdesc class="form-control input-md"placeholder="' +
+        '...Task Description"required> ' +
         '<span class=help-block>help</span></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=employee>Assign To Employee</label>' +
         '<div class=col-md-6><select class=form-control id=employee name=employee>' +
@@ -672,7 +675,7 @@ function fixHeight(hh)
     }
     else
     {
-        eh = h;
+        eh = hh;
     }
     var h = 0;
     $("div.content").each(function()
