@@ -255,6 +255,7 @@ function populateTasks(boardId)
                 for (i = 0; i < result.tasks.length; ++i)
                 {
                     var task = result.tasks[i];
+                    console.log(task);
                     var element = '<div id=\"task' + task.id +
                         '\" class=\"task animated fadeInDown' +// randomAnim() +
                         '\" data-id=\"' + task.id + '\"> ';
@@ -675,7 +676,7 @@ function fixHeight(hh)
     }
     else
     {
-        eh = hh;
+        eh = h;
     }
     var h = 0;
     $("div.content").each(function()
