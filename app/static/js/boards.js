@@ -360,7 +360,6 @@ function createBoard(element)
         "desc": desc,
         "org_id": orgId
     };
-    console.log(value);
     $.ajax(
         {
             type: "POST",
@@ -387,11 +386,12 @@ function addBoard(id, title, numberOfEmps, desc, count)
 {
     var board =
         '<div class="board" data-id="' + id + '"ondblclick="goToBoard(' +
-        id + ')"><div><h2 class="text-center">' + title + '</h2>' +
-        '<button class="btn transparent menu btnIcon glyphicon glyphicon-align-justify"></button>' +
+        id + ')"><div><h2 class="text-center" id="title">' + title + '</h2>' +
+        '<button data-id="' + id + '" class="btn transparent menu btnIcon glyphicon glyphicon-align-justify" onclick="event.preventDefault();' +
+        'showEditBoardForm(this);"></button>' +
         '</div><br/><div class="text-center"><h2>' + count +
         ' <span class="glyphicon glyphicon-tasks"></span></h2>' +
-        '</div><hr/><div><p class="description">' + desc + '</p>' +
+        '</div><hr/><div><p class="description" id="desc">' + desc + '</p>' +
         '</div></div>';
 
     $("#boards").append(board);
@@ -432,6 +432,69 @@ function populateEmployees(org)
                 }
             }
         });
+}
+
+function showEditBoardForm(source)
+{
+    var id = guid();
+    var bid = $(source).data("id");
+    var title =  "placeholder";
+    var desc =  "placeholder";
+    $(".board").each(function () {
+       if($(this).data("id") == bid)
+       {
+           title = $(this).find("#title").text();
+           desc = $(this).find("#desc").text();
+           return false;
+       }
+    });
+    var element = '<form class="form-horizontal" id="'+ id +'"><fieldset><legend>Form Name</legend>' +
+        '<div class="form-group"> <label class="col-md-4 control-label" for="title">Title</label>' +
+        '<div class="col-md-4"> <input id="title" name="title" type="text" ' +
+        'placeholder="Title Goes Here" class="form-control input-md" required="" value="'+ title +'"> ' +
+        '</div></div><div class="form-group"> <label class="col-md-4 control-label" for="desc">' +
+        'Description</label> <div class="col-md-4"> <input id="desc" name="desc" type="text" ' +
+        'placeholder="Description goes here" class="form-control input-md" value="'+ desc +'"> </div></div>' +
+        '<div class="form-group"> <label class="col-md-4 control-label" for="singlebutton">' +
+        '</label> <div class="col-md-4"> <button id="singlebutton" ' +
+        'name="singlebutton" class="btn btn-primary" onclick="event.preventDefault();' +
+        'editBoard(this);" data-id="'+ id +'" data-board="'+ bid +'">Submit Changes</button> </div></div>' +
+        '</fieldset></form>';
+    alertModal("Edit A Board", element);
+}
+
+function editBoard(id) {
+    var form = $("#" + $(id).data("id"));
+    var title = form.find("#title").val();
+    var desc = form.find("#desc").val();
+    var idd = $(id).data("board");
+    var value = {
+        "id": idd,
+        "title": title,
+        "desc": desc
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#edit-board-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if (result.error != undefined)
+                {
+                    alertModal("Error", result.error);
+                }
+                else
+                {
+                    alertModal("Success", result.msg + " .Reloading page..." );
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 3000);
+                }
+            }
+        });
+
 }
 
 function guid()

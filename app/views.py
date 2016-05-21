@@ -43,6 +43,24 @@ def index():
     return redirect(url_for('signin'))
 
 
+@app.route('/editboard', methods=['POST'])
+def edit_board():
+    bid = int(request.json['id'])
+    title = request.json['title']
+    desc = request.json['desc']
+    try:
+        board = TaskBoard.get(TaskBoard.id == bid)
+    except DoesNotExist as e:
+        return jsonify(error='An error has occurred ' + e.message)
+    try:
+        board.name = title
+        board.description = desc
+        board.save()
+        return jsonify(msg='Board has been updated')
+    except Exception as e:
+        return jsonify(error='An error has occurred ' + e.message)
+
+
 @app.route('/toggleurgency', methods=['POST'])
 def toggle_urgency():
     task = int(request.json['task'])
