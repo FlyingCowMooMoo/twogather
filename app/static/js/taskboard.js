@@ -586,13 +586,13 @@ function createTaskForm()
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
         '<input id=taskname name=taskname class="form-control input-md"placeholder="' +
         'Task name here like a title"required> ' +
-        '<span class=help-block>help</span></div></div><div class=form-group>' +
+        '<span class=help-block style="display: none; visibility: hidden;">help</span></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskdesc>Task Description</label>' +
         '<div class=col-md-6><input id=taskdesc name=taskdesc class="form-control input-md"placeholder="' +
-        '...Task Description"required> ' +
-        '<span class=help-block>help</span></div></div><div class=form-group>' +
+        '...Task Description"> ' +
+        '<span class=help-block style="display: none; visibility: hidden;">help</span></div></div><div class=form-group style="display: none; visibility: hidden;">' +
         '<label class="col-md-4 control-label"for=employee>Assign To Employee</label>' +
-        '<div class=col-md-6><select class=form-control id=employee name=employee>' +
+        '<div style="display: none; visibility: hidden;" class=col-md-6><select class=form-control id=employee name=employee>' +
         '<option value=none>None</option>';
 
     $(".employee").each(function()
@@ -603,7 +603,7 @@ function createTaskForm()
             '">' + $(this).children('#name').html() + '</option>'
     });
 
-    newTask += '</select></div></div><div class=form-group>' +
+    newTask += '</select></div></div><div class=form-group style="display: none; visibility: hidden;">' +
         '<label class="col-md-4 control-label"for=employee>Manager</label><div class=col-md-6>' +
         '<select class=form-control id=manager name=manager>';
 
@@ -611,7 +611,7 @@ function createTaskForm()
             "#manager-name").val() + '</option>';
 
     newTask +=
-        '</select></div></div><div class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
+        '</select></div></div><div style="display: none; visibility: hidden;" class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
         '<div class=col-md-4><label class=radio-inline for=urgent-0><input id=urgent-0 name=urgent type=radio value=yes> Yes</label><label class=radio-inline for=urgent-1>' +
         '<input id=urgent-1 name=urgent type=radio value=no checked> No</label></div></div><div class=form-group><label class="col-md-4 control-label"for=taskname>' +
         '</label><div class=col-md-6>' +
