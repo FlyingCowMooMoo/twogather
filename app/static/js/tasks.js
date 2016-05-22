@@ -24,9 +24,6 @@ var taskCount = 0;
  		$("#newTasks").append(newTask);
  		taskCount ++;
  		$("#todoTasksNumber").text(taskCount);
-
-		// make employees droppable on the employee field
- 		makeEmpsDraggable()
  	});
 
  })
@@ -105,8 +102,13 @@ var taskCount = 0;
     });
 
     task += '</div>';
+
+    addLog("You added task '" + $(rootTask).find('[id^="taskTitle"]').val() + "'.");
+
     // empty task block and fill it with the detaiils
     $(rootTask).empty().attr('class','task').append(task);
+
+
 })
 
 // show the comments block
@@ -213,10 +215,13 @@ function populateEmployees(org) {
 	});
 }
 
-/**
- * Function to make employees draggable to boards
- */
-function makeEmpsDraggable() {
-	//$( '#employees, [id^="empAssigned"]' ).sortable({ connectWith: ".emps"}).disableSelection();
+/* Activity logs */
+var logs = [];
+
+function addLog(log) {
+    
+    logs.push(log);
 }
+
+
 

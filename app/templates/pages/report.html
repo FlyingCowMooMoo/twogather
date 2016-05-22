@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ orgname }} - {{ boardname }}</title>
+    <title>Reports</title>
 
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
@@ -37,21 +37,21 @@
         <!-- </li> -->
         </ul>
        <div class="btn-group nav navbar-nav navbar-right">
-        <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
-            {{ accountname }}
-            <span class="glyphicon glyphicon-menu-down"></span>
-        </a>
-        <ul class="dropdown-menu">
-            <!-- dropdown menu links -->
-            <li class="active"><a href="#">{{ accountname }}</a>
-            </li>
-            <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
-            </li>
-            <hr>
-            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
-            </li>
-        </ul>
-    </div>
+            <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ accountname }}
+                <span class="glyphicon glyphicon-menu-down"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li class="active">
+                    <a href="#">{{ accountname }}</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -82,6 +82,7 @@
              </div>
         </div>
     </div>
+    <div id="Logs" style="height:300px;"></div>
 </main>
 <script type="text/javascript">
     google.charts.load('current', {packages: ['corechart', 'bar']});
@@ -113,49 +114,17 @@ function drawAxisTickColors() {
       data.addColumn('number', 'Finished Tasks');
 
       data.addRows([
-          {% for item in lastdays %}
-              [new Date({{ item.date.year }}, {{ item.date.month }}, {{ item.date.day }}), {{ item.assigned }}, {{ item.completed }}],
+        {% for item in lastdays %}
+        [new Date({{ item.date.year }},
+                {{ item.date.month }},
+                {{ item.date.day }}), 
+                {{ item.assigned }}, 
+            {{ item.completed }}],
           {% endfor %}
        ]);
 
       var options = {
         title: 'Number of tasks added and finished in the past days',
-        // focusTarget: 'category',
-        // hAxis: {
-        //   title: 'Day',
-        //   format: 'h:mm a',
-        //   viewWindow: {
-        //     min: [7, 30, 0],
-        //     max: [17, 30, 0]
-        //   },
-        //   textStyle: {
-        //     fontSize: 14,
-        //     color: '#053061',
-        //     bold: true,
-        //     italic: false
-        //   },
-        //   titleTextStyle: {
-        //     fontSize: 18,
-        //     color: '#053061',
-        //     bold: true,
-        //     italic: false
-        //   }
-        // // },
-        // vAxis: {
-        //   title: 'Rating (scale of 1-10)',
-        //   textStyle: {
-        //     fontSize: 18,
-        //     color: '#67001f',
-        //     bold: false,
-        //     italic: false
-        //   },
-        //   titleTextStyle: {
-        //     fontSize: 18,
-        //     color: '#67001f',
-        //     bold: true,
-        //     italic: false
-        //   }
-        // }
       };
 
       var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));

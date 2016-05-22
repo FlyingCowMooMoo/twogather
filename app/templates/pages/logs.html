@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Activity Logs</title>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}" />
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+
+
+<!-- Navigation -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ url_for('show_board', board_id=bid) }}">
+                <div class="img"></div>
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="{{ url_for('company', cid=cid) }}">{{ orgname }}</a>
+            </li>
+            <li><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
+            </li>
+        <!-- </li> -->
+        </ul>
+       <div class="btn-group nav navbar-nav navbar-right">
+        <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+            {{ accountname }}
+            <span class="glyphicon glyphicon-menu-down"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+            <li class="active"><a href="#">{{ accountname }}</a>
+            </li>
+            <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
+            </li>
+            <hr>
+            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
+            </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+
+<!-- Body -->
+<main>
+    
+</main>
+
+</body>
+
+</html>

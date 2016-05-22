@@ -12,6 +12,7 @@ var empColors = [
     "#FFECE5",
     "#CDB2A5",
     "#FFCD72",
+    "#D86F36",
     "#FEECA1",
     "#E2E095",
     "#D9D9BF",
@@ -46,6 +47,7 @@ var empColors = [
     "#F69DAF",
     "#CFAAC7"
 ];
+
 $(function()
 {
 
@@ -201,7 +203,8 @@ $(function()
     .on('click', '.input', function()
     {
         $(this).focus();
-    });
+    }
+);
 
 /**
  * Function to redirect to board page when board double clicked

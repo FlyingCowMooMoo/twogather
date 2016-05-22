@@ -40,7 +40,6 @@ var animations = ["fadeIn",
 
 function randomAnim()
 {
-    // var r = animations[Math.floor(Math.random() * animations.length)];
     var r = "fadeInRight";
     return "animated " + r;
 }
@@ -471,9 +470,7 @@ function sib(id)
 function enableEmployeeMode()
 {
     $("#addTask").fadeOut();
-    // $(".navbar").fadeOut();
      $("div#toggleMngMode").hide();
-    //$("#employees-block").fadeOut();
     $("#toggleEmpMode").fadeIn();
 }
 
@@ -481,7 +478,6 @@ function disableEmployeeMode()
 {
     $("#addTask").fadeIn();
     $("#toggleMngMode").fadeIn();
-    //$("#employees-block").fadeIn();
     $("#toggleEmpMode").hide();
 }
 
@@ -808,3 +804,5 @@ function toggleUrgency(id)
             }
         });
 }
+
+

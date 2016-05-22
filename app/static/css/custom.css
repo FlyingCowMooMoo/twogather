@@ -304,6 +304,7 @@ div.employee {
 
 div.employee p {
 	margin-bottom: 0;
+	font-size: 14px;
 }
 
 div.employee-new {
@@ -448,19 +449,9 @@ div.state > div.content {
 	padding: 8px;
 }
 
-/*div.content > div {
-	background-color: darkGray;
-	height: 490px;
-	width: 100%;
-	border-radius: 2px;
-	padding: 8px;
-	overflow: auto;
-}*/
-
 div.content > div.task {
 	height: 60px;
 	width: 100%;
-	/*background-color: whitesmoke;*/
 	border-radius: 3px;
 	margin-bottom: 8px;
 }
@@ -476,7 +467,7 @@ div.task div.taskEmp {
 	background-color: lightsalmon;
 	width: 60px;
 	border-radius: 3px 0 0 3px;
-	padding: 10px 5px;
+	padding: 9px 5px;
 	text-align: center;
 	color: white;
 	cursor: default;
@@ -484,7 +475,6 @@ div.task div.taskEmp {
 
 div.task div.taskContent {
 	width: 194px;
-	/*padding: 5px;*/
 	background-color: whitesmoke;
     white-space: nowrap;
 }
@@ -713,7 +703,6 @@ div.task-new div > button.btn.remove {
 	background-color: lightGray;
 }
 
-
 /*   test     */
 div.content div.task > div.test {
 	height: 60px;
@@ -765,7 +754,10 @@ div.content div.task > div.test {
 
 
  	/* board page*/
-
+ 	div.employee {
+ 		min-height: 18px;
+		font-size: 13px;
+ 	}
  	/* tasks block */
  	div.state {
  		width: 250px;
@@ -832,6 +824,7 @@ div.content div.task > div.test {
 
 	div.taskContent > div > span.btn.transparent {
     	font-size: 18px;
+    	top: -17px;
 	}
 
 	/* employees block */
