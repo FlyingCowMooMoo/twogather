@@ -57,7 +57,24 @@
 
 <!-- Body -->
 <main>
-    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Row</th>
+            <th>Event</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{ item.event }}</td>
+                <td>{{ item.date.strftime('%d-%m-%Y') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </main>
 
 </body>

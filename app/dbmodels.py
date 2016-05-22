@@ -85,6 +85,16 @@ class Task(db.Model):
     marked_as_high_priority = BooleanField(default=False)
     hidden = BooleanField(default=False)
 
+    def get_worker(self):
+        if self.marked_by is not None:
+            emp = self.marked_by
+            if emp.first_name is not None and emp.last_name is not None:
+                return ' '.join((emp.first_name, emp.last_name))
+            else:
+                return emp.get_abv()
+        else:
+            return 'Unknown Employee'
+
 
 class TaskCompletion(db.Model):
     task = ForeignKeyField(Task)

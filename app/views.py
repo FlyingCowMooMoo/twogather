@@ -213,7 +213,31 @@ def show_board(board_id=None):
         return show_error('404', e.message)
 
 
+@app.route('/logs/<int:board_id>', methods=['GET'])
+@login_required
+def logs(board_id):
+    if board_id is None:
+        return show_error('400', 'No board id specified')
+    try:
+        board = TaskBoard.get(TaskBoard.id == board_id)
+        cid = board.org_id
+        data = list()
+        for task in Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id):
+            data.append({"event": 'Task created. ' + task.title, "date": task.assigned_at})
+            if Task.completed_at is not None:
+                data.append({"event": 'Task completed. ' + task.title + " marked as completed by " + task.get_worker(),
+                             "date": task.assigned_at})
+        data.sort(key=lambda r: r.get("date"))
+        return render_template('pages/logs.html', id=board_id,
+                               orgid=board.org_id,
+                               orgname=board.org_name, accountname=current_user.name, managerid=current_user.id,
+                               boardname=board.name, bid=board.id, items=tuple(data), cid=cid)
+    except DoesNotExist as e:
+        return show_error('404', e.message)
+
+
 @app.route('/report/<int:board_id>', methods=['GET'])
+@login_required
 def report(board_id):
     if board_id is None:
         return show_error('400', 'No board id specified')
