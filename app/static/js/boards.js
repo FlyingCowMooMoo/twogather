@@ -63,7 +63,7 @@ $(function()
         var newId = guid();
         var newBoard =
             '<div class="col-sm-3" id="' + newId +
-            '"><div class="board board-new"><div><h4 class="heading">New Board</h4>' +
+            '"><div class=""><div><h4 class="heading">New Board</h4>' +
             '<button onclick="event.preventDefault(); $(this).parent().parent().parent().remove();" ' +
             'class="btn transparent delete remove">X</button></div><br/>' +
             '<form><fieldset class="form-group"><input type="text" class="form-control input"' +
@@ -72,9 +72,19 @@ $(function()
             '</fieldset></div><div class="text-center">' +
             '<button class="btn brd" id="create-board" data-id="' + newId +
             '" onclick="createBoard(this)">Save</button></form></div></div>';
-        $("#boards").parent().prepend(newBoard);
-        boardCount++;
+        //$("#boards").parent().prepend(newBoard);
+        //boardCount++;
         //$("#boardsNumber").text(boardCount);
+        var form = '<form class="form-horizontal" id="' + newId +'"><fieldset><legend>Form Name</legend>' +
+            '<div class="form-group"> <label class="col-md-4 control-label" for="boardTitle">Board Title' +
+            '</label> <div class="col-md-4"> <input id="boardTitle" name="boardTitle" type="text" ' +
+            'placeholder="Title" class="form-control input-md" required=""> </div></div><div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="boardDesc">Board Description</label> <div class="col-md-4"> ' +
+            '<input id="boardDesc" name="boardDesc" type="text" placeholder="Description" class="form-control ' +
+            'input-md" required=""> </div></div><div class="form-group"> <label class="col-md-4 control-label" ' +
+            'for="singlebutton"></label> <div class="col-md-4"><button class="btn btn-primary" id="create-board" ' +
+            'data-id="' + newId + '" onclick="createBoard(this)">Save</button> </div></div></fieldset></form>';
+        alertModal("Create a board", form);
         document.getElementById("create-board").addEventListener(
             "click",
             function(event)
