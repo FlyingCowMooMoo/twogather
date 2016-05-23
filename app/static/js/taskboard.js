@@ -551,10 +551,13 @@ function submitCreateTaskForm(id)
                 }
                 else
                 {
-                    alertModal("Success", "Created a new task");
-                    $(".task").remove();
-                    var boardId = $("#board_id").val();
-                    populateTasks(boardId);
+
+                    alertModal("Success", "Created a new task. Reloading page..");
+                    setTimeout(function ()
+                    {
+                        location.reload(true);
+                    }, 2000);
+
                 }
             },
             error: function(error)
