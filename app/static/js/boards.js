@@ -389,14 +389,14 @@ function createBoard(element)
 function addBoard(id, title, numberOfEmps, desc, count)
 {
     var board =
-        '<div class="board" data-id="' + id + '"ondblclick="goToBoard(' +
-        id + ')"><div><h2 class="text-center" id="title">' + title + '</h2>' +
+        '<div class="board col-md-6" data-id="' + id + '"ondblclick="goToBoard(' +
+        id + ')"><div class="board-inner"><div><h2 class="text-center" id="title">' + title + '</h2>' +
         '<button data-id="' + id + '" class="btn transparent menu btnIcon glyphicon glyphicon-align-justify" onclick="event.preventDefault();' +
         'showEditBoardForm(this);"></button>' +
         '</div><br/><div class="text-center"><h2>' + count +
         ' <span class="glyphicon glyphicon-tasks"></span></h2>' +
         '</div><hr/><div><p class="description" id="desc">' + desc + '</p>' +
-        '</div></div>';
+        '</div></div></div>';
 
     $("#boards").append(board);
     $("#boardsNumber").html(parseInt($("#boardsNumber").text()) + 1);
@@ -452,6 +452,7 @@ function showEditBoardForm(source)
            return false;
        }
     });
+
     var element = '<form class="form-horizontal" id="'+ id +'"><fieldset><legend>Form Name</legend>' +
         '<div class="form-group"> <label class="col-md-4 control-label" for="title">Title</label>' +
         '<div class="col-md-4"> <input id="title" name="title" type="text" ' +

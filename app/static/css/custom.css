@@ -238,11 +238,15 @@ div.row.boards {
 	/*height: 80%;*/
 }
 
-div.board {
+div.board-inner {
 	background-color: lightGray;
 	padding: 1px 15px;
 	margin-bottom: 20px;
 	border-radius: 3px;
+}
+
+div.board {
+	/*margin: 10px 15px; */
 }
 
 div.board-new {
@@ -250,9 +254,11 @@ div.board-new {
 	padding-bottom: 11px;
 }
 
-div.board > div > h2 {
+div.board-inner > div > h2 {
 	margin-top: 10px;
 }
+
+
 
 div[id^='empsInvolved'] {
 	min-height: 50px;
