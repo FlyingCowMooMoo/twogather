@@ -64,7 +64,8 @@ $(function()
         var newBoard =
             '<div class="col-sm-3" id="' + newId +
             '"><div class="board board-new"><div><h4 class="heading">New Board</h4>' +
-            '<button class="btn transparent delete remove">X</button></div><br/>' +
+            '<button onclick="event.preventDefault(); $(this).parent().parent().parent().remove();" ' +
+            'class="btn transparent delete remove">X</button></div><br/>' +
             '<form><fieldset class="form-group"><input type="text" class="form-control input"' +
             ' id="boardTitle" placeholder="Board Title"> </fieldset><fieldset class="form-group">' +
             '<textarea class="form-control input" id="boardDesc" placeholder="Description" rows="2"></textarea>' +
@@ -103,9 +104,6 @@ $(function()
         // checks if event source is from board or employee
         if ($(this).parent().parent().attr('class') == 'board board-new')
         {
-            $(this).parentsUntil("#boards").remove();
-            boardCount--;
-            $("#boardsNumber").text(boardCount);
         }
         else
         {
