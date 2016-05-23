@@ -204,6 +204,8 @@ div.btn-group.navbar-right > a > span.glyphicon {
 	top: 6px;
 }
 
+ul.navbar-nav li.nav-link > a:hover,
+ul.navbar-nav li.nav-link > a:focus,
 div.btn-group.navbar-right > a:hover,
 div.btn-group.navbar-right > a:focus {
 	text-decoration: none;

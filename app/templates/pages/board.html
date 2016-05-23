@@ -54,10 +54,10 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="{{ url_for('company', cid=orgid) }}">{{ orgname }}</a>
             </li>
-            <li><a href="{{ url_for('show_board', board_id=id) }}">{{ boardname }}</a>
+            <li class="nav-link" ><a href="{{ url_for('show_board', board_id=id) }}">{{ boardname }}</a>
             </li>
         </ul>
-        <div class="btn-group nav navbar-nav navbar-right">
+        <div class="btn-group nav navbar-nav navbar-right nav-link">
             <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
                 {{ accountname }}
                 <span class="glyphicon glyphicon-menu-down"></span>
