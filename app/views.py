@@ -61,6 +61,25 @@ def edit_board():
         return jsonify(error='An error has occurred ' + e.message)
 
 
+@app.route('/togglevisibility', methods=['POST'])
+def toggle_visibility():
+    task = int(request.json['task'])
+    try:
+        t = Task.get(Task.id == task)
+        if t.hidden:
+            t.hidden = False
+            msg = 'Task has been restored'
+        else:
+            t.hidden = True
+            msg = 'Task has been deleted'
+        t.save()
+        return jsonify(msg=msg)
+    except DoesNotExist:
+        return jsonify(error='Invalid Task')
+    except Exception as e:
+        return jsonify(error='An error has occurred ' + e.message)
+
+
 @app.route('/toggleurgency', methods=['POST'])
 def toggle_urgency():
     task = int(request.json['task'])

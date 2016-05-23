@@ -703,6 +703,11 @@ function cm()
             {
                 var target = opt.$trigger;
                 toggleUrgency(target.data("id"));
+            }},
+            del: {name: "Delete Task", callback: function(key, opt)
+            {
+                var target = opt.$trigger;
+                hideTask(target.data("id"));
             }}
         }
     });
@@ -774,6 +779,33 @@ function assignTask(form)
                     var boardId = $("#board_id").val();
                     populateTasks(boardId);
                 }
+            }
+        });
+}
+
+function hideTask(id)
+{
+    //
+    var value = {
+        "task": id
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#hide_task-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if(result.error != undefined)
+                {
+                    alertModal("Error", result.error());
+                }
+                alertModal("Success", result.msg);
+                $(".task").remove();
+                var boardId = $("#board_id").val();
+                populateTasks(boardId);
+
             }
         });
 }
