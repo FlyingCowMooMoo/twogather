@@ -84,6 +84,7 @@ class Task(db.Model):
     marked_by = ForeignKeyField(EmployeePin, null=True)
     marked_as_high_priority = BooleanField(default=False)
     hidden = BooleanField(default=False)
+    emp_id = property(lambda self: self.marked_by.pin)
 
     def get_worker(self):
         if self.marked_by is not None:

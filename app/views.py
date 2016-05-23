@@ -454,7 +454,12 @@ def get_boards():
         for a in BoardTask.select():
             if a.board_id == b.id:
                 count += 1
-        data.append({'id': b.id, 'name': b.name, 'desc': b.description, 'count': count})
+        ta = list()
+        for task in Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == b.id):
+            if task.marked_by is not None:
+                ta.append(task.emp_id)
+
+        data.append({'id': b.id, 'name': b.name, 'desc': b.description, 'count': count, 'emps': len(list(set(ta)))})
     return jsonify(boards=data)
 
 
