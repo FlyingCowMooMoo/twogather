@@ -390,15 +390,15 @@ function addBoard(id, title, numberOfEmps, desc, count)
 {
     var board =
         '<div class="board col-md-6" data-id="' + id + '"ondblclick="goToBoard(' +
-        id + ')"><div class="board-inner"><div><h2 class="text-center" id="title">' + title + '</h2>' +
+        id + ')"><div class="board-inner"><div><h2 id="title">' + title + '</h2>' +
         '<button data-id="' + id + '" class="btn transparent menu btnIcon glyphicon glyphicon-align-justify" onclick="event.preventDefault();' +
         'showEditBoardForm(this);"></button>' +
-        '</div><br/><div class="text-center"><h2>' + count +
+        '</div><hr/><div class="row"><div class="col-md-9"><p class="description" id="desc">' + desc + '</p>' +
+        '</div><div class="text-center col-md-3"><h2>' + count +
         ' <span class="glyphicon glyphicon-tasks"></span></h2>' +
-        '</div><div class="text-center"><h2>' + numberOfEmps +
+        '<h2>' + numberOfEmps +
         ' <span class="glyphicon glyphicon-user""></span></h2>' +
-        '</div><hr/><div><p class="description" id="desc">' + desc + '</p>' +
-        '</div></div></div>';
+        '</div></div></div></div>';
 
     $("#boards").append(board);
     $("#boardsNumber").html(parseInt($("#boardsNumber").text()) + 1);

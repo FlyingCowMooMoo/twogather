@@ -245,6 +245,15 @@ div.board-inner {
 	border-radius: 3px;
 }
 
+div.board-inner > div.row {
+	padding: 0 10px;
+}
+
+div.board-inner > div.row h2 {
+	margin-top: 11px;
+	font-size: 28px;
+}
+
 div.board {
 	/*margin: 10px 15px; */
 }
@@ -678,10 +687,13 @@ div.task-new div > button.btn.remove {
 }
 
 .btn.menu {
-	font-size: 28px;
-	position: relative;
-	top: -34px;
-	right: 16px;
+
+    display: inline-block;
+    float: right;
+    position: relative;
+    font-size: 28px;
+    top: -31px;
+    right: -15px;
 }
 
 
