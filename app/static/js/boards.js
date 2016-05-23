@@ -307,7 +307,7 @@ function populateBoards(orgId)
                     {
                         var b = result.boards[i];
                         //noinspection JSUnresolvedVariable
-                        addBoard(b.id, b.name, 0, b.desc, String(b.count));
+                        addBoard(b.id, b.name, b.emps, b.desc, String(b.count));
 
                     }
                 }
@@ -395,6 +395,8 @@ function addBoard(id, title, numberOfEmps, desc, count)
         'showEditBoardForm(this);"></button>' +
         '</div><br/><div class="text-center"><h2>' + count +
         ' <span class="glyphicon glyphicon-tasks"></span></h2>' +
+        '</div><div class="text-center"><h2>' + numberOfEmps +
+        ' <span class="glyphicon glyphicon-user""></span></h2>' +
         '</div><hr/><div><p class="description" id="desc">' + desc + '</p>' +
         '</div></div>';
 
