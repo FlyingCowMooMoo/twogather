@@ -69,8 +69,7 @@ $(function()
             ' id="boardTitle" placeholder="Board Title"> </fieldset><fieldset class="form-group">' +
             '<textarea class="form-control input" id="boardDesc" placeholder="Description" rows="2"></textarea>' +
             '</fieldset></div><div class="text-center">' +
-            '<button class="btn brd" id="create-board" data-id="' +
-            newId +
+            '<button class="btn brd" id="create-board" data-id="' + newId +
             '" onclick="createBoard(this)">Save</button></form></div></div>';
         $("#boards").parent().prepend(newBoard);
         boardCount++;
@@ -363,6 +362,7 @@ function createBoard(element)
         "desc": desc,
         "org_id": orgId
     };
+    element.remove();
     $.ajax(
         {
             type: "POST",
@@ -379,6 +379,7 @@ function createBoard(element)
                 else
                 {
                     var b = result.board;
+                    alertModal("Success", result.msg);
                     addBoard(b.id, b.name, 0, b.desc, b.count);
                 }
             }

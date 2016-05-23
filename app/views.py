@@ -435,7 +435,7 @@ def create_board():
     try:
         board.save()
         b = {'id': board.id, 'name': board.name, 'desc': board.description, 'count': 0}
-        return jsonify(board=b)
+        return jsonify(msg='Successfully created a board with title: ' + board.name, board=b)
     except Exception as e:
         return jsonify(error=e.message)
 
