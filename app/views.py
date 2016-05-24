@@ -160,13 +160,13 @@ def create_employee():
             valid_pin = True
     try:
         try:
-            c = Color.get(Color.hex_code == color)
+            color = Color.get(Color.hex_code == color)
         except:
             c = Color()
             c.hex_code = color
             c.save()
             color = Color.get(Color.hex_code == color)
-
+        print(color)
         emp = EmployeePin()
         emp.pin = pin
         emp.color = color
