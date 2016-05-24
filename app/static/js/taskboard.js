@@ -584,14 +584,7 @@ function createTaskForm()
 
     var newTask =
         '<form class="form-horizontal nosub" id="create-task-form-' + tid +
-        '"><fieldset><legend>Create A Task</legend>' +
-        '<div class=form-group><label class="col-md-4 control-label"for=selectbasic>Board</label><div class=col-md-6>' +
-        '<select class=form-control id="selectboard" name=selectboard>';
-
-    newTask += '<option value="' + $("#board_id").val() + '">' + $(
-            "#board_name").val() + '</option>';
-
-    newTask += '</select></div></div><div class=form-group>' +
+        '"><fieldset><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
         '<input id=taskname name=taskname class="form-control input-md"placeholder="' +
         'Task name here like a title"required> ' +
