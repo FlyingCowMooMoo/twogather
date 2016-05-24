@@ -374,6 +374,16 @@ function createBoard(element)
     var desc = element.find('#boardDesc').val();
     var managerId = $("#manager-id").val();
     var orgId = $("#orgid").val();
+    var hasErrros = false;
+    if(isEmpty(title) || isEmpty(desc))
+    {
+        hasErrros = true;
+    }
+    if(hasErrors)
+    {
+        alertModal("Error", "Invalid Board Details, all fields are required!");
+        return;
+    }
     var value = {
         "manager": managerId,
         "title": title,
