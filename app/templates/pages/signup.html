@@ -139,7 +139,8 @@
     {
         $('#alert-modal-title').html(title);
         $('#alert-modal-body').html(body);
-        $('#alert-modal').modal('show');
+        //$('#alert-modal').modal('show');
+        $('#alert-modal').appendTo("body").modal('show');
     }
 
 </script>
