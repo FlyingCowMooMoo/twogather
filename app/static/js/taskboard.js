@@ -524,6 +524,16 @@ function submitCreateTaskForm(id)
     var man = element.find("#manager").val();
     var urgent = element.find("#urgent-1").val();
     var board = element.find("#selectboard").val();
+    var hasErrors = false;
+    if(isEmpty(taskName) || isEmpty(taskDesc))
+    {
+        hasErrors = true;
+    }
+    if(hasErrors)
+    {
+        alertModal("Error", "Invalid Task Details")
+        return;
+    }
     var data = {};
     data['board_id'] = board;
     data['task_title'] = taskName;
@@ -837,6 +847,15 @@ function toggleUrgency(id)
 
             }
         });
+}
+
+function isEmpty(str)
+{
+    if(str.replace(/\s/g,"") == "")
+    {
+        return true;
+    }
+    return false;
 }
 
 

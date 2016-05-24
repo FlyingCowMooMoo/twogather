@@ -238,6 +238,16 @@ function createEmployee(form)
     var fn = form.find("#first-name").val();
     var ln = form.find("#last-name").val();
     var c = form.find("#color").val();
+    var hasErrors = false;
+    if(isEmpty(fn) || isEmpty(ln))
+    {
+        hasErrors = true;
+    }
+    if(hasErrors)
+    {
+        alertModal("Error", "Invalid Employee Details, all fields are required!");
+        return;
+    }
     var value = {
         "first-name": fn,
         "last-name": ln,
@@ -365,6 +375,16 @@ function createBoard(element)
     var desc = element.find('#boardDesc').val();
     var managerId = $("#manager-id").val();
     var orgId = $("#orgid").val();
+    var hasErrros = false;
+    if(isEmpty(title) || isEmpty(desc))
+    {
+        hasErrros = true;
+    }
+    if(hasErrors)
+    {
+        alertModal("Error", "Invalid Board Details, all fields are required!");
+        return;
+    }
     var value = {
         "manager": managerId,
         "title": title,
@@ -540,3 +560,13 @@ function guid()
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
         s4() + '-' + s4() + s4() + s4();
 }
+
+function isEmpty(str)
+{
+    if(str.replace(/\s/g,"") == "")
+    {
+        return true;
+    }
+    return false;
+}
+

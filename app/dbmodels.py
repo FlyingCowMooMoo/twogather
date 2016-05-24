@@ -117,6 +117,7 @@ class TaskBoard(db.Model):
     organization = ForeignKeyField(Organization)
     org_id = property(lambda self: self.organization.id)
     org_name = property(lambda self: self.organization.name)
+    hidden = BooleanField(default=False)
 
 
 class BoardTask(db.Model):
