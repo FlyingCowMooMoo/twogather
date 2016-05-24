@@ -375,10 +375,10 @@ function createBoard(element)
     var desc = element.find('#boardDesc').val();
     var managerId = $("#manager-id").val();
     var orgId = $("#orgid").val();
-    var hasErrros = false;
+    var hasErrors = false;
     if(isEmpty(title) || isEmpty(desc))
     {
-        hasErrros = true;
+        hasErrors = true;
     }
     if(hasErrors)
     {
