@@ -308,11 +308,17 @@ div#employees-block {
 }
 
 div.employees {
-	height: 80%;
+	max-height: 80vh;
 	border-radius: 3px;
 	border-left: 3px solid #2c3e50;
 	margin-top: 10px;
 	padding: 0 10px;
+}
+
+main#task_states div.employees {
+	max-height: 80vh;
+	overflow: auto;
+	overflow-x: hidden;
 }
 
 div.employee {
@@ -363,8 +369,7 @@ div.employee-new span {
 	display: inline-block;
 }
 
-div.employee-new button.btn.brd/*,
-div.employee-new button.delete */{
+div.employee-new button.btn.brd {
 	font-size: smaller;
 	height: 22px;
 	padding-top: 2px;
