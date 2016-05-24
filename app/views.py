@@ -35,7 +35,6 @@ def prepare():
     #    if t.marked_as_completed and t.completed_at is None:
     #        t.completed_at = dbutils.random_date(t.assigned_at, datetime.datetime.now())
     #        t.save()
-
     print ('a')
 
 
@@ -411,7 +410,7 @@ def mark_task():
         task.marked_as_task = False
         task.marked_as_completed = True
         task.marked_as_todo = False
-        task.marked_as_completed = datetime.datetime.now()
+        task.completed_at = datetime.datetime.now()
     task.save()
     msg = ' '.join(('Task was marked as', action, 'by employee with PIN', emp.pin))
     return jsonify(msg=msg)
