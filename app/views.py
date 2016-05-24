@@ -298,23 +298,23 @@ def report(board_id):
         except DoesNotExist:
             d = 0
 
-        start_date = datetime.date.today() - datetime.timedelta(days=30)
-        end_date = datetime.date.today()
+        start_date = datetime.date.today() - datetime.timedelta(days=5)
+        end_date = datetime.date.today() + datetime.timedelta(days=1)
         data = list()
         for today in utils.daterange(start_date, end_date):
             try:
                 assigned = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
                                                                                Task.assigned_at.between(
                                                                                    today - datetime.timedelta(days=1),
-                                                                                   today)).count()
-            except DoesNotExist:
+                                                                                   today + datetime.timedelta(days=1))).count()
+            except DoesNotExist as e:
                 assigned = 0
 
             try:
                 completed = Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == board_id,
                                                                                 Task.completed_at.between(
                                                                                     today - datetime.timedelta(days=1),
-                                                                                    today)).count()
+                                                                                    today + datetime.timedelta(days=1))).count()
             except DoesNotExist:
                 completed = 0
             data.append({"date": today, "assigned": assigned, "completed": completed})
