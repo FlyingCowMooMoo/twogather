@@ -20,20 +20,27 @@
       <div class="heading">
           <img src="{{ url_for('static', filename='img/logo_green.png') }}" alt="Gatha Logo">
       </div>
+        <fieldset class="form-group" id="errors">
+
+        </fieldset>
       <div class="content">
         <p>* All fields are required.</p>
         <form>
           <fieldset class="form-group">
             <input type="text" class="form-control input" id="warehouse" placeholder="Warehouse Name" required>
+              <span class="help-inline" id="warehouse-error">This field cannot be empty</span>
           </fieldset>
           <fieldset class="form-group">
             <input type="text" class="form-control input" id="manager" placeholder="Manager Name" required>
+              <span class="help-inline" id="manager-error">This field cannot be empty</span>
           </fieldset>
           <fieldset class="form-group">
             <input type="email" class="form-control input" id="email" placeholder="Email" required>
+              <span class="help-inline" id="email-error">This field cannot be empty</span>
           </fieldset>
           <fieldset class="form-group">
             <input type="password" class="form-control input" id="password" placeholder="Password" required>
+              <span class="help-inline" id="password-error">This field cannot be empty</span>
           </fieldset>
           <div class="text-center">
             <button class="btn brd log" type="button" onclick="event.preventDefault(); register();">Sign up</button>
@@ -60,12 +67,51 @@
   </main>
 
 <script>
+    $(".help-inline").hide();
     function register()
     {
+        var hasErrors = false;
         var company = $("#warehouse").val();
         var name = $("#manager").val();
         var email = $("#email").val();
         var password = $("#password").val();
+        $("#warehouse").parent().removeClass('error');
+        $("#manager").parent().removeClass('error');
+        $("#email").parent().removeClass('error');
+        $("#password").parent().removeClass('error');
+        $("#warehouse-error").fadeOut();
+        $("#manager-error").fadeOut();
+        $("#email-error").fadeOut();
+        $("#password-error").fadeOut();
+
+        if(company.replace(/\s/g,"") == "")
+        {
+            $("#warehouse-error").fadeIn();
+            $("#warehouse").parent().addClass("error");
+            hasErrors = true;
+        }
+        if(name.replace(/\s/g,"") == "")
+        {
+            $("#manager-error").fadeIn();
+            $("#manager").parent().addClass("error");
+            hasErrors = true;
+        }
+        if(email.replace(/\s/g,"") == "")
+        {
+            $("#email-error").fadeIn();
+            $("#email").parent().addClass("error");
+            hasErrors = true;
+        }
+        if(password.replace(/\s/g,"") == "")
+        {
+            $("#password-error").fadeIn();
+            $("#password").parent().addClass("error");
+            hasErrors = true;
+        }
+        if(hasErrors)
+        {
+            return;
+        }
         var value = {"company": company, "name": name, "email": email, "password": password};
         $.ajax({
             type : "POST",
