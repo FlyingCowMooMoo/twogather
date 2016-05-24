@@ -57,7 +57,7 @@ $(document).ready(function()
     var boardId = $("#board_id").val();
     var orgId = $("#orgid").val();
     populateTasks(boardId);
-    populateEmployees(orgId);
+    populateEmployees(boardId);
 });
 
 function addCommentForm(taskId)
@@ -631,10 +631,10 @@ function createTaskForm()
     alertModal("New Task", newTask);
 }
 
-function populateEmployees(org)
+function populateEmployees(bid)
 {
     var value = {
-        "org_id": org
+        "board_id": bid
     };
     $.ajax(
         {

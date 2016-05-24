@@ -432,6 +432,22 @@ def get_employees():
         return jsonify(error="Invalid Parameters" + e.message)
 
 
+@app.route('/getemployeesforboard', methods=['POST'])
+def get_employees_for_board():
+    bid = int(request.json['board_id'])
+    employees = list()
+    try:
+        for task in Task.select().join(BoardTask).join(TaskBoard).where(TaskBoard.id == bid):
+            if task.marked_by is not None:
+                emp = task.marked_by
+                employees.append({"id": emp.id, "color": emp.hex_color, "pin": emp.pin,
+                                  "fname": emp.first_name, "lname": emp.last_name})
+        employees = map(dict, set(tuple(sorted(d.items())) for d in employees))
+        return jsonify(employees=employees)
+    except DoesNotExist as e:
+        return jsonify(error="Invalid Parameters" + e.message)
+
+
 @app.route('/companies')
 def companies():
     return render_template('companies.html', items=tuple(Organization.select()))
