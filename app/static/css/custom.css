@@ -10,7 +10,8 @@
 	/*font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; */
 }
 
-html {
+body {
+	min-height: 100vh;
 	background-color: #f2f2f2;
 }
 
@@ -21,12 +22,8 @@ hr {
 .navbar {
 	border-radius: 0px;
 	margin-bottom: 10px;
-	/*background-color: lightGreen;*/
 }
-/*    padding: 5px 0px;
-    border-radius: 3px;
-    text-align: center;
-}*/
+
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover{
 	/*background-color: green;*/
@@ -36,6 +33,10 @@ main {
 	padding-right: 20px;
 	padding-left: 20px;
 	width: 100%;
+}
+
+main#task_states {
+	overflow: hidden;
 }
 
 .col-sm-3 {
@@ -398,7 +399,7 @@ nav.navbar button#switchMode:focus {
 }
 
 div#states-block {
-	float: left;
+	display: inline-block;
 	width: 85%;
 	padding: 30px 0;
 }
@@ -408,15 +409,8 @@ div.state {
 	margin-right: auto;
 	min-width: 100px;
 	width:300px;
+	height: 70vh;
 }
-/*
-div.state div.empty span#addTask {
-	color: #454545;
-}
-
-div.state div.empty span#addTask:hover {
-	color: gray;
-}*/
 
 div.state > div.heading {
 	height: 60px;
@@ -458,13 +452,13 @@ div.empty span#addTask:hover {
 }
 
 div.state > div.content {
-	height: 100%;
+	height: 100% !important;
 	width: 100%;
 	border-radius: 0 3px 3px 3px;
 	margin-bottom: 20px;
 	overflow: auto;
-	overflow-x: hidden;
-	overflow-y: hidden;
+	/*overflow-x: hidden;*/
+	overflow: auto;
 	background-color: darkGray;
 	border: 10px solid lightGray;
 	border-top: 15px solid lightGray;
