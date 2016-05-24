@@ -15,6 +15,10 @@ body {
 	background-color: #f2f2f2;
 }
 
+body#report_page {
+	background-color: white;
+}
+
 hr {
 	width: 92%;
 	margin: 16px 4%;
@@ -161,7 +165,7 @@ main.sign div.text-center > p {
 
 /* Navigation */
 
-div.navbar-header > a.navbar-brand {
+.navbar-header > a.navbar-brand {
 	padding: 10px;
 }
 
@@ -414,7 +418,7 @@ div.state {
 	margin-right: auto;
 	min-width: 100px;
 	width:300px;
-	height: 70vh;
+	height: 73vh;
 }
 
 div.state > div.heading {
@@ -457,7 +461,7 @@ div.empty span#addTask:hover {
 }
 
 div.state > div.content {
-	height: 100% !important;
+	height: 97% !important;
 	width: 100%;
 	border-radius: 0 3px 3px 3px;
 	margin-bottom: 20px;
@@ -585,17 +589,6 @@ div.task-new div.heading > button.delete {
 	font-size: 20px;
 	right: -15px;
 }
-/*
-div.task-new form {
-	position: relative;
-    top: -26px;
-    padding: 0 2px;
-}*/
-
-/*div.task-new div > fieldset:first-child {
-	position: absolute;
-	width: 250px;
-}*/
 
 div.task-new form p {
 	font-size: 13px;
@@ -664,6 +657,10 @@ div.task-new div.text-center {
 
 div.task-new div > button.btn.remove {
 	float: left;
+}
+
+h4.empsInBoard {
+	font-size: 30px;
 }
 
 /* buttons */

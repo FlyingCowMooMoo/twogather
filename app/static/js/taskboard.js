@@ -58,7 +58,37 @@ $(document).ready(function()
     var orgId = $("#orgid").val();
     populateTasks(boardId);
     populateEmployees(boardId);
+    populateCompanyEmployees(orgId);
 });
+
+function populateCompanyEmployees(orgId)
+{
+    var value = {
+        "org_id": orgId
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#get-org-employees-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                for (var i = 0; i < result.employees.length; ++i)
+                {
+                    var emp = result.employees[i];
+                    var element = '<div id="employee-' + emp.id +
+                        '" data-id="' + emp.id +
+                        '" style=\"display:' + 'none;' +  'background-color:' + emp.color +
+                        ' \" class="orgemp' +
+                        //+ randomAnim() +
+                        '" ondrag="dragg()"> <p id="name">' + emp.fname +
+                        " " + emp.lname + '</p></div>';
+                    $("#employees").append(element);
+                }
+            }
+        });
+}
 
 function addCommentForm(taskId)
 {
@@ -582,9 +612,16 @@ function createTaskForm()
     // create a new task
     var tid = guid();
 
-    var newTask =
+  var newTask =
         '<form class="form-horizontal nosub" id="create-task-form-' + tid +
-        '"><fieldset><div class=form-group>' +
+        '"><fieldset><legend>Create A Task</legend>' +
+        '<div class=form-group><label class="col-md-4 control-label"for=selectbasic>Board</label><div class=col-md-6>' +
+        '<select class=form-control id="selectboard" name=selectboard>';
+
+    newTask += '<option value="' + $("#board_id").val() + '">' + $(
+            "#board_name").val() + '</option>';
+
+    newTask += '</select></div></div><div class=form-group>' +
         '<label class="col-md-4 control-label"for=taskname>Task Name</label><div class=col-md-6>' +
         '<input id=taskname name=taskname class="form-control input-md"placeholder="' +
         'Task name here like a title"required> ' +
@@ -597,7 +634,7 @@ function createTaskForm()
         '<div style="display: none; visibility: hidden;" class=col-md-6><select class=form-control id=employee name=employee>' +
         '<option value=none>None</option>';
 
-    $(".employee").each(function()
+    $(".orgemp").each(function()
     {
         newTask += '<option value="' + $(this).data("id") +
             '" style="' +
@@ -613,7 +650,7 @@ function createTaskForm()
             "#manager-name").val() + '</option>';
 
     newTask +=
-        '</select></div></div><div style="display: none; visibility: hidden;" class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
+        '</select></div></div><div style="" class=form-group><label class="col-md-4 control-label"for=urgent>Mark As Urgent</label>' +
         '<div class=col-md-4><label class=radio-inline for=urgent-0><input id=urgent-0 name=urgent type=radio value=yes> Yes</label><label class=radio-inline for=urgent-1>' +
         '<input id=urgent-1 name=urgent type=radio value=no checked> No</label></div></div><div class=form-group><label class="col-md-4 control-label"for=taskname>' +
         '</label><div class=col-md-6>' +
@@ -629,6 +666,7 @@ function populateEmployees(bid)
     var value = {
         "board_id": bid
     };
+    console.log(bid);
     $.ajax(
         {
             type: "POST",
@@ -729,7 +767,7 @@ function showAssignPanel(id)
     $.ajax(
         {
             type: "POST",
-            url: $("#get-employees-url").val(),
+            url: $("#get-org-employees-url").val(),
             data: JSON.stringify(value),
             contentType: 'application/json;charset=UTF-8',
             success: function(result)

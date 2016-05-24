@@ -18,7 +18,7 @@
     </style>
 </head>
 
-<body>
+<body id="report_page">
 
 
 <!-- Navigation -->
@@ -47,6 +47,8 @@
                     <a href="#">{{ accountname }}</a>
                 </li>
                 <hr>
+                <li class="a"><a href="{{ url_for('logs', board_id=id) }}">Activity Logs</a></li>
+                <hr/>
                 <li>
                     <a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
                 </li>

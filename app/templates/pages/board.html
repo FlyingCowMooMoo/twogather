@@ -35,6 +35,7 @@
 <input type="hidden" id="mark-task-url" value="{{ url_for('mark_task') }}">
 <input type="hidden" id="get-comments-url" value="{{ url_for('get_comments') }}">
 <input type="hidden" id="get-employees-url" value="{{ url_for('get_employees_for_board') }}">
+<input type="hidden" id="get-org-employees-url" value="{{ url_for('get_employees') }}">
 <input type="hidden" id="create-task-url" value="{{ url_for('submit_create_task') }}">
 <input type="hidden" id="login-url" value="{{ url_for('signin') }}">
 <input type="hidden" id="create-comment-url" value="{{ url_for('add_comment') }}">
@@ -150,7 +151,9 @@
     <!-- Employees -->
     <div id="employees-block">
         <div>
-            <h4 class="empsInBoard"> Employees (<span id="empsNumber">0</span>)</h4>
+            <h4 class="empsInBoard"><span id="empsNumber">0</span> 
+             <span class="glyphicon glyphicon-user"></span>
+            </h4>
         </div>
         <div id="employees" class="employees emps">
         </div>
