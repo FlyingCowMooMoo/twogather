@@ -447,6 +447,7 @@ function addBoard(id, title, numberOfEmps, desc, count)
 
     $("#boards").append(board);
     $("#boardsNumber").html(parseInt($("#boardsNumber").text()) + 1);
+    cm();
 }
 
 function alertModal(title, body)
@@ -548,6 +549,52 @@ function editBoard(id) {
         });
 
 }
+
+function cm()
+{
+    $.contextMenu({
+        selector: ".board",
+        callback: function(key, options) {
+            var m = "clicked: " + key;
+            window.console && console.log(m) || alert(m);
+        },
+        items: {
+            hide: {name: "Delete Board", callback: function(key, opt)
+            {
+                var target = opt.$trigger;
+                hideBoard(target.data("id"));
+            }}
+        }
+    });
+}
+
+function hideBoard(id)
+{
+    //
+    var value = {
+        "board": id
+    };
+    $.ajax(
+        {
+            type: "POST",
+            url: $("#toggle_board_visibility-url").val(),
+            data: JSON.stringify(value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result)
+            {
+                if(result.error != undefined)
+                {
+                    alertModal("Error", result.error());
+                }
+                alertModal("Success", result.msg);
+                $(".board").remove();
+                var orgId = parseInt($("#orgid").val());
+                populateBoards(orgId);
+
+            }
+        });
+}
+
 
 function guid()
 {
