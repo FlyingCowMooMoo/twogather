@@ -475,6 +475,7 @@ div.content > div.task {
 	width: 100%;
 	border-radius: 3px;
 	margin-bottom: 8px;
+	background-color: whitesmoke;
 }
 
 div.task > div {
@@ -495,7 +496,7 @@ div.task div.taskEmp {
 }
 
 div.task div.taskContent {
-	width: 194px;
+	width: 193px;
 	background-color: whitesmoke;
     white-space: nowrap;
 }
@@ -766,7 +767,7 @@ div.content div.task > div.test {
  	}
 
 	div.task div.taskContent {
-   		width: 294px;
+   		width: 293px;
    	}
 
  }
@@ -828,7 +829,7 @@ div.content div.task > div.test {
 	}
 
 	div.task div.taskContent {
- 	   width: 161px;	
+ 	   width: 160px;	
 	}
 
 	div.taskContent h6 {
