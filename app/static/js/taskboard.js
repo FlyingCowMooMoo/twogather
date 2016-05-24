@@ -183,6 +183,11 @@ function confirmEmpPin()
                 alertModal('Error', result.error);
             }
         });
+    $("#emp-pin-form").fadeIn();
+    $("#emp-pin-emp-display").fadeOut();
+    $("#emp-pin-emp-display-name").fadeOut();
+    $("#emp-pin-emp-display-pin").fadeOut();
+    $("#emp-pin").val("");
 }
 
 $("#emp-pin-confirm").click(function()
@@ -211,7 +216,6 @@ function verifyPin()
             {
                 if (result.employee != undefined)
                 {
-                    console.log(result.employee);
                     $("#emp-pin-form").fadeOut();
                     $("#emp-pin-emp-display-pin").css(
                         'background-color', result.employee.color
