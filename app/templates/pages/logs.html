@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="{{ url_for('company', cid=cid) }}">{{ orgname }}</a>
             </li>
-            <li><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
+            <li class="nav-link" ><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
             </li>
         <!-- </li> -->
         </ul>
@@ -44,8 +44,6 @@
         <ul class="dropdown-menu">
             <!-- dropdown menu links -->
             <li class="active"><a href="#">{{ accountname }}</a>
-            </li>
-            <li class="a"><a href="#" onclick="enableEmployeeMode()">Employees</a>
             </li>
             <hr>
             <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>

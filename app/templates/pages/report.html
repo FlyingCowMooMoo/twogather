@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="{{ url_for('company', cid=cid) }}">{{ orgname }}</a>
             </li>
-            <li><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
+            <li class="nav-link" ><a href="{{ url_for('show_board', board_id=bid) }}">{{ boardname }}</a>
             </li>
         <!-- </li> -->
         </ul>
@@ -82,7 +82,6 @@
              </div>
         </div>
     </div>
-    <div id="Logs" style="height:300px;"></div>
 </main>
 <script type="text/javascript">
     google.charts.load('current', {packages: ['corechart', 'bar']});

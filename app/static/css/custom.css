@@ -290,6 +290,11 @@ div[id^='empsInvolved'] div.emp {
 	text-align: center;
 }
 
+/*div.form-group input:focus,
+div.form-group input:visit {
+	background-color: white !important;
+}*/
+
 /* Boards page: Employees */
 
 div#employees-block {

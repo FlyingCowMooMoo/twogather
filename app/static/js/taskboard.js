@@ -264,7 +264,7 @@ function populateTasks(boardId)
                             // randomAnim() +
                             '\" style=\"background-color: ' +
                             '' + "lightGray" +
-                            '\" > <h5 id="emp-name-d">U</h5> </div>';
+                            '\" > <h5 id="emp-name-d"></h5> </div>';
                     }
                     else
                     {

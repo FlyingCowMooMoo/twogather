@@ -358,6 +358,7 @@ function createEmployeeForm()
 
 function createBoard(element)
 {
+    
     var id = $(element).data("id");
     element = $("#" + id);
     var title = element.find('#boardTitle').val();
@@ -370,28 +371,44 @@ function createBoard(element)
         "desc": desc,
         "org_id": orgId
     };
-    element.remove();
-    $.ajax(
-        {
-            type: "POST",
-            url: $("#create-board-url").val(),
-            data: JSON.stringify(value),
-            contentType: 'application/json;charset=UTF-8',
-            success: function(result)
+
+    /* check fields are not empty*/
+    var valid = true;
+
+    if ( title == "" ){
+        $('#boardTitle').css('background-color', 'pink');
+        valid = false;
+    }
+    if ( desc == ""){
+        $('#boardDesc').css('background-color', 'pink');
+         valid = false;
+    }
+
+    if (valid == true) {
+        element.remove();
+        $.ajax(
             {
-                console.log(result);
-                if (result.error != undefined)
+                type: "POST",
+                url: $("#create-board-url").val(),
+                data: JSON.stringify(value),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result)
                 {
-                    alertModal("Error", result.error);
-                }
-                else
-                {
-                    var b = result.board;
-                    alertModal("Success", result.msg);
-                    addBoard(b.id, b.name, 0, b.desc, b.count);
+                    console.log(result);
+                    if (result.error != undefined)
+                    {
+                        alertModal("Error", result.error);
+                    }
+                    else
+                    {
+                        var b = result.board;
+                        alertModal("Success", result.msg);
+                        addBoard(b.id, b.name, 0, b.desc, b.count);
+                    }
                 }
             }
-        });
+        );
+    }
 }
 
 function addBoard(id, title, numberOfEmps, desc, count)
