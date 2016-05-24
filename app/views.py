@@ -26,6 +26,7 @@ def prepare():
     # m = SqliteMigrator(db.database)
     # migrate(m.add_column('task', 'hidden', BooleanField(default=False)))
     # migrate(m.add_column('user', 'organization_id', ForeignKeyField(Organization, null=True, to_field=Organization.id)))
+    # migrate(m.add_column('taskboard', 'hidden', BooleanField(default=False)))
     # for u in User.select():
     #   org = (Organization.select().order_by(fn.Random())).get()
     #  u.organization = org
@@ -76,6 +77,24 @@ def toggle_visibility():
         return jsonify(msg=msg)
     except DoesNotExist:
         return jsonify(error='Invalid Task')
+    except Exception as e:
+        return jsonify(error='An error has occurred ' + e.message)
+
+@app.route('/toggleboardvisibility', methods=['POST'])
+def toggle_board_visibility():
+    b = int(request.json['board'])
+    try:
+        t = TaskBoard.get(TaskBoard.id == b)
+        if t.hidden:
+            t.hidden = False
+            msg = 'Board has been restored'
+        else:
+            t.hidden = True
+            msg = 'Board has been deleted'
+        t.save()
+        return jsonify(msg=msg)
+    except DoesNotExist:
+        return jsonify(error='Invalid Board')
     except Exception as e:
         return jsonify(error='An error has occurred ' + e.message)
 
@@ -464,7 +483,7 @@ def get_boards():
     orgid = int(request.json['org_id'])
     try:
         org = Organization.get(Organization.id == orgid)
-        boards = tuple(TaskBoard.select().where(TaskBoard.organization == org))
+        boards = tuple(TaskBoard.select().where(TaskBoard.organization == org, TaskBoard.hidden == False))
     except DoesNotExist:
         return jsonify(error="Invalid Board Id")
     data = list()
