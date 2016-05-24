@@ -550,6 +550,29 @@ function editBoard(id) {
 
 }
 
+
+function guid()
+{
+    function s4()
+    {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
+
+function isEmpty(str)
+{
+    if(str.replace(/\s/g,"") == "")
+    {
+        return true;
+    }
+    return false;
+}
+
+
 function cm()
 {
     $.contextMenu({
@@ -565,7 +588,7 @@ function cm()
                 hideBoard(target.data("id"));
             }}
         }
-    });
+    }); //sad
 }
 
 function hideBoard(id)
@@ -593,27 +616,5 @@ function hideBoard(id)
 
             }
         });
-}
-
-
-function guid()
-{
-    function s4()
-    {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-}
-
-function isEmpty(str)
-{
-    if(str.replace(/\s/g,"") == "")
-    {
-        return true;
-    }
-    return false;
 }
 
